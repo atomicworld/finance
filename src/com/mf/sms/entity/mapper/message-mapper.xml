@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.sms.dao.MessageDao">
+
+	<resultMap id="Message" type="com.mf.sms.entity.Message">
+        <result property="no" column="NO"/>
+        <result property="cntrctno" column="CNTRCTNO"/>
+        <result property="srlno" column="SRLNO"/>
+        <result property="mstype" column="MSTYPE"/>
+        <result property="recipientname" column="RECIPIENTNAME"/>
+        <result property="recipienttype" column="RECIPIENTTYPE"/>
+        <result property="recipientcertno" column="RECIPIENTCERTNO"/>
+        <result property="recipienttel" column="RECIPIENTTEL"/>
+        <result property="modelno" column="MODELNO"/>
+        <result property="sendername" column="SENDERNAME"/>
+        <result property="senderid" column="SENDERID"/>
+        <result property="sdate" column="SDATE"/>
+        <result property="state" column="STATE"/>
+        <result property="stime" column="STIME"/>
+        <result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		NO,CNTRCTNO,SRLNO,MSTYPE,RECIPIENTNAME,RECIPIENTTYPE,RECIPIENTCERTNO,
+		RECIPIENTTEL,MODELNO,SENDERNAME,SENDERID,SDATE,STIME,STATE,REMARK
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.sms.entity.Message">
+		select
+		<include refid="selectId" />
+		from message
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.sms.entity.Message" parameterType="com.mf.sms.entity.Message">
+		select
+		<include refid="selectId" />
+		from message
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.sms.entity.Message" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from message
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.cntrctno)">
+					AND CNTRCTNO like '%${t.cntrctno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.srlno)">
+					AND SRLNO like '%${t.srlno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.mstype)">
+					AND MSTYPE like '%${t.mstype}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.recipientname)">
+					AND RECIPIENTNAME like '%${t.recipientname}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.recipienttype)">
+					AND RECIPIENTTYPE like '%${t.recipienttype}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.recipientcertno)">
+					AND RECIPIENTCERTNO like '%${t.recipientcertno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.recipienttel)">
+					AND RECIPIENTTEL like '%${t.recipienttel}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.modelno)">
+					AND MODELNO like '%${t.modelno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.sendername)">
+					AND SENDERNAME like '%${t.sendername}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.senderid)">
+					AND SENDERID like '%${t.senderid}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.sdate)">
+					AND SDATE like '%${t.sdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.stime)">
+					AND STIME like '%${t.stime}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.state)">
+					AND STATE like '%${t.state}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(cntrctno)">
+					AND CNTRCTNO like '%${cntrctno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(srlnoe)">
+					AND SRLNO like '%${srlno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(mstype)">
+					AND MSTYPE like '%${mstype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(recipientname)">
+					AND RECIPIENTNAME like '%${recipientname}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(recipienttype)">
+					AND RECIPIENTTYPE like '%${recipienttype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(recipientcertno)">
+					AND RECIPIENTCERTNO like '%${recipientcertno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(recipienttel)">
+					AND RECIPIENTTEL like '%${recipienttel}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(modelno)">
+					AND MODELNO like '%${modelno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(sendername)">
+					AND SENDERNAME like '%${sendername}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(senderid)">
+					AND SENDERID like '%${senderid}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(sdate)">
+					AND SDATE like '%${sdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(stime)">
+					AND STIME like '%${stime}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(state)">
+					AND STATE like '%${state}%'
+				</if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			    </if>
+		</where>
+	</sql>
+	
+	 <!-- 新增Selective -->
+ 	<insert id="add" parameterType="com.mf.sms.entity.Message">
+<!-- 	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey> -->
+		INSERT INTO message 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(no)">
+				NO,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				CNTRCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(srlno)">
+				SRLNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(mstype)">
+				MSTYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(recipientname)">
+				RECIPIENTNAME,
+			</if>
+			<if test="@Ognl@isNotEmpty(recipienttype)">
+				RECIPIENTTYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(recipientcertno)">
+				RECIPIENTCERTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(recipienttel)">
+				RECIPIENTTEL,
+			</if>
+			<if test="@Ognl@isNotEmpty(modelno)">
+				MODELNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(sendername)">
+				SENDERNAME,
+			</if>
+			<if test="@Ognl@isNotEmpty(senderid)">
+				SENDERID,
+			</if>
+			<if test="@Ognl@isNotEmpty(sdate)">
+				SDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(stime)">
+				STIME,
+			</if>
+			<if test="@Ognl@isNotEmpty(state)">
+				STATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(no)">
+				#{no},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				#{cntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(srlno)">
+				#{srlno},
+			</if>
+			<if test="@Ognl@isNotEmpty(mstype)">
+				#{mstype},
+			</if>
+			<if test="@Ognl@isNotEmpty(recipientname)">
+				#{recipientname},
+			</if>
+			<if test="@Ognl@isNotEmpty(recipienttype)">
+				#{recipienttype},
+			</if>
+			<if test="@Ognl@isNotEmpty(recipientcertno)">
+				#{recipientcertno},
+			</if>
+			<if test="@Ognl@isNotEmpty(recipienttel)">
+				#{recipienttel},
+			</if>
+			<if test="@Ognl@isNotEmpty(modelno)">
+				#{modelno},
+			</if>
+			<if test="@Ognl@isNotEmpty(sendername)">
+				#{sendername},
+			</if>
+			<if test="@Ognl@isNotEmpty(senderid)">
+				#{senderid},
+			</if>
+			<if test="@Ognl@isNotEmpty(sdate)">
+				#{sdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(stime)">
+				#{stime},
+			</if>
+			<if test="@Ognl@isNotEmpty(state)">
+				#{state},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM message WHERE
+        NO = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.sms.entity.Message">
+		SELECT <include refid="selectId" />
+		    FROM message 
+	        WHERE 
+        NO = #{id} 
+	</select>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(cntrctno)">
+			CRTRCTNO = #{cntrctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(srlno)">
+			SRLNO = #{srlno},
+		</if>
+		<if test="@Ognl@isNotEmpty(mstype)">
+			MSTYPE = #{mstype},
+		</if>
+		<if test="@Ognl@isNotEmpty(recipientname)">
+			RECIPIENTNAME = #{recipientname},
+		</if>
+		<if test="@Ognl@isNotEmpty(recipienttype)">
+			RECIPIENTTYPE = #{recipienttype},
+		</if>
+		<if test="@Ognl@isNotEmpty(recipientcertno)">
+			RECIPIENTCERTNO = #{recipientcertno},
+		</if>
+		<if test="@Ognl@isNotEmpty(recipienttel)">
+			RECIPIENTTEL = #{recipienttel},
+		</if>
+		<if test="@Ognl@isNotEmpty(modelno)">
+			MODELNO = #{modelno},
+		</if>
+		<if test="@Ognl@isNotEmpty(sendername)">
+			SENDERNAME = #{sendername},
+		</if>
+		<if test="@Ognl@isNotEmpty(senderid)">
+			SENDERID = #{senderid},
+		</if>
+		<if test="@Ognl@isNotEmpty(sdate)">
+			SDATE = #{sdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(stime)">
+			SDATE = #{stime},
+		</if>
+		<if test="@Ognl@isNotEmpty(state)">
+			STATE = #{state},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.sms.entity.Message">
+	    UPDATE message 
+		<include refid="updateset"/>
+        WHERE 
+	        NO = #{no} 
+	</update>
+	
+	
+	
+	
+	<!-- 根据日期查实体     findSerialNoByDate  -->
+	<select id="findSerialNoByDate" parameterType="String" resultType="int">
+		SELECT count(*) from message t 
+		WHERE t.SDATE = #{date} 
+	</select>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

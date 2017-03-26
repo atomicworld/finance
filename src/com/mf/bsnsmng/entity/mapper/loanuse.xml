@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.bsnsmng.dao.LoanuseDao">
+
+	<resultMap id="Loanuse" type="com.mf.bsnsmng.entity.Loanuse">
+        <result property="useno" column="USENO"/>
+        <result property="usenm" column="USENM"/>
+        <result property="usedes" column="USEDES"/>
+        <result property="isused" column="ISUSED"/>
+        <result property="frstfthr" column="FRSTFTHR"/>
+        <result property="scndfthr" column="SCNDFTHR"/>
+        <result property="thrdfthr" column="THRDFTHR"/>
+        <result property="lvl" column="LVL"/>
+        <result property="isbttm" column="ISBTTM"/>
+        <result property="reserved" column="RESERVED"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		USENO,
+        USENM,
+        USEDES,
+        ISUSED,
+FRSTFTHR,
+SCNDFTHR,
+THRDFTHR,
+LVL,
+ISBTTM,
+RESERVED
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.bsnsmng.entity.Loanuse">
+		select
+		<include refid="selectId" />
+		from loanuse
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.bsnsmng.entity.Loanuse" parameterType="com.mf.bsnsmng.entity.Loanuse">
+		select
+		<include refid="selectId" />
+		from loanuse
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.bsnsmng.entity.Loanuse" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from loanuse
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.useno)">
+					AND USENO like '%${t.useno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.usenm)">
+					AND USENM like '%${t.usenm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.usedes)">
+					AND USEDES like '%${t.usedes}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.isused)">
+					AND ISUSED like '%${t.isused}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.frstfthr)">
+					AND FRSTFTHR like '%${t.frstfthr}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.scndfthr)">
+					AND SCNDFTHR like '%${t.scndfthr}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.thrdfthr)">
+					AND THRDFTHR like '%${t.thrdfthr}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.lvl)">
+					AND LVL like '%${t.lvl}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.isbttm)">
+					AND ISBTTM like '%${t.isbttm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.reserved)">
+					AND RESERVED like '%${t.reserved}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(useno)">
+					AND USENO like '%${useno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(usenm)">
+					AND USENM like '%${usenm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(usedes)">
+					AND USEDES like '%${usedes}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(isused)">
+					AND ISUSED like '%${isused}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(frstfthr)">
+					AND FRSTFTHR like '%${frstfthr}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(scndfthr)">
+					AND SCNDFTHR like '%${scndfthr}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(thrdfthr)">
+					AND THRDFTHR like '%${thrdfthr}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(lvl)">
+					AND LVL like '%${lvl}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(isbttm)">
+					AND ISBTTM like '%${isbttm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(reserved)">
+					AND RESERVED like '%${reserved}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.bsnsmng.entity.Loanuse" resultType="int">
+		select count(0) from loanuse
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.bsnsmng.entity.Loanuse">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO loanuse (
+        	USENO ,
+        	USENM ,
+        	USEDES ,
+        	ISUSED ,
+        	FRSTFTHR ,
+        	SCNDFTHR ,
+        	THRDFTHR ,
+        	LVL ,
+        	ISBTTM ,
+        	RESERVED 
+        ) VALUES (
+        	#{useno} ,
+        	#{usenm} ,
+        	#{usedes} ,
+        	#{isused} ,
+        	#{frstfthr} ,
+        	#{scndfthr} ,
+        	#{thrdfthr} ,
+        	#{lvl} ,
+        	#{isbttm} ,
+        	#{reserved} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.bsnsmng.entity.Loanuse">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO loanuse 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(useno)">
+				USENO,
+			</if>
+			<if test="@Ognl@isNotEmpty(usenm)">
+				USENM,
+			</if>
+			<if test="@Ognl@isNotEmpty(usedes)">
+				USEDES,
+			</if>
+			<if test="@Ognl@isNotEmpty(isused)">
+				ISUSED,
+			</if>
+			<if test="@Ognl@isNotEmpty(frstfthr)">
+				FRSTFTHR,
+			</if>
+			<if test="@Ognl@isNotEmpty(scndfthr)">
+				SCNDFTHR,
+			</if>
+			<if test="@Ognl@isNotEmpty(thrdfthr)">
+				THRDFTHR,
+			</if>
+			<if test="@Ognl@isNotEmpty(lvl)">
+				LVL,
+			</if>
+			<if test="@Ognl@isNotEmpty(isbttm)">
+				ISBTTM,
+			</if>
+			<if test="@Ognl@isNotEmpty(reserved)">
+				RESERVED,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(useno)">
+				#{useno},
+			</if>
+			<if test="@Ognl@isNotEmpty(usenm)">
+				#{usenm},
+			</if>
+			<if test="@Ognl@isNotEmpty(usedes)">
+				#{usedes},
+			</if>
+			<if test="@Ognl@isNotEmpty(isused)">
+				#{isused},
+			</if>
+			<if test="@Ognl@isNotEmpty(frstfthr)">
+				#{frstfthr},
+			</if>
+			<if test="@Ognl@isNotEmpty(scndfthr)">
+				#{scndfthr},
+			</if>
+			<if test="@Ognl@isNotEmpty(thrdfthr)">
+				#{thrdfthr},
+			</if>
+			<if test="@Ognl@isNotEmpty(lvl)">
+				#{lvl},
+			</if>
+			<if test="@Ognl@isNotEmpty(isbttm)">
+				#{isbttm},
+			</if>
+			<if test="@Ognl@isNotEmpty(reserved)">
+				#{reserved},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM loanuse WHERE
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.bsnsmng.entity.Loanuse">
+		SELECT <include refid="selectId" />
+		    FROM loanuse 
+	        WHERE  useno=#{id}
+	</select>
+	
+	<!-- 根据Usenm查询对应的行业编码-->
+	<select id="getByUsenm" parameterType="String" resultType="com.mf.bsnsmng.entity.Loanuse">
+		SELECT <include refid="selectId" />
+		    FROM loanuse 
+	        WHERE  usenm=#{usenm}
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.bsnsmng.entity.Loanuse">
+	    UPDATE loanuse SET
+	        USENO = #{useno} ,
+	        USENM = #{usenm} ,
+	        USEDES = #{usedes} ,
+	        ISUSED = #{isused} ,
+	        FRSTFTHR = #{frstfthr} ,
+	        SCNDFTHR = #{scndfthr} ,
+	        THRDFTHR = #{thrdfthr} ,
+	        LVL = #{lvl} ,
+	        ISBTTM = #{isbttm} ,
+	        RESERVED = #{reserved} 
+        WHERE 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(useno)">
+			USENO = #{useno},
+		</if>
+		<if test="@Ognl@isNotEmpty(usenm)">
+			USENM = #{usenm},
+		</if>
+		<if test="@Ognl@isNotEmpty(usedes)">
+			USEDES = #{usedes},
+		</if>
+		<if test="@Ognl@isNotEmpty(isused)">
+			ISUSED = #{isused},
+		</if>
+		<if test="@Ognl@isNotEmpty(frstfthr)">
+			FRSTFTHR = #{frstfthr},
+		</if>
+		<if test="@Ognl@isNotEmpty(scndfthr)">
+			SCNDFTHR = #{scndfthr},
+		</if>
+		<if test="@Ognl@isNotEmpty(thrdfthr)">
+			THRDFTHR = #{thrdfthr},
+		</if>
+		<if test="@Ognl@isNotEmpty(lvl)">
+			LVL = #{lvl},
+		</if>
+		<if test="@Ognl@isNotEmpty(isbttm)">
+			ISBTTM = #{isbttm},
+		</if>
+		<if test="@Ognl@isNotEmpty(reserved)">
+			RESERVED = #{reserved},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.bsnsmng.entity.Loanuse">
+	    UPDATE loanuse 
+		<include refid="updateset"/>
+        WHERE 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

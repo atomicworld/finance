@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.bsnsmng.dao.BsnsApplyDao">
+	<!-- <resultMap id="BsnsApply" type="com.mf.entity.BsnsApply">
+        <result property="clntnm" column="CLNTNM"/>
+        <result property="entlglnm" column="ENTLGLNM"/>
+        <result property="kndno" column="KNDNO"/>
+        <result property="termtyp" column="TERMTYP"/>
+        <result property="bsnstyp" column="BSNSTYP"/>
+        <result property="currncy" column="CURRNCY"/>
+        <result property="applyamnt" column="APPLYAMNT"/>
+        <result property="trmyr" column="TRMYR"/>
+        <result property="trmmnth" column="TRMMNTH"/>
+        <result property="trmday" column="TRMDAY"/>
+        <result property="bsrtyp" column="BSRTYP"/>
+        <result property="basert" column="BASERT"/>
+        <result property="rtfltprcnt" column="RTFLTPRCNT"/>
+        <result property="applyrt" column="APPLYRT"/>
+        <result property="useno" column="USENO"/>
+        <result property="intrstmd" column="INTRSTMD"/>
+        <result property="rpmntway" column="RPMNTWAY"/>
+        <result property="grtway" column="GRTWAY"/>
+        <result property="grtwaydtl" column="GRTWAYDTL"/>
+        <result property="apprvlstt" column="APPRVLSTT"/>
+        <result property="bsnsbalttl" column="BSNSBALTTL"/>
+        <result property="thsbal" column="THSBAL"/>
+        <result property="othrbal" column="OTHRBAL"/>
+        <result property="grtforothr" column="GRTFOROTHR"/>
+        <result property="bsnsopnm" column="BSNSOPNM"/>
+        <result property="mngdptno" column="MNGDPTNO"/>
+        <result property="bsnsopno" column="BSNSOPNO"/>
+        <result property="regdptno" column="REGDPTNO"/>
+        <result property="regopno" column="REGOPNO"/>
+        <result property="regdate" column="REGDATE"/>
+        <result property="remark" column="REMARK"/>
+        <result property="toindstry" column="TOINDSTRY"/>
+        <result property="usedes" column="USEDES"/>
+        <result property="pctyp" column="PCTYP"/>
+        <result property="highpctno" column="HIGHPCTNO"/>
+        <result property="ishigh" column="ISHIGH"/>
+        <result property="bsrtno" column="BSRTNO"/>
+        <result property="ovrfltprcnt" column="OVRFLTPRCNT"/>
+        <result property="fnfltprcnt" column="FNFLTPRCNT"/>
+        <result property="cmpdfltprcnt" column="CMPDFLTPRCNT"/>
+        <result property="rtyp" column="RTYP"/>
+        <result property="bnkno" column="BNKNO"/>
+        <result property="bnknm" column="BNKNM"/>
+        <result property="isfxinstpre" column="ISFXINSTPRE"/>
+        <result property="fxinstamnt" column="FXINSTAMNT"/>
+        <result property="cnsltamnt" column="CNSLTAMNT"/>
+        <result property="reserved" column="RESERVED"/>
+        <result property="applyno" column="APPLYNO"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="custScale" column="CustScale"/>
+        <result property="solutionWay" column="SolutionWay"/>
+        <result property="loanerType" column="LoanerType"/>
+        <result property="loanUsage" column="LoanUsage"/>
+        <result property="loanArea" column="LoanArea"/>
+        <result property="isTch" column="IsTCH"/>
+	</resultMap> -->
+	<sql id="selectId">
+		CLNTNM,
+ENTLGLNM,
+KNDNO,
+TERMTYP,
+BSNSTYP,
+CURRNCY,
+APPLYAMNT,
+TRMYR,
+TRMMNTH,
+TRMDAY,
+BSRTYP,
+BASERT,
+RTFLTPRCNT,
+APPLYRT,
+USENO,
+INTRSTMD,
+RPMNTWAY,
+GRTWAY,
+GRTWAYDTL,
+APPRVLSTT,
+BSNSBALTTL,
+THSBAL,
+OTHRBAL,
+GRTFOROTHR,
+BSNSOPNM,
+MNGDPTNO,
+BSNSOPNO,
+REGDPTNO,
+REGOPNO,
+REGDATE,
+REMARK,
+TOINDSTRY,
+USEDES,
+PCTYP,
+HIGHPCTNO,
+ISHIGH,
+BSRTNO,
+OVRFLTPRCNT,
+FNFLTPRCNT,
+CMPDFLTPRCNT,
+RTYP,
+BNKNO,
+BNKNM,
+ISFXINSTPRE,
+FXINSTAMNT,
+CNSLTAMNT,
+RESERVED,
+APPLYNO,
+CLNTNO,
+CustScale,
+SolutionWay,
+LoanerType,
+LoanUsage,
+LoanArea,
+IsTCH
+    </sql>
+  
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.bsnsmng.entity.BsnsApply">
+		INSERT INTO bsns_apply 
+		<include refid="addtrim"/>
+	</insert>
+	
+<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				CLNTNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(entlglnm)">
+				ENTLGLNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(kndno)">
+				KNDNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(termtyp)">
+				TERMTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnstyp)">
+				BSNSTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(currncy)">
+				CURRNCY,
+			</if>
+			<if test="@Ognl@isNotEmpty(applyamnt)">
+				APPLYAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(trmyr)">
+				TRMYR,
+			</if>
+			<if test="@Ognl@isNotEmpty(trmmnth)">
+				TRMMNTH,
+			</if>
+			<if test="@Ognl@isNotEmpty(trmday)">
+				TRMDAY,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsrtyp)">
+				BSRTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(basert)">
+				BASERT,
+			</if>
+			<if test="@Ognl@isNotEmpty(rtfltprcnt)">
+				RTFLTPRCNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(applyrt)">
+				APPLYRT,
+			</if>
+			<if test="@Ognl@isNotEmpty(useno)">
+				USENO,
+			</if>
+			<if test="@Ognl@isNotEmpty(intrstmd)">
+				INTRSTMD,
+			</if>
+			<if test="@Ognl@isNotEmpty(rpmntway)">
+				RPMNTWAY,
+			</if>
+			<if test="@Ognl@isNotEmpty(grtway)">
+				GRTWAY,
+			</if>
+			<if test="@Ognl@isNotEmpty(grtwaydtl)">
+				GRTWAYDTL,
+			</if>
+			<if test="@Ognl@isNotEmpty(apprvlstt)">
+				APPRVLSTT,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsbalttl)">
+				BSNSBALTTL,
+			</if>
+			<if test="@Ognl@isNotEmpty(thsbal)">
+				THSBAL,
+			</if>
+			<if test="@Ognl@isNotEmpty(othrbal)">
+				OTHRBAL,
+			</if>
+			<if test="@Ognl@isNotEmpty(grtforothr)">
+				GRTFOROTHR,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsopnm)">
+				BSNSOPNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(mngdptno)">
+				MNGDPTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsopno)">
+				BSNSOPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(regdptno)">
+				REGDPTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				REGOPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(regdate)">
+				REGDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+			<if test="@Ognl@isNotEmpty(toindstry)">
+				TOINDSTRY,
+			</if>
+			<if test="@Ognl@isNotEmpty(usedes)">
+				USEDES,
+			</if>
+			<if test="@Ognl@isNotEmpty(pctyp)">
+				PCTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(highpctno)">
+				HIGHPCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(ishigh)">
+				ISHIGH,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsrtno)">
+				BSRTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(ovrfltprcnt)">
+				OVRFLTPRCNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(fnfltprcnt)">
+				FNFLTPRCNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(cmpdfltprcnt)">
+				CMPDFLTPRCNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(rtyp)">
+				RTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(bnkno)">
+				BNKNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(bnknm)">
+				BNKNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(isfxinstpre)">
+				ISFXINSTPRE,
+			</if>
+			<if test="@Ognl@isNotEmpty(fxinstamnt)">
+				FXINSTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(cnsltamnt)">
+				CNSLTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(reserved)">
+				RESERVED,
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				APPLYNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(custScale)">
+				CustScale,
+			</if>
+			<if test="@Ognl@isNotEmpty(solutionWay)">
+				SolutionWay,
+			</if>
+			<if test="@Ognl@isNotEmpty(loanerType)">
+				LoanerType,
+			</if>
+			<if test="@Ognl@isNotEmpty(loanUsage)">
+				LoanUsage,
+			</if>
+			<if test="@Ognl@isNotEmpty(loanArea)">
+				LoanArea,
+			</if>
+			<if test="@Ognl@isNotEmpty(isTch)">
+				IsTCH,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				#{clntnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(entlglnm)">
+				#{entlglnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(kndno)">
+				#{kndno},
+			</if>
+			<if test="@Ognl@isNotEmpty(termtyp)">
+				#{termtyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnstyp)">
+				#{bsnstyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(currncy)">
+				#{currncy},
+			</if>
+			<if test="@Ognl@isNotEmpty(applyamnt)">
+				#{applyamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(trmyr)">
+				#{trmyr},
+			</if>
+			<if test="@Ognl@isNotEmpty(trmmnth)">
+				#{trmmnth},
+			</if>
+			<if test="@Ognl@isNotEmpty(trmday)">
+				#{trmday},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsrtyp)">
+				#{bsrtyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(basert)">
+				#{basert},
+			</if>
+			<if test="@Ognl@isNotEmpty(rtfltprcnt)">
+				#{rtfltprcnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(applyrt)">
+				#{applyrt},
+			</if>
+			<if test="@Ognl@isNotEmpty(useno)">
+				#{useno},
+			</if>
+			<if test="@Ognl@isNotEmpty(intrstmd)">
+				#{intrstmd},
+			</if>
+			<if test="@Ognl@isNotEmpty(rpmntway)">
+				#{rpmntway},
+			</if>
+			<if test="@Ognl@isNotEmpty(grtway)">
+				#{grtway},
+			</if>
+			<if test="@Ognl@isNotEmpty(grtwaydtl)">
+				#{grtwaydtl},
+			</if>
+			<if test="@Ognl@isNotEmpty(apprvlstt)">
+				#{apprvlstt},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsbalttl)">
+				#{bsnsbalttl},
+			</if>
+			<if test="@Ognl@isNotEmpty(thsbal)">
+				#{thsbal},
+			</if>
+			<if test="@Ognl@isNotEmpty(othrbal)">
+				#{othrbal},
+			</if>
+			<if test="@Ognl@isNotEmpty(grtforothr)">
+				#{grtforothr},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsopnm)">
+				#{bsnsopnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(mngdptno)">
+				#{mngdptno},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsopno)">
+				#{bsnsopno},
+			</if>
+			<if test="@Ognl@isNotEmpty(regdptno)">
+				#{regdptno},
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				#{regopno},
+			</if>
+			<if test="@Ognl@isNotEmpty(regdate)">
+				#{regdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@Ognl@isNotEmpty(toindstry)">
+				#{toindstry},
+			</if>
+			<if test="@Ognl@isNotEmpty(usedes)">
+				#{usedes},
+			</if>
+			<if test="@Ognl@isNotEmpty(pctyp)">
+				#{pctyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(highpctno)">
+				#{highpctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(ishigh)">
+				#{ishigh},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsrtno)">
+				#{bsrtno},
+			</if>
+			<if test="@Ognl@isNotEmpty(ovrfltprcnt)">
+				#{ovrfltprcnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(fnfltprcnt)">
+				#{fnfltprcnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(cmpdfltprcnt)">
+				#{cmpdfltprcnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(rtyp)">
+				#{rtyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(bnkno)">
+				#{bnkno},
+			</if>
+			<if test="@Ognl@isNotEmpty(bnknm)">
+				#{bnknm},
+			</if>
+			<if test="@Ognl@isNotEmpty(isfxinstpre)">
+				#{isfxinstpre},
+			</if>
+			<if test="@Ognl@isNotEmpty(fxinstamnt)">
+				#{fxinstamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(cnsltamnt)">
+				#{cnsltamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(reserved)">
+				#{reserved},
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				#{applyno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(custScale)">
+				#{custScale},
+			</if>
+			<if test="@Ognl@isNotEmpty(solutionWay)">
+				#{solutionWay},
+			</if>
+			<if test="@Ognl@isNotEmpty(loanerType)">
+				#{loanerType},
+			</if>
+			<if test="@Ognl@isNotEmpty(loanUsage)">
+				#{loanUsage},
+			</if>
+			<if test="@Ognl@isNotEmpty(loanArea)">
+				#{loanArea},
+			</if>
+			<if test="@Ognl@isNotEmpty(isTch)">
+				#{isTch},
+			</if>
+    </trim>
+	</sql>
+	<!-- 根据申请编号 -->
+	 <select id="getById" parameterType="String" resultType="com.mf.bsnsmng.entity.BsnsApply">
+	     select 
+	     <include refid="selectId"/>
+	     from bsns_apply where applyno =#{id}
+	 </select>
+	   <!-- 根据客户编号取申请编号 -->
+	  <select id="getByClntNo" parameterType="String" resultType="String">
+	     SELECT MAX(APPLYNO)+1 FROM BSNS_APPLY  WHERE clntno =#{clntNo}
+	 </select>
+	 <!-- 根据客户编号取申请编号 -->
+	  <select id="isHave" parameterType="String" resultType="Integer">
+	     SELECT count(*) FROM BSNS_APPLY  WHERE clntno =#{clntno}
+	 </select>
+	 <!-- 根据客户编号查询 -->
+	 <select id="queryAll" parameterType="String" resultType="com.mf.bsnsmng.entity.BsnsApply">
+	       select <include refid="selectId"/> from bsns_apply where  clntno=#{clntNo} and APPRVLSTT is null
+	 </select>
+	 
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntnm)">
+			CLNTNM = #{clntnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(entlglnm)">
+			ENTLGLNM = #{entlglnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(kndno)">
+			KNDNO = #{kndno},
+		</if>
+		<if test="@Ognl@isNotEmpty(termtyp)">
+			TERMTYP = #{termtyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnstyp)">
+			BSNSTYP = #{bsnstyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(currncy)">
+			CURRNCY = #{currncy},
+		</if>
+		<if test="@Ognl@isNotEmpty(applyamnt)">
+			APPLYAMNT = #{applyamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(trmyr)">
+			TRMYR = #{trmyr},
+		</if>
+		<if test="@Ognl@isNotEmpty(trmmnth)">
+			TRMMNTH = #{trmmnth},
+		</if>
+		<if test="@Ognl@isNotEmpty(trmday)">
+			TRMDAY = #{trmday},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsrtyp)">
+			BSRTYP = #{bsrtyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(basert)">
+			BASERT = #{basert},
+		</if>
+		<if test="@Ognl@isNotEmpty(rtfltprcnt)">
+			RTFLTPRCNT = #{rtfltprcnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(applyrt)">
+			APPLYRT = #{applyrt},
+		</if>
+		<if test="@Ognl@isNotEmpty(useno)">
+			USENO = #{useno},
+		</if>
+		<if test="@Ognl@isNotEmpty(intrstmd)">
+			INTRSTMD = #{intrstmd},
+		</if>
+		<if test="@Ognl@isNotEmpty(rpmntway)">
+			RPMNTWAY = #{rpmntway},
+		</if>
+		<if test="@Ognl@isNotEmpty(grtway)">
+			GRTWAY = #{grtway},
+		</if>
+		<if test="@Ognl@isNotEmpty(grtwaydtl)">
+			GRTWAYDTL = #{grtwaydtl},
+		</if>
+		<if test="@Ognl@isNotEmpty(apprvlstt)">
+			APPRVLSTT = #{apprvlstt},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnsbalttl)">
+			BSNSBALTTL = #{bsnsbalttl},
+		</if>
+		<if test="@Ognl@isNotEmpty(thsbal)">
+			THSBAL = #{thsbal},
+		</if>
+		<if test="@Ognl@isNotEmpty(othrbal)">
+			OTHRBAL = #{othrbal},
+		</if>
+		<if test="@Ognl@isNotEmpty(grtforothr)">
+			GRTFOROTHR = #{grtforothr},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnsopnm)">
+			BSNSOPNM = #{bsnsopnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(mngdptno)">
+			MNGDPTNO = #{mngdptno},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnsopno)">
+			BSNSOPNO = #{bsnsopno},
+		</if>
+		<if test="@Ognl@isNotEmpty(regdptno)">
+			REGDPTNO = #{regdptno},
+		</if>
+		<if test="@Ognl@isNotEmpty(regopno)">
+			REGOPNO = #{regopno},
+		</if>
+		<if test="@Ognl@isNotEmpty(regdate)">
+			REGDATE = #{regdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(toindstry)">
+			TOINDSTRY = #{toindstry},
+		</if>
+		<if test="@Ognl@isNotEmpty(usedes)">
+			USEDES = #{usedes},
+		</if>
+		<if test="@Ognl@isNotEmpty(pctyp)">
+			PCTYP = #{pctyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(highpctno)">
+			HIGHPCTNO = #{highpctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(ishigh)">
+			ISHIGH = #{ishigh},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsrtno)">
+			BSRTNO = #{bsrtno},
+		</if>
+		<if test="@Ognl@isNotEmpty(ovrfltprcnt)">
+			OVRFLTPRCNT = #{ovrfltprcnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(fnfltprcnt)">
+			FNFLTPRCNT = #{fnfltprcnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(cmpdfltprcnt)">
+			CMPDFLTPRCNT = #{cmpdfltprcnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(rtyp)">
+			RTYP = #{rtyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(bnkno)">
+			BNKNO = #{bnkno},
+		</if>
+		<if test="@Ognl@isNotEmpty(bnknm)">
+			BNKNM = #{bnknm},
+		</if>
+		<if test="@Ognl@isNotEmpty(isfxinstpre)">
+			ISFXINSTPRE = #{isfxinstpre},
+		</if>
+		<if test="@Ognl@isNotEmpty(fxinstamnt)">
+			FXINSTAMNT = #{fxinstamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(cnsltamnt)">
+			CNSLTAMNT = #{cnsltamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(reserved)">
+			RESERVED = #{reserved},
+		</if>
+		<if test="@Ognl@isNotEmpty(applyno)">
+			APPLYNO = #{applyno},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(custScale)">
+			CustScale = #{custScale},
+		</if>
+		<if test="@Ognl@isNotEmpty(solutionWay)">
+			SolutionWay = #{solutionWay},
+		</if>
+		<if test="@Ognl@isNotEmpty(loanerType)">
+			LoanerType = #{loanerType},
+		</if>
+		<if test="@Ognl@isNotEmpty(loanUsage)">
+			LoanUsage = #{loanUsage},
+		</if>
+		<if test="@Ognl@isNotEmpty(loanArea)">
+			LoanArea = #{loanArea},
+		</if>
+		<if test="@Ognl@isNotEmpty(isTch)">
+			IsTCH = #{isTch},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.bsnsmng.entity.BsnsApply">
+	    UPDATE bsns_apply 
+		<include refid="updateset"/>
+         where applyNo=#{applyno}
+	</update>
+	<!-- 删除 -->
+	<delete id="delete" parameterType="java.lang.String" >
+	     DELETE from bsns_apply where applyNo=#{applyNo}
+	</delete>
+</mapper>
+

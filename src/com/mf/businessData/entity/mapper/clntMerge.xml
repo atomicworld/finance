@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.mf.businessData.dao.ClntMergeDao">
+
+	<sql id="selectItems">
+		recordid, clntno, clntnm, mergedclntno, mergedclntnm,
+			mergedate, opno, dptno, remark
+  	</sql>
+    
+    <!-- 列表查询 -->
+	<select id="query" resultType="com.mf.businessData.entity.ClntMerge">
+		select
+		<include refid="selectItems" />
+		from ClntMerge
+	</select>
+	
+	<!-- 查询所有 -->
+	<select id="queryAll" resultType="com.mf.businessData.entity.ClntMerge">
+		select
+		<include refid="selectItems" />
+		from ClntMerge
+	</select>
+	
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.businessData.entity.ClntMerge" resultType="int">
+		select count(0) from ClntMerge
+	</select>
+	
+	<!-- 新增 客户合并信息-->
+	<insert id="add" parameterType="com.mf.businessData.entity.ClntMerge">
+		INSERT INTO ClntMerge (
+			recordid, 
+			clntno, 
+			clntnm, 
+			mergedclntno, 
+			mergedclntnm,
+			mergedate, 
+			opno, 
+			dptno, 
+			remark
+         ) VALUES (
+			(select maxId from  (SELECT (IFNULL(MAX(recordid),999)+1) as maxId FROM ClntMerge) as t),
+			#{clntno}, 
+			#{clntnm}, 
+			#{mergedclntno}, 
+			#{mergedclntnm}, 
+			#{mergedate}, 
+			#{opno}, 
+			#{dptno}, 
+			#{remark}
+           )
+	</insert>
+
+	
+	<!-- 查询客户合并信息 -->
+	<select id="getById" parameterType="String" resultType="com.mf.businessData.entity.ClntMerge">
+	    select
+		<include refid="selectItems" />
+		from ClntMerge
+		where  recordid=#{recordid}
+	</select>
+	
+	
+</mapper>
+

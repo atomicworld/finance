@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntGradePersonalDao">
+
+	<resultMap id="ClntGradePersonal" type="com.mf.client.entity.ClntGradePersonal">
+        <result property="base" column="base"/>
+        <result property="occup" column="occup"/>
+        <result property="vitae" column="vitae"/>
+        <result property="asset" column="asset"/>
+        <result property="exprec" column="exprec"/>
+        <result property="safe" column="safe"/>
+        <result property="tax" column="tax"/>
+        <result property="immasset" column="immasset"/>
+        <result property="clntno" column="clntno"/>
+        <result property="score" column="score"/>
+        <result property="memo" column="memo"/>
+        
+	</resultMap>
+	
+	<sql id="selectId">
+		base,
+		occup,
+		vitae,
+		asset,
+		exprec,
+		safe,
+		tax,
+		immasset,
+		clntno,
+		score,
+		memo
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntGradePersonal">
+		select
+		<include refid="selectId" />
+		from clnt_grade_personal
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntGradePersonal" parameterType="com.mf.client.entity.ClntGradePersonal">
+		select
+		<include refid="selectId" />
+		from clnt_grade_personal
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntGradePersonal" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_grade_personal
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.base)">
+					AND base like '%${t.base}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.occup)">
+					AND occup like '%${t.occup}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.vitae)">
+					AND vitae like '%${t.vitae}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.asset)">
+					AND asset like '%${t.asset}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.exprec)">
+					AND exprec like '%${t.exprec}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.safe)">
+					AND safe like '%${t.safe}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.tax)">
+					AND tax like '%${t.tax}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.immasset)">
+					AND immasset like '%${t.immasset}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.score)">
+					AND score like '%${t.score}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(base)">
+					AND base like '%${base}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(occup)">
+					AND occup like '%${occup}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(vitae)">
+					AND vitae like '%${vitae}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(asset)">
+					AND asset like '%${asset}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(exprec)">
+					AND exprec like '%${exprec}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(safe)">
+					AND safe like '%${safe}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(tax)">
+					AND tax like '%${tax}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(immasset)">
+					AND immasset like '%${immasset}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(score)">
+					AND score like '%${score}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntGradePersonal" resultType="int">
+		select count(0) from clnt_grade_personal
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntGradePersonal">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_grade_personal (
+        	base ,
+        	occup ,
+        	vitae ,
+        	asset ,
+        	exprec ,
+        	safe ,
+        	tax ,
+        	immasset ,
+        	memo,
+        	score 
+        ) VALUES (
+        	#{base} ,
+        	#{occup} ,
+        	#{vitae} ,
+        	#{asset} ,
+        	#{exprec} ,
+        	#{safe} ,
+        	#{tax} ,
+        	#{immasset} ,
+        	#{memo} ,
+        	#{score} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntGradePersonal">
+		INSERT INTO clnt_grade_personal 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				clntno,
+			</if>
+			<if test="@Ognl@isNotEmpty(base)">
+				base,
+			</if>
+			<if test="@Ognl@isNotEmpty(occup)">
+				occup,
+			</if>
+			<if test="@Ognl@isNotEmpty(vitae)">
+				vitae,
+			</if>
+			<if test="@Ognl@isNotEmpty(asset)">
+				asset,
+			</if>
+			<if test="@Ognl@isNotEmpty(exprec)">
+				exprec,
+			</if>
+			<if test="@Ognl@isNotEmpty(safe)">
+				safe,
+			</if>
+			<if test="@Ognl@isNotEmpty(tax)">
+				tax,
+			</if>
+			<if test="@Ognl@isNotEmpty(immasset)">
+				immasset,
+			</if>
+			<if test="@Ognl@isNotEmpty(score)">
+				score,
+			</if>
+			<if test="@Ognl@isNotEmpty(memo)">
+				memo,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(base)">
+				#{base},
+			</if>
+			<if test="@Ognl@isNotEmpty(occup)">
+				#{occup},
+			</if>
+			<if test="@Ognl@isNotEmpty(vitae)">
+				#{vitae},
+			</if>
+			<if test="@Ognl@isNotEmpty(asset)">
+				#{asset},
+			</if>
+			<if test="@Ognl@isNotEmpty(exprec)">
+				#{exprec},
+			</if>
+			<if test="@Ognl@isNotEmpty(safe)">
+				#{safe},
+			</if>
+			<if test="@Ognl@isNotEmpty(tax)">
+				#{tax},
+			</if>
+			<if test="@Ognl@isNotEmpty(immasset)">
+				#{immasset},
+			</if>
+			
+			<if test="@Ognl@isNotEmpty(score)">
+				#{score},
+			</if>
+			
+			<if test="@Ognl@isNotEmpty(memo)">
+				#{memo},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM clnt_grade_personal WHERE
+        clntno = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntGradePersonal">
+		SELECT <include refid="selectId" />
+		    FROM clnt_grade_personal 
+	        WHERE 
+        clntno = #{clntno} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntGradePersonal">
+	    UPDATE clnt_grade_personal SET
+	        base = #{base} ,
+	        occup = #{occup} ,
+	        vitae = #{vitae} ,
+	        asset = #{asset} ,
+	        exprec = #{exprec} ,
+	        safe = #{safe} ,
+	        tax = #{tax} ,
+	        immasset = #{immasset} ,
+	        memo = #{memo} ,	        
+	        score = #{score} 
+        WHERE 
+	        clntno = #{clntno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(base)">
+			base = #{base},
+		</if>
+		<if test="@Ognl@isNotEmpty(occup)">
+			occup = #{occup},
+		</if>
+		<if test="@Ognl@isNotEmpty(vitae)">
+			vitae = #{vitae},
+		</if>
+		<if test="@Ognl@isNotEmpty(asset)">
+			asset = #{asset},
+		</if>
+		<if test="@Ognl@isNotEmpty(exprec)">
+			exprec = #{exprec},
+		</if>
+		<if test="@Ognl@isNotEmpty(safe)">
+			safe = #{safe},
+		</if>
+		<if test="@Ognl@isNotEmpty(tax)">
+			tax = #{tax},
+		</if>
+		<if test="@Ognl@isNotEmpty(immasset)">
+			immasset = #{immasset},
+		</if>
+		<if test="@Ognl@isNotEmpty(memo)">
+			memo = #{memo},
+		</if>
+		<if test="@Ognl@isNotEmpty(score)">
+			score = #{score},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntGradePersonal">
+	    UPDATE clnt_grade_personal 
+		<include refid="updateset"/>
+        WHERE 
+	        clntno = #{clntno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

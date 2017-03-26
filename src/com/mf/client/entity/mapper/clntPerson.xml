@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.mf.client.dao.ClntPersonDao">
+
+	
+	<sql id="selectId">
+		CLNTNO,
+		(select cc.clntname from clnt_client cc where cc.CLNTID = CLNTNO) CLNTNAME,
+		(SELECT cc.certtype FROM clnt_client cc WHERE cc.clntid = clntno) CERTTYPE,
+		(SELECT cc.certno FROM clnt_client cc WHERE cc.clntid = clntno) CERTNO,
+        DEPTCODE,
+		GENDER,
+		BIRTHDAY,
+		POLITICS,
+		NATION,
+		MARRIAGE,
+		EDULEVEL,
+		EDUDEGREE,
+		HEALTH,
+		HOUSEHOLD,
+		RESCONDITION,
+		CLNTAREA,
+		ADDRESS,
+		ZIP,
+		HOMETEL,
+		MOBILETEL,
+		OTHERTEL,
+		EMAIL,
+		(select cc.clntname from clnt_client cc where cc.CLNTID = CLNTNO) SCDATE,
+		LASTMODDATE,
+		GRADEMODEL,
+		REMARK,
+		bankcode,
+		cardid
+    </sql>
+    
+    <select id="queryAll" resultType="com.mf.client.entity.ClntPerson">
+		select
+		<include refid="selectId" />
+		from clnt_person
+	</select>
+	
+
+	<select id="query" resultType="com.mf.client.entity.ClntPerson">
+		select
+		<include refid="selectId" />
+		from clnt_person
+	</select>
+	
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntPerson" resultType="int">
+		select count(0) from clnt_person
+	</select>
+	
+	<select id="findByCertno" resultType="com.mf.client.entity.ClntPerson">
+		select
+		<include refid="selectId" />
+		from clnt_person 
+		where certno = #{certno}
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntPerson">
+		INSERT INTO clnt_person (
+			CLNTNO ,
+        	DEPTCODE ,
+        	GENDER ,
+        	BIRTHDAY ,
+        	POLITICS ,
+        	NATION ,
+        	MARRIAGE ,
+        	EDULEVEL ,
+        	EDUDEGREE ,
+        	HEALTH ,
+        	HOUSEHOLD ,
+        	RESCONDITION ,
+        	CLNTAREA ,
+        	ADDRESS ,
+        	ZIP ,
+        	HOMETEL ,
+        	MOBILETEL ,
+        	OTHERTEL ,
+        	EMAIL ,
+        	LASTMODDATE ,
+        	GRADEMODEL ,
+        	REMARK,
+        	bankcode,
+        	cardid 
+        ) VALUES (
+       		#{clntno} ,
+        	#{deptcode} ,
+        	#{gender} ,
+        	#{birthday} ,
+        	#{politics} ,
+        	#{nation} ,
+        	#{marriage} ,
+        	#{edulevel} ,
+        	#{edudegree} ,
+        	#{health} ,
+        	#{household} ,
+        	#{rescondition} ,
+        	#{clntarea} ,
+        	#{address} ,
+        	#{zip} ,
+        	#{hometel} ,
+        	#{mobiletel} ,
+        	#{othertel} ,
+        	#{email} ,
+        	#{lastmoddate} ,
+        	#{grademodel} ,
+        	#{remark} ,
+        	#{bankcode} ,
+        	#{cardid} 
+        	
+        )
+	</insert>
+	
+	
+	<select id="findByClntno" resultType="com.mf.client.entity.ClntPerson" parameterType="String">
+		select 
+		<include refid="selectId"/> 
+		from clnt_person 
+		where clntno = #{clntno}
+	</select>
+	
+	
+	
+	<update id="modify" parameterType="com.mf.client.entity.ClntPerson">
+	    UPDATE clnt_person 
+		<include refid="updateset"/>
+        WHERE 
+	        CLNTNO = #{clntno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(deptcode)">
+			DEPTCODE = #{deptcode},
+		</if>
+		<if test="@Ognl@isNotEmpty(gender)">
+			GENDER = #{gender},
+		</if>
+		<if test="@Ognl@isNotEmpty(birthday)">
+			BIRTHDAY = #{birthday},
+		</if>
+		<if test="@Ognl@isNotEmpty(politics)">
+			POLITICS = #{politics},
+		</if>
+		<if test="@Ognl@isNotEmpty(nation)">
+			NATION = #{nation},
+		</if>
+		<if test="@Ognl@isNotEmpty(marriage)">
+			MARRIAGE = #{marriage},
+		</if>
+		<if test="@Ognl@isNotEmpty(edulevel)">
+			EDULEVEL = #{edulevel},
+		</if>
+		<if test="@Ognl@isNotEmpty(edudegree)">
+			EDUDEGREE = #{edudegree},
+		</if>
+		<if test="@Ognl@isNotEmpty(health)">
+			HEALTH = #{health},
+		</if>
+		<if test="@Ognl@isNotEmpty(household)">
+			HOUSEHOLD = #{household},
+		</if>
+		<if test="@Ognl@isNotEmpty(rescondition)">
+			RESCONDITION = #{rescondition},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntarea)">
+			CLNTAREA = #{clntarea},
+		</if>
+		<if test="@Ognl@isNotEmpty(address)">
+			ADDRESS = #{address},
+		</if>
+		<if test="@Ognl@isNotEmpty(zip)">
+			ZIP = #{zip},
+		</if>
+		<if test="@Ognl@isNotEmpty(hometel)">
+			HOMETEL = #{hometel},
+		</if>
+		<if test="@Ognl@isNotEmpty(mobiletel)">
+			MOBILETEL = #{mobiletel},
+		</if>
+		<if test="@Ognl@isNotEmpty(othertel)">
+			OTHERTEL = #{othertel},
+		</if>
+		<if test="@Ognl@isNotEmpty(email)">
+			EMAIL = #{email},
+		</if>
+		<if test="@Ognl@isNotEmpty(lastmoddate)">
+			LASTMODDATE = #{lastmoddate},
+		</if>
+		<if test="@Ognl@isNotEmpty(grademodel)">
+			GRADEMODEL = #{grademodel},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(bankcode)">
+			BANKCODE = #{bankcode},
+		</if>
+		<if test="@Ognl@isNotEmpty(cardid)">
+			cardid = #{cardid},
+		</if>
+    </set>
+	</sql>
+<select id="getByClntno" resultType="com.mf.client.entity.ClntPerson" parameterType="String">
+		select 
+		a.clntno,
+		a.address,
+		a.zip,
+		a.hometel,
+		a.mobiletel,
+		a.othertel,
+		a.email,
+		a.remark,
+		b.sd_key as politics,
+		c.sd_key as nation,
+		d.sd_key as marriage,
+		e.sd_key as edulevel,
+		f.sd_key as edudegree,
+		g.sd_key as health,
+		h.sd_key as household,
+		j.sd_key as rescondition,
+		k.sd_key as grademodel,
+		a.clntarea,
+		a.cardid,
+		a.bankcode
+		from clnt_person a 
+		left join sys_dictionary b on (a.politics= b.sd_value and b.code='1011')
+		left join sys_dictionary c on (a.nation=c.sd_value and c.code='1012')
+		left join sys_dictionary d on (a.marriage=d.sd_value and d.code='1003') 
+		left join sys_dictionary e on (a.edulevel=e.sd_value and e.code='1004')
+		left join sys_dictionary f on (a.edudegree=f.sd_value and f.code='1005') 
+		left join sys_dictionary g on (a.health=g.sd_value and g.code='1013') 
+		left join sys_dictionary h on (a.household=h.sd_value and h.code='1014') 
+		left join sys_dictionary j on (a.rescondition=j.sd_value and j.code='1010') 
+		left join sys_dictionary k on (a.grademodel=k.sd_value and k.code='1015')
+		where 
+		clntno = #{clntno}
+	</select>
+</mapper>
+

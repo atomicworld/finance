@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 命名空间全限定类名，interface xxxDao调用此id方法名 -->
+<mapper namespace="com.mf.sys.dao.SysDicTypeDao">
+
+	<!-- 获取所有字段 -->
+	<sql id="getAllFields">
+		CODE,
+		NAME,
+		REMARK,
+		FLAG
+	</sql>
+	
+	<select id="query" resultType="SysDicType" >
+		select 
+			<include refid="getAllFields"/>
+		from sys_dictype
+		<where>
+			<if test="t.name != null and t.name != ''">
+				NAME like '%${t.name}%'
+			</if>
+		</where>
+	</select>
+	
+	<select id="count" parameterType="SysDicType" resultType="int">
+		select count(0) from sys_dictype
+	</select>
+	
+	<!-- 新增字典类型 -->
+	<insert id="add" parameterType="SysDicType">
+		insert into sys_dictype 
+		values(#{code},#{name},#{remark},#{flag})  
+	</insert>
+	
+	<select id="findByCode" parameterType="String" resultType="SysDicType">
+		select 
+			<include refid="getAllFields"/>
+		from sys_dictype
+		where code = #{code}
+	</select>
+	
+	<update id="modify" parameterType="SysDicType">
+		update sys_dictype
+		<set>
+			name = #{name},
+			remark = #{remark},
+			flag = #{flag} 
+		</set>
+		where code = #{code}
+	</update>
+	<!--chenze start-->
+	<select id="findAll" resultType="SysDicType" >
+		select 
+			<include refid="getAllFields"/>
+		from sys_dictype	
+	</select>
+	<!--chenze end-->
+</mapper>

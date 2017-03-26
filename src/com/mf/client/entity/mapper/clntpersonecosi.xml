@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntPersonEcoSiDao">
+
+	<resultMap id="ClntPersonEcoSi" type="com.mf.client.entity.ClntPersonEcoSi">
+        <result property="id" column="ID"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="sitype" column="SITYPE"/>
+        <result property="amtpermon" column="AMTPERMON"/>
+        <result property="balanceamt" column="BALANCEAMT"/>
+        <result property="begindate" column="BEGINDATE"/>
+        <result property="statenddate" column="STATENDDATE"/>
+        <result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ID,
+CLNTNO,
+SITYPE,
+AMTPERMON,
+BALANCEAMT,
+BEGINDATE,
+STATENDDATE,
+REMARK
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntPersonEcoSi">
+		select
+		<include refid="selectId" />
+		from clnt_person_eco_si
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntPersonEcoSi" parameterType="com.mf.client.entity.ClntPersonEcoSi">
+		select
+		<include refid="selectId" />
+		from clnt_person_eco_si
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntPersonEcoSi" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_person_eco_si
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.sitype)">
+					AND SITYPE like '%${t.sitype}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.amtpermon)">
+					AND AMTPERMON = '${t.amtpermon}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.balanceamt)">
+					AND BALANCEAMT = '${t.balanceamt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.begindate)">
+					AND BEGINDATE like '%${t.begindate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.statenddate)">
+					AND STATENDDATE like '%${t.statenddate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(sitype)">
+					AND SITYPE like '%${sitype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(amtpermon)">
+					AND AMTPERMON = '${amtpermon}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(balanceamt)">
+					AND BALANCEAMT = '${balanceamt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(begindate)">
+					AND BEGINDATE like '%${begindate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(statenddate)">
+					AND STATENDDATE like '%${statenddate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntPersonEcoSi" resultType="int">
+		select count(0) from clnt_person_eco_si
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntPersonEcoSi">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_person_eco_si (
+        	CLNTNO ,
+        	SITYPE ,
+        	AMTPERMON ,
+        	BALANCEAMT ,
+        	BEGINDATE ,
+        	STATENDDATE ,
+        	REMARK 
+        ) VALUES (
+        	#{clntno} ,
+        	#{sitype} ,
+        	#{amtpermon} ,
+        	#{balanceamt} ,
+        	#{begindate} ,
+        	#{statenddate} ,
+        	#{remark} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntPersonEcoSi">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO clnt_person_eco_si 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(sitype)">
+				SITYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(amtpermon)">
+				AMTPERMON,
+			</if>
+			<if test="@Ognl@isNotEmpty(balanceamt)">
+				BALANCEAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(begindate)">
+				BEGINDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(statenddate)">
+				STATENDDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(sitype)">
+				#{sitype},
+			</if>
+			<if test="@Ognl@isNotEmpty(amtpermon)">
+				#{amtpermon},
+			</if>
+			<if test="@Ognl@isNotEmpty(balanceamt)">
+				#{balanceamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(begindate)">
+				#{begindate},
+			</if>
+			<if test="@Ognl@isNotEmpty(statenddate)">
+				#{statenddate},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM clnt_person_eco_si WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntPersonEcoSi">
+		SELECT <include refid="selectId" />
+		    FROM clnt_person_eco_si 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntPersonEcoSi">
+	    UPDATE clnt_person_eco_si SET
+	        CLNTNO = #{clntno} ,
+	        SITYPE = #{sitype} ,
+	        AMTPERMON = #{amtpermon} ,
+	        BALANCEAMT = #{balanceamt} ,
+	        BEGINDATE = #{begindate} ,
+	        STATENDDATE = #{statenddate} ,
+	        REMARK = #{remark} 
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(sitype)">
+			SITYPE = #{sitype},
+		</if>
+		<if test="@Ognl@isNotEmpty(amtpermon)">
+			AMTPERMON = #{amtpermon},
+		</if>
+		<if test="@Ognl@isNotEmpty(balanceamt)">
+			BALANCEAMT = #{balanceamt},
+		</if>
+		<if test="@Ognl@isNotEmpty(begindate)">
+			BEGINDATE = #{begindate},
+		</if>
+		<if test="@Ognl@isNotEmpty(statenddate)">
+			STATENDDATE = #{statenddate},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntPersonEcoSi">
+	    UPDATE clnt_person_eco_si 
+		<include refid="updateset"/>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

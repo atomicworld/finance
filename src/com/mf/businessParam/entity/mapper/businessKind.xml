@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.mf.businessParam.dao.BusinessKindDao">
+
+	<sql id="selectItems">
+		KNDNO,
+		KNDNM,
+		MINAMNT,
+		MAXAMNT,
+		SDATE,
+		EDATE,
+		ISUSED,
+		cstmrtyp,
+		currncy,
+		trmtyp,
+		minmnth,
+		maxmnth,
+		remark,
+		bsnstyp,
+		pctyp,
+		maxday,
+		minday
+  	</sql>
+    
+	<select id="query" resultType="BusinessKind">
+		select
+		<include refid="selectItems" />
+		from BSNSKIND
+		<include refid="querywhere"/>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>    				
+		   <if test="@Ognl@isNotEmpty(t.kndnm)">
+				AND KNDNM like '%${t.kndnm}%'
+		   </if>    
+		</where>
+	</sql>
+	
+	<select id="getType" parameterType="String" resultType="BusinessKind">
+		select
+			<include refid="selectItems" />
+		from BSNSKIND 
+		 	where cstmrtyp = #{cstmrtyp}
+	</select>
+	<select id="getTypeAll" parameterType="String" resultType="BusinessKind">
+		select
+			<include refid="selectItems" />
+		from BSNSKIND 
+	</select>
+	<select id="queryAll" resultType="BusinessKind">
+		select
+		<include refid="selectItems" />
+		from BSNSKIND
+	</select>
+	
+	<!-- 总记录数 -->
+	<select id="count" parameterType="BusinessKind" resultType="int">
+		select count(0) from BSNSKIND
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="add" parameterType="BusinessKind">
+		INSERT INTO BSNSKIND (
+			KNDNO,
+			KNDNM,
+			MINAMNT,
+			MAXAMNT,
+			SDATE,
+			EDATE,
+			ISUSED,
+			cstmrtyp,
+			currncy,
+			trmtyp,
+			minmnth,
+			maxmnth,
+			remark,
+			bsnstyp,
+			pctyp,
+			maxday,
+			minday
+         ) VALUES (
+			(select maxId from  (SELECT (IFNULL(MAX(KNDNO),999)+1) as maxId FROM BSNSKIND) as t),
+			#{kndnm}, 
+			#{minamnt}, 
+			#{maxamnt}, 
+			#{sdate}, 
+			#{edate}, 
+			#{isused},
+			#{cstmrtyp},
+			#{currncy},
+			#{trmtyp},
+			#{minmnth},
+			#{maxmnth},
+			#{remark},
+			#{bsnstyp},
+			#{pctyp},
+			#{maxday},
+			#{minday}
+        )
+	</insert>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="String">
+	    DELETE FROM BSNSKIND 
+	    WHERE KNDNO=#{kndno}
+	</delete>
+	
+	
+	<select id="getById" parameterType="String" resultType="BusinessKind">
+	    select
+		<include refid="selectItems" />
+		from BSNSKIND
+		where  KNDNO=#{kndno}
+	</select>
+	
+	<!-- 全量更新 -->
+	<update id="modify" parameterType="BusinessKind">
+		update BSNSKIND 
+		<set>           
+			kndnm=#{kndnm},
+			sdate=#{sdate},
+			edate=#{edate},
+			cstmrtyp=#{cstmrtyp},
+			currncy=#{currncy},
+			trmtyp=#{trmtyp},
+			minmnth=#{minmnth},
+			maxmnth=#{maxmnth},
+			minamnt=#{minamnt},
+			maxamnt=#{maxamnt},
+			remark=#{remark},
+			isused=#{isused},
+			bsnstyp=#{bsnstyp},
+			pctyp=#{pctyp},
+			maxday=#{maxday},
+			minday=#{minday},
+			remark=#{remark}
+		</set>
+		
+		WHERE KNDNO=#{kndno}
+	</update>
+	
+	<update id="changeStatus" parameterType="BusinessKind">
+		update BSNSKIND 
+		<set>
+		     isused=#{isused}
+		</set>
+		WHERE KNDNO=#{kndno}
+	</update>
+	
+	<!-- add by hw -->
+	<select id="getAbleType" parameterType="String" resultType="BusinessKind">
+		select
+			<include refid="selectItems" />
+		from BSNSKIND 
+		 	where cstmrtyp = #{cstmrtyp} AND isused = 1
+	</select>
+	
+	
+</mapper>
+

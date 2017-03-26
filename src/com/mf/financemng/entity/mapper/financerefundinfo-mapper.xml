@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FinanceRefundInfoDao">
+
+	<resultMap id="FinanceRefundInfo" type="com.mf.financemng.entity.FinanceRefundInfo">
+       <result property="returnloanmoneyid" column="RETURNLOANMONEYID"/>
+        <result property="loanmoneyid" column="LOANMONEYID"/>
+        <result property="returndate" column="RETURNDATE"/>
+        <result property="returnamount" column="RETURNAMOUNT"/>
+        <result property="returninterest" column="RETURNINTEREST"/>
+        <result property="orgcode" column="ORGCODE"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		RETURNLOANMONEYID,
+LOANMONEYID,
+RETURNDATE,
+RETURNAMOUNT,
+RETURNINTEREST,
+ORGCODE
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.FinanceRefundInfo">
+		select
+		<include refid="selectId" />
+		from loanmoneyreturn 
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.FinanceRefundInfo" parameterType="com.mf.financemng.entity.FinanceRefundInfo">
+		select
+		<include refid="selectId" />
+		from loanmoneyreturn 
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.financemng.entity.FinanceRefundInfo" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from loanmoneyreturn 
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.loanmoneyid)">
+					AND LOANMONEYID like '%${t.loanmoneyid}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.returndateBegin)">
+					AND RETURNDATE >= #{t.returndateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.returndateEnd)">
+					AND RETURNDATE &lt;= #{t.returndateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.returnamount)">
+					AND RETURNAMOUNT = '${t.returnamount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.returninterest)">
+					AND RETURNINTEREST = '${t.returninterest}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.orgcode)">
+					AND ORGCODE like '%${t.orgcode}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(loanmoneyid)">
+					AND LOANMONEYID like '%${loanmoneyid}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(returndateBegin)">
+					AND RETURNDATE >= #{returndateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(returndateEnd)">
+					AND RETURNDATE &lt;= #{returndateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(returnamount)">
+					AND RETURNAMOUNT = '${returnamount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(returninterest)">
+					AND RETURNINTEREST = '${returninterest}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(orgcode)">
+					AND ORGCODE like '%${orgcode}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.FinanceRefundInfo" resultType="int">
+		select count(0) from loanmoneyreturn 
+		<include refid="querywhere1"/>
+	</select>
+	
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.FinanceRefundInfo">
+		INSERT INTO loanmoneyreturn  
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(returnloanmoneyid)">
+				returnloanmoneyid,
+			</if>
+			<if test="@Ognl@isNotEmpty(loanmoneyid)">
+				LOANMONEYID,
+			</if>
+			<if test="@Ognl@isNotEmpty(returndate)">
+				RETURNDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(returnamount)">
+				RETURNAMOUNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(returninterest)">
+				RETURNINTEREST,
+			</if>
+			<if test="@Ognl@isNotEmpty(orgcode)">
+				ORGCODE,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(returnloanmoneyid)">
+				#{returnloanmoneyid},
+			</if>
+			<if test="@Ognl@isNotEmpty(loanmoneyid)">
+				#{loanmoneyid},
+			</if>
+			<if test="@Ognl@isNotEmpty(returndate)">
+				#{returndate},
+			</if>
+			<if test="@Ognl@isNotEmpty(returnamount)">
+				#{returnamount},
+			</if>
+			<if test="@Ognl@isNotEmpty(returninterest)">
+				#{returninterest},
+			</if>
+			<if test="@Ognl@isNotEmpty(orgcode)">
+				#{orgcode},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删  -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM loanmoneyreturn  WHERE
+        returnloanmoneyid = #{id} 
+	</delete>
+	<!-- 删  deleteParentId-->
+	<delete id="deleteParentId" parameterType="String">
+		DELETE FROM loanmoneyreturn  WHERE
+        loanmoneyid = #{loanno} 
+	</delete>
+	<!-- 根据主键查实体 -->
+	<select id="getFiInfoById" parameterType="String" resultType="com.mf.financemng.entity.FinanceRefundInfo">
+			SELECT a.RETURNLOANMONEYID,
+			a.LOANMONEYID,
+			a.RETURNDATE,
+			a.RETURNAMOUNT,
+			a.RETURNINTEREST,b.BANKNO as orgcode FROM loanmoneyreturn a  
+ 			left join
+			loanmoney b on a.loanmoneyid=b.loanmoneyid
+			WHERE returnloanmoneyid =#{id}
+	</select>
+	
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(returndate)">
+			RETURNDATE = #{returndate},
+		</if>
+		<if test="@Ognl@isNotEmpty(returnamount)">
+			RETURNAMOUNT = #{returnamount},
+		</if>
+		<if test="@Ognl@isNotEmpty(returninterest)">
+			RETURNINTEREST = #{returninterest},
+		</if>
+		<if test="@Ognl@isNotEmpty(orgcode)">
+			ORGCODE = #{orgcode},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.financemng.entity.FinanceRefundInfo">
+	    UPDATE loanmoneyreturn  
+		<include refid="updateset"/>
+        WHERE 
+	        returnloanmoneyid = #{returnloanmoneyid} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

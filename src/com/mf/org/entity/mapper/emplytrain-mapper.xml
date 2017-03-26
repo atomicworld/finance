@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.org.dao.EmplyTrainDao">
+
+	<resultMap id="EmplyTrain" type="com.mf.org.entity.EmplyTrain">
+        <result property="id" column="id"/>
+        <result property="trainno" column="trainno"/>
+        <result property="emplyno" column="emplyno"/>
+        <result property="score" column="score"/>
+        <result property="result" column="result"/>
+        <result property="remark" column="remark"/>
+        <result property="emplynm" column="emplynm"/>
+        <result property="idnum" column="idnum"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		id,trainno,emplyno,score,result,remark,emplynm,idnum
+    </sql>
+    
+<!--     <select id="findAll" resultType="com.mf.org.entity.EmplyTrain">
+		select
+		<include refid="selectId" />
+		from emply_train
+	</select> -->
+	
+<!-- 	<select id="queryAll" resultType="com.mf.org.entity.EmplyTrain" parameterType="com.mf.org.entity.EmplyTrain">
+		select
+		<include refid="selectId" />
+		from emply_train
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.org.entity.EmplyTrain" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from emply_train
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.trainno)">
+					AND trainno like '%${t.trainno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.emplyno)">
+					AND emplyno like '%${t.emplyno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.score)">
+					AND score like '%${t.score}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.result)">
+					AND result like '%${t.result}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND remark like '%${t.remark}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(trainno)">
+					AND trainno like '%${trainno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(emplyno)">
+					AND emplyno like '%${emplyno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(score)">
+					AND score like '%${score}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(result)">
+					AND result like '%${result}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND remark like '%${remark}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	总记录数
+	<select id="count" parameterType="com.mf.org.entity.EmplyTrain" resultType="int">
+		select count(0) from emply_train
+		<include refid="querywhere1"/>
+	</select>
+	
+	新增
+	<insert id="addAll" parameterType="com.mf.org.entity.EmplyTrain">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO emply_train (
+        	trainno ,
+        	emplyno ,
+        	score ,
+        	result ,
+        	remark 
+        ) VALUES (
+        	#{trainno} ,
+        	#{emplyno} ,
+        	#{score} ,
+        	#{result} ,
+        	#{remark} 
+        )
+	</insert>
+	
+	新增Selective
+	<insert id="add" parameterType="com.mf.org.entity.EmplyTrain">
+		INSERT INTO emply_train 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(trainno)">
+				trainno,
+			</if>
+			<if test="@Ognl@isNotEmpty(emplyno)">
+				emplyno,
+			</if>
+			<if test="@Ognl@isNotEmpty(score)">
+				score,
+			</if>
+			<if test="@Ognl@isNotEmpty(result)">
+				result,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				remark,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(trainno)">
+				#{trainno},
+			</if>
+			<if test="@Ognl@isNotEmpty(emplyno)">
+				#{emplyno},
+			</if>
+			<if test="@Ognl@isNotEmpty(score)">
+				#{score},
+			</if>
+			<if test="@Ognl@isNotEmpty(result)">
+				#{result},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+	
+	删
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM emply_train WHERE
+        id = #{id} 
+	</delete>
+	
+	根据主键查实体
+	<select id="getById" parameterType="String" resultType="com.mf.org.entity.EmplyTrain">
+		SELECT <include refid="selectId" />
+		    FROM emply_train 
+	        WHERE 
+        id = #{id} 
+	</select>
+	
+	更新all
+	<update id="updateAll" parameterType="com.mf.org.entity.EmplyTrain">
+	    UPDATE emply_train SET
+	        trainno = #{trainno} ,
+	        emplyno = #{emplyno} ,
+	        score = #{score} ,
+	        result = #{result} ,
+	        remark = #{remark} 
+        WHERE 
+	        id = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(trainno)">
+			trainno = #{trainno},
+		</if>
+		<if test="@Ognl@isNotEmpty(emplyno)">
+			emplyno = #{emplyno},
+		</if>
+		<if test="@Ognl@isNotEmpty(score)">
+			score = #{score},
+		</if>
+		<if test="@Ognl@isNotEmpty(result)">
+			result = #{result},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			remark = #{remark},
+		</if>
+    </set>
+	</sql>
+	
+	更新Selective
+	<update id="update" parameterType="com.mf.org.entity.EmplyTrain">
+	    UPDATE emply_train 
+		<include refid="updateset"/>
+        WHERE 
+	        id = #{id} 
+	</update>
+	 -->
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+
+	<!-- 新增 -->
+	<insert id="add" parameterType="com.mf.org.entity.EmplyTrain">
+		INSERT INTO emply_train (id,trainno,emplyno,score,result,remark,emplynm,idnum) 
+		VALUES (
+        	#{id},
+        	#{trainno} ,
+        	#{emplyno} ,
+        	#{score} ,
+        	#{result} ,
+        	#{remark} ,
+        	#{emplynm} ,
+        	#{idnum}
+        )
+	</insert>
+	
+	<!-- 根据会议表主键，找到会议_人员表的数据 -->
+	<select id="getByTraino" resultType="com.mf.org.entity.EmplyTrain" parameterType="String">
+		select
+			<include refid="selectId" />
+		from emply_train
+		WHERE 
+			trainno = #{trainno} 
+	</select>
+	
+	<!-- 删   -->
+	<delete id="deleteEmplyTrain" parameterType="String">
+		DELETE FROM emply_train WHERE
+        trainno = #{trainno} 
+	</delete>
+	
+</mapper>
+
+

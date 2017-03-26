@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.sys.dao.SysMappingtoolDao">
+
+	<resultMap id="SysMappingtool" type="com.mf.sys.entity.SysMappingtool">
+        <result property="id" column="ID"/>
+        <result property="preKey" column="PREKEY"/>
+        <result property="value" column="VALUE"/>
+        <result property="date" column="DATE"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ID,PRE_KEY,VALUE,DATE
+    </sql>   
+   
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+	<!-- 根据日期和主键查找最大的流水号 -->
+	<select id="getSerialnumber" parameterType="com.mf.sys.entity.SysMappingtool" resultType="String">
+		SELECT value FROM sys_mappingtool 
+	    WHERE 
+        	PREKEY = #{preKey} AND DATE = #{date}
+	</select>
+		
+	<!-- 当天存在，则累加 -->
+	<update id="modifySerialnumber" parameterType="com.mf.sys.entity.SysMappingtool">
+	    UPDATE sys_mappingtool SET
+	    	VALUE = #{value} ,
+	        DATE = #{date} 
+        WHERE 
+	        PREKEY = #{preKey}
+	</update>
+	
+</mapper>
+

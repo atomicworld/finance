@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.aftrmng.dao.AfterBadloanDao">
+
+	<resultMap id="AfterBadloan" type="com.mf.aftrmng.entity.AfterBadloan">
+        <result property="recdid" column="recdid"/>
+        <result property="dueno" column="dueno"/>
+        <result property="amnt" column="amnt"/>
+        <result property="status" column="status"/>
+        <result property="descs" column="descs"/>
+        <result property="crtdate" column="crtdate"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		recdid,
+dueno,
+amnt,
+status,
+descs,
+crtdate
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.aftrmng.entity.AfterBadloan">
+		select
+		<include refid="selectId" />
+		from after_badloan
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.aftrmng.entity.AfterBadloan" parameterType="com.mf.aftrmng.entity.AfterBadloan">
+		select
+		<include refid="selectId" />
+		from after_badloan
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.aftrmng.entity.AfterFvclass" parameterType="java.util.HashMap">
+		select 
+		a.rcrdid,
+		a.clntnm,
+		a.cntrctno,
+		a.dueno,
+		c.sd_key as clsstyp,
+		b.dueamnt as tenclssrslt
+		from after_fvclass a 
+		left join bsns_bill b on a.dueno=b.dueno
+		left join sys_dictionary c on a.clsstyp=c.sd_value 
+		where c.code=4000 and b.dueno is not null and a.manualrslt in(3,4,5)
+<!-- 		where c.code=4000 and b.dueno is not null and a.clsstyp in(3,4,5) -->
+		<if test="@Ognl@isNotEmpty(t.clntnm)">
+			and a.clntnm like '%${t.clntnm}%'
+		</if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	<select id="queryBadloan" resultType="com.mf.aftrmng.entity.AfterBadloan" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from after_badloan
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.dueno)">
+					AND dueno like '%${t.dueno}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.amnt)">
+					AND amnt = '${t.amnt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.status)">
+					AND status like '%${t.status}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.descs)">
+					AND descs like '%${t.descs}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.crtdate)">
+					AND crtdate like '%${t.crtdate}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(dueno)">
+					AND dueno like '%${dueno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(amnt)">
+					AND amnt = '${amnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(status)">
+					AND status like '%${status}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(descs)">
+					AND descs like '%${descs}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(crtdate)">
+					AND crtdate like '%${crtdate}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.aftrmng.entity.AfterBadloan" resultType="int">
+		select count(0) from after_badloan
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.aftrmng.entity.AfterBadloan">
+		INSERT INTO after_badloan 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(recdid)">
+				recdid,
+			</if>
+			<if test="@Ognl@isNotEmpty(dueno)">
+				dueno,
+			</if>
+			<if test="@Ognl@isNotEmpty(amnt)">
+				amnt,
+			</if>
+			<if test="@Ognl@isNotEmpty(status)">
+				status,
+			</if>
+			<if test="@Ognl@isNotEmpty(descs)">
+				descs,
+			</if>
+			<if test="@Ognl@isNotEmpty(crtdate)">
+				crtdate,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(recdid)">
+				#{recdid},
+			</if>
+			<if test="@Ognl@isNotEmpty(dueno)">
+				#{dueno},
+			</if>
+			<if test="@Ognl@isNotEmpty(amnt)">
+				#{amnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(status)">
+				#{status},
+			</if>
+			<if test="@Ognl@isNotEmpty(descs)">
+				#{descs},
+			</if>
+			<if test="@Ognl@isNotEmpty(crtdate)">
+				#{crtdate},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM after_badloan WHERE
+        recdid = #{recdid} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.aftrmng.entity.AfterBadloan">
+		SELECT <include refid="selectId" />
+		    FROM after_badloan 
+	        WHERE 
+        recdid = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.aftrmng.entity.AfterBadloan">
+	    UPDATE after_badloan SET
+	        dueno = #{dueno} ,
+	        amnt = #{amnt} ,
+	        status = #{status} ,
+	        descs = #{descs} ,
+	        crtdate = #{crtdate} 
+        WHERE 
+	        recdid = #{recdid} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(dueno)">
+			dueno = #{dueno},
+		</if>
+		<if test="@Ognl@isNotEmpty(amnt)">
+			amnt = #{amnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(status)">
+			status = #{status},
+		</if>
+		<if test="@Ognl@isNotEmpty(descs)">
+			descs = #{descs},
+		</if>
+		<if test="@Ognl@isNotEmpty(crtdate)">
+			crtdate = #{crtdate},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.aftrmng.entity.AfterBadloan">
+	    UPDATE after_badloan 
+		<include refid="updateset"/>
+        WHERE 
+	        recdid = #{recdid} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

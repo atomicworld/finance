@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.shareholder.dao.CorpShareassetsDao">
+
+	<resultMap id="CorpShareassets" type="com.mf.shareholder.entity.CorpShareassets">
+        <result property="shareno" column="shareno"/>
+        <result property="years0" column="Years0"/>
+        <result property="assets0" column="Assets0"/>
+        <result property="liabilities0" column="Liabilities0"/>
+        <result property="profit0" column="Profit0"/>
+        <result property="equity0" column="Equity0"/>
+        <result property="inverest0" column="Inverest0"/>
+        <result property="years1" column="Years1"/>
+        <result property="assets1" column="Assets1"/>
+        <result property="liabilities1" column="Liabilities1"/>
+        <result property="profit1" column="Profit1"/>
+        <result property="equity1" column="Equity1"/>
+        <result property="inverest1" column="Inverest1"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		shareno,
+Years0,
+Assets0,
+Liabilities0,
+Profit0,
+Equity0,
+Inverest0,
+Years1,
+Assets1,
+Liabilities1,
+Profit1,
+Equity1,
+Inverest1
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.shareholder.entity.CorpShareassets">
+		select
+		<include refid="selectId" />
+		from corp_shareassets
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.shareholder.entity.CorpShareassets" parameterType="com.mf.shareholder.entity.CorpShareassets">
+		select
+		<include refid="selectId" />
+		from corp_shareassets
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.shareholder.entity.CorpShareassets" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from corp_shareassets
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.shareno)">
+					AND shareno like '%${t.shareno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.years0)">
+					AND Years0 like '%${t.years0}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.assets0)">
+					AND Assets0 like '%${t.assets0}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.liabilities0)">
+					AND Liabilities0 like '%${t.liabilities0}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.profit0)">
+					AND Profit0 like '%${t.profit0}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.equity0)">
+					AND Equity0 like '%${t.equity0}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.inverest0)">
+					AND Inverest0 like '%${t.inverest0}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.years1)">
+					AND Years1 like '%${t.years1}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.assets1)">
+					AND Assets1 like '%${t.assets1}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.liabilities1)">
+					AND Liabilities1 like '%${t.liabilities1}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.profit1)">
+					AND Profit1 like '%${t.profit1}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.equity1)">
+					AND Equity1 like '%${t.equity1}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.inverest1)">
+					AND Inverest1 like '%${t.inverest1}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(shareno)">
+					AND shareno like '%${shareno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(years0)">
+					AND Years0 like '%${years0}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(assets0)">
+					AND Assets0 like '%${assets0}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(liabilities0)">
+					AND Liabilities0 like '%${liabilities0}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(profit0)">
+					AND Profit0 like '%${profit0}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(equity0)">
+					AND Equity0 like '%${equity0}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(inverest0)">
+					AND Inverest0 like '%${inverest0}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(years1)">
+					AND Years1 like '%${years1}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(assets1)">
+					AND Assets1 like '%${assets1}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(liabilities1)">
+					AND Liabilities1 like '%${liabilities1}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(profit1)">
+					AND Profit1 like '%${profit1}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(equity1)">
+					AND Equity1 like '%${equity1}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(inverest1)">
+					AND Inverest1 like '%${inverest1}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.shareholder.entity.CorpShareassets" resultType="int">
+		select count(0) from corp_shareassets
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.shareholder.entity.CorpShareassets">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO corp_shareassets (
+        	shareno ,
+        	Years0 ,
+        	Assets0 ,
+        	Liabilities0 ,
+        	Profit0 ,
+        	Equity0 ,
+        	Inverest0 ,
+        	Years1 ,
+        	Assets1 ,
+        	Liabilities1 ,
+        	Profit1 ,
+        	Equity1 ,
+        	Inverest1 
+        ) VALUES (
+        	#{shareno} ,
+        	#{years0} ,
+        	#{assets0} ,
+        	#{liabilities0} ,
+        	#{profit0} ,
+        	#{equity0} ,
+        	#{inverest0} ,
+        	#{years1} ,
+        	#{assets1} ,
+        	#{liabilities1} ,
+        	#{profit1} ,
+        	#{equity1} ,
+        	#{inverest1} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.shareholder.entity.CorpShareassets">
+		INSERT INTO corp_shareassets 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(shareno)">
+				shareno,
+			</if>
+			<if test="@Ognl@isNotEmpty(years0)">
+				Years0,
+			</if>
+			<if test="@Ognl@isNotEmpty(assets0)">
+				Assets0,
+			</if>
+			<if test="@Ognl@isNotEmpty(liabilities0)">
+				Liabilities0,
+			</if>
+			<if test="@Ognl@isNotEmpty(profit0)">
+				Profit0,
+			</if>
+			<if test="@Ognl@isNotEmpty(equity0)">
+				Equity0,
+			</if>
+			<if test="@Ognl@isNotEmpty(inverest0)">
+				Inverest0,
+			</if>
+			<if test="@Ognl@isNotEmpty(years1)">
+				Years1,
+			</if>
+			<if test="@Ognl@isNotEmpty(assets1)">
+				Assets1,
+			</if>
+			<if test="@Ognl@isNotEmpty(liabilities1)">
+				Liabilities1,
+			</if>
+			<if test="@Ognl@isNotEmpty(profit1)">
+				Profit1,
+			</if>
+			<if test="@Ognl@isNotEmpty(equity1)">
+				Equity1,
+			</if>
+			<if test="@Ognl@isNotEmpty(inverest1)">
+				Inverest1,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(shareno)">
+				#{shareno},
+			</if>
+			<if test="@Ognl@isNotEmpty(years0)">
+				#{years0},
+			</if>
+			<if test="@Ognl@isNotEmpty(assets0)">
+				#{assets0},
+			</if>
+			<if test="@Ognl@isNotEmpty(liabilities0)">
+				#{liabilities0},
+			</if>
+			<if test="@Ognl@isNotEmpty(profit0)">
+				#{profit0},
+			</if>
+			<if test="@Ognl@isNotEmpty(equity0)">
+				#{equity0},
+			</if>
+			<if test="@Ognl@isNotEmpty(inverest0)">
+				#{inverest0},
+			</if>
+			<if test="@Ognl@isNotEmpty(years1)">
+				#{years1},
+			</if>
+			<if test="@Ognl@isNotEmpty(assets1)">
+				#{assets1},
+			</if>
+			<if test="@Ognl@isNotEmpty(liabilities1)">
+				#{liabilities1},
+			</if>
+			<if test="@Ognl@isNotEmpty(profit1)">
+				#{profit1},
+			</if>
+			<if test="@Ognl@isNotEmpty(equity1)">
+				#{equity1},
+			</if>
+			<if test="@Ognl@isNotEmpty(inverest1)">
+				#{inverest1},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM corp_shareassets WHERE shareno = #{shareno}
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.shareholder.entity.CorpShareassets">
+		SELECT <include refid="selectId" />
+		    FROM corp_shareassets 
+	        WHERE shareno = #{shareno}
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.shareholder.entity.CorpShareassets">
+	    UPDATE corp_shareassets SET
+	        shareno = #{shareno} ,
+	        Years0 = #{years0} ,
+	        Assets0 = #{assets0} ,
+	        Liabilities0 = #{liabilities0} ,
+	        Profit0 = #{profit0} ,
+	        Equity0 = #{equity0} ,
+	        Inverest0 = #{inverest0} ,
+	        Years1 = #{years1} ,
+	        Assets1 = #{assets1} ,
+	        Liabilities1 = #{liabilities1} ,
+	        Profit1 = #{profit1} ,
+	        Equity1 = #{equity1} ,
+	        Inverest1 = #{inverest1} 
+        WHERE 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(shareno)">
+			shareno = #{shareno},
+		</if>
+		<if test="@Ognl@isNotEmpty(years0)">
+			Years0 = #{years0},
+		</if>
+		<if test="@Ognl@isNotEmpty(assets0)">
+			Assets0 = #{assets0},
+		</if>
+		<if test="@Ognl@isNotEmpty(liabilities0)">
+			Liabilities0 = #{liabilities0},
+		</if>
+		<if test="@Ognl@isNotEmpty(profit0)">
+			Profit0 = #{profit0},
+		</if>
+		<if test="@Ognl@isNotEmpty(equity0)">
+			Equity0 = #{equity0},
+		</if>
+		<if test="@Ognl@isNotEmpty(inverest0)">
+			Inverest0 = #{inverest0},
+		</if>
+		<if test="@Ognl@isNotEmpty(years1)">
+			Years1 = #{years1},
+		</if>
+		<if test="@Ognl@isNotEmpty(assets1)">
+			Assets1 = #{assets1},
+		</if>
+		<if test="@Ognl@isNotEmpty(liabilities1)">
+			Liabilities1 = #{liabilities1},
+		</if>
+		<if test="@Ognl@isNotEmpty(profit1)">
+			Profit1 = #{profit1},
+		</if>
+		<if test="@Ognl@isNotEmpty(equity1)">
+			Equity1 = #{equity1},
+		</if>
+		<if test="@Ognl@isNotEmpty(inverest1)">
+			Inverest1 = #{inverest1},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.shareholder.entity.CorpShareassets">
+	    UPDATE corp_shareassets 
+		<include refid="updateset"/>
+        WHERE shareno = #{shareno}
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

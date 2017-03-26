@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.bsnsmng.dao.ReportsmodelDownDao">
+
+	<resultMap id="ReportsmodelDown" type="com.mf.bsnsmng.entity.ReportsmodelDown">
+        <result property="reportno" column="REPORTNO"/>
+        <result property="reportname" column="REPORTNAME"/>
+        <result property="downpath" column="DOWNPATH"/>
+         <result property="memo" column="memo"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		REPORTNO,
+		REPORTNAME,
+		DOWNPATH,
+		memo
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.bsnsmng.entity.ReportsmodelDown">
+		select
+		<include refid="selectId" />
+		from reportsmodel_down
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.bsnsmng.entity.ReportsmodelDown" parameterType="com.mf.bsnsmng.entity.ReportsmodelDown">
+		select
+		<include refid="selectId" />
+		from reportsmodel_down
+		<include refid="querywhere1"/>
+		order by reportno 
+	</select>
+
+	<select id="query" resultType="com.mf.bsnsmng.entity.ReportsmodelDown" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from reportsmodel_down
+		<include refid="querywhere"/>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.reportname)">
+					AND REPORTNAME like '%${t.reportname}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.downpath)">
+					AND DOWNPATH like '%${t.downpath}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(reportname)">
+					AND REPORTNAME like '%${reportname}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(downpath)">
+					AND DOWNPATH like '%${downpath}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.bsnsmng.entity.ReportsmodelDown" resultType="int">
+		select count(0) from reportsmodel_down
+		<include refid="querywhere1"/>
+	</select>
+
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.bsnsmng.entity.ReportsmodelDown">
+		INSERT INTO reportsmodel_down 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(reportno)">
+				reportno,
+			</if>
+			<if test="@Ognl@isNotEmpty(reportname)">
+				REPORTNAME,
+			</if>
+			<if test="@Ognl@isNotEmpty(downpath)">
+				DOWNPATH,
+			</if>
+			<if test="@Ognl@isNotEmpty(memo)">
+				memo,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(reportno)">
+				#{reportno},
+			</if>
+			<if test="@Ognl@isNotEmpty(reportname)">
+				#{reportname},
+			</if>
+			<if test="@Ognl@isNotEmpty(downpath)">
+				#{downpath},
+			</if>
+			<if test="@Ognl@isNotEmpty(memo)">
+				#{memo},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM reportsmodel_down WHERE
+        REPORTNO = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.bsnsmng.entity.ReportsmodelDown">
+		SELECT <include refid="selectId" />
+		    FROM reportsmodel_down 
+	        WHERE 
+        REPORTNO = #{id} 
+	</select>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(reportname)">
+			REPORTNAME = #{reportname},
+		</if>
+		<if test="@Ognl@isNotEmpty(downpath)">
+			DOWNPATH = #{downpath},
+		</if>
+		<if test="@Ognl@isNotEmpty(memo)">
+			memo = #{memo},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.bsnsmng.entity.ReportsmodelDown">
+	    UPDATE reportsmodel_down 
+		<include refid="updateset"/>
+        WHERE 
+	        REPORTNO = #{reportno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FnncPrfdtlDao">
+
+	<resultMap id="FnncPrfdtl" type="com.mf.financemng.entity.FnncPrfdtl">
+        <result property="prftrcno" column="PRFTRCNO"/>
+        <result property="sqnno" column="SQNNO"/>
+        <result property="accntno" column="ACCNTNO"/>
+        <result property="upaccntno" column="UPACCNTNO"/>
+        <result property="jdflg" column="JDFLG"/>
+        <result property="amnt" column="AMNT"/>
+        <result property="remark" column="REMARK"/>
+        <result property="sqsort" column="SQSORT"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		PRFTRCNO,
+SQNNO,
+ACCNTNO,
+UPACCNTNO,
+JDFLG,
+AMNT,
+REMARK,
+SQSORT
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.FnncPrfdtl">
+		select
+		<include refid="selectId" />
+		from fnnc_prfdtl
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.FnncPrfdtl" parameterType="com.mf.financemng.entity.FnncPrfdtl">
+		select
+		<include refid="selectId" />
+		from fnnc_prfdtl
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.financemng.entity.FnncPrfdtl" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fnnc_prfdtl
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.accntno)">
+					AND ACCNTNO like '%${t.accntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.upaccntno)">
+					AND UPACCNTNO like '%${t.upaccntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.jdflg)">
+					AND JDFLG like '%${t.jdflg}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.amnt)">
+					AND AMNT = '${t.amnt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(accntno)">
+					AND ACCNTNO like '%${accntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(upaccntno)">
+					AND UPACCNTNO like '%${upaccntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(jdflg)">
+					AND JDFLG like '%${jdflg}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(amnt)">
+					AND AMNT = '${amnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.FnncPrfdtl" resultType="int">
+		select count(0) from fnnc_prfdtl
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.financemng.entity.FnncPrfdtl">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO fnnc_prfdtl (
+        	ACCNTNO ,
+        	UPACCNTNO ,
+        	JDFLG ,
+        	AMNT ,
+        	REMARK,
+			SQSORT 
+        ) VALUES (
+        	#{accntno} ,
+        	#{upaccntno} ,
+        	#{jdflg} ,
+        	#{amnt} ,
+        	#{remark},
+        	#{sqsort} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.FnncPrfdtl">
+		INSERT INTO fnnc_prfdtl 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(prftrcno)">
+				PRFTRCNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(sqnno)">
+				SQNNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(accntno)">
+				ACCNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(upaccntno)">
+				UPACCNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(jdflg)">
+				JDFLG,
+			</if>
+			<if test="@Ognl@isNotEmpty(amnt)">
+				AMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if><if test="@Ognl@isNotEmpty(sqsort)">
+				SQSORT
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(prftrcno)">
+				#{prftrcno},
+			</if>
+			<if test="@Ognl@isNotEmpty(sqnno)">
+				#{sqnno},
+			</if>
+			<if test="@Ognl@isNotEmpty(accntno)">
+				#{accntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(upaccntno)">
+				#{upaccntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(jdflg)">
+				#{jdflg},
+			</if>
+			<if test="@Ognl@isNotEmpty(amnt)">
+				#{amnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if><if test="@Ognl@isNotEmpty(sqsort)">
+				#{sqsort}
+			</if>
+			
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM fnnc_prfdtl WHERE
+        PRFTRCNO = #{prftrcno}
+	</delete>
+	<!-- 删 -->
+	<delete id="deleteBysqnno" parameterType="String">
+		DELETE FROM fnnc_prfdtl WHERE
+        SQNNO = '${_parameter}' 
+	</delete>
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.FnncPrfdtl">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_prfdtl 
+	        WHERE 
+        PRFTRCNO = #{id}  AND 
+        SQNNO = #{id} 
+	</select>
+	<select id="getByPrfrtcno" parameterType="String" resultType="com.mf.financemng.entity.FnncPrfdtl">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_prfdtl 
+	        WHERE 
+        PRFTRCNO = #{prftrcno}
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.financemng.entity.FnncPrfdtl">
+	    UPDATE fnnc_prfdtl SET
+	        ACCNTNO = #{accntno} ,
+	        UPACCNTNO = #{upaccntno} ,
+	        JDFLG = #{jdflg} ,
+	        AMNT = #{amnt} ,
+	        REMARK = #{remark},
+	        SQSORT=#{sqsort} 
+        WHERE 
+	        PRFTRCNO = #{prftrcno}  
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(accntno)">
+			ACCNTNO = #{accntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(upaccntno)">
+			UPACCNTNO = #{upaccntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(jdflg)">
+			JDFLG = #{jdflg},
+		</if>
+		<if test="@Ognl@isNotEmpty(amnt)">
+			AMNT = #{amnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(sqsort)">
+			SQSORT = #{sqsort}
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.financemng.entity.FnncPrfdtl">
+	    UPDATE fnnc_prfdtl 
+		<include refid="updateset"/>
+        WHERE 
+	        SQNNO = #{sqnno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	<select id="querylist" resultType="com.mf.financemng.entity.FnncPrfdtlList" parameterType="String" >
+		select 
+		a.prftrcno,
+		a.sqnno,
+		a.remark,
+		a.accntno,
+		concat(a.accntno,"-",b.accntnm)as accntnm,
+		a.upaccntno,
+		a.jdflg,
+		a.amnt,
+		c.accntnm as upaccntnm 
+		from fnnc_prfdtl a 
+		left join fnnc_accntitem b on a.accntno=b.accntno 
+		left join fnnc_accntitem c on a.accntno=c.accntno 
+		where a.prftrcno=#{prftrcno}
+		order by a.sqnno
+	</select>
+	<select id="queryAccnt" resultType="com.mf.financemng.entity.FnncPrfdtlList" parameterType="String" >
+		
+	select 
+	d.accntno,
+	sum(b.amnt)as amnt,
+	d.accntnm,
+	case when b.jdflg=2 then '贷' else '借' end as jdflg ,
+	count(b.sqnno)as remark from fnnc_chckprfbs a 
+	left join fnnc_chckprfdtl b on a.chcktrcno=b.chcktrcno 
+	left join fnnc_accntitem d on b.accntno=d.accntno 
+	where a.accntflg='N' 
+	group by b.accntno,b.jdflg
+
+	</select>
+	<select id="queryAccntAll" resultType="com.mf.financemng.entity.FnncPrfdtlList" parameterType="String" >
+		
+	select 
+	d.accntno,
+	sum(b.amnt)as amnt,
+	d.accntnm,
+	case when b.jdflg=1 then '贷' else '借' end as jdflg ,
+	case when a.accntflg='J' then '已汇总状态' else '已结转状态' end remark from fnnc_chckprfbs a 
+	left join fnnc_chckprfdtl b on a.chcktrcno=b.chcktrcno 
+	left join fnnc_accntitem d on b.accntno=d.accntno 
+	where (a.accntflg='J' or a.accntflg='Y') AND substring(a.prfcrtdt,1,6)=(select substring(MAX(prfcrtdt),1,6) from fnnc_chckprfbs)
+	group by b.accntno,b.jdflg
+
+	</select>
+	
+</mapper>
+

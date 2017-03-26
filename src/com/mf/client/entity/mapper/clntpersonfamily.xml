@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntPersonFamilyDao">
+
+	<resultMap id="ClntPersonFamily" type="com.mf.client.entity.ClntPersonFamily">
+        <result property="id" column="ID"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="clntrelation" column="CLNTRELATION"/>
+        <result property="name" column="NAME"/>
+        <result property="certtype" column="CERTTYPE"/>
+        <result property="certno" column="CERTNO"/>
+        <result property="gender" column="GENDER"/>
+        <result property="tel" column="TEL"/>
+        <result property="company" column="COMPANY"/>
+        <result property="health" column="HEALTH"/>
+        <result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ID,
+CLNTNO,
+CLNTRELATION,
+NAME,
+CERTTYPE,
+CERTNO,
+GENDER,
+TEL,
+COMPANY,
+HEALTH,
+REMARK
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntPersonFamily">
+		select
+		<include refid="selectId" />
+		from clnt_person_family
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntPersonFamily" parameterType="com.mf.client.entity.ClntPersonFamily">
+		select
+		<include refid="selectId" />
+		from clnt_person_family
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntPersonFamily">
+		select
+		<include refid="selectId" />
+		from clnt_person_family 
+		where CLNTNO = ${t.clntno}
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntrelation)">
+					AND CLNTRELATION like '%${t.clntrelation}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.name)">
+					AND NAME like '%${t.name}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.certtype)">
+					AND CERTTYPE like '%${t.certtype}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.certno)">
+					AND CERTNO like '%${t.certno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.gender)">
+					AND GENDER like '%${t.gender}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.tel)">
+					AND TEL like '%${t.tel}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.company)">
+					AND COMPANY like '%${t.company}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.health)">
+					AND HEALTH like '%${t.health}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntrelation)">
+					AND CLNTRELATION like '%${clntrelation}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(name)">
+					AND NAME like '%${name}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(certtype)">
+					AND CERTTYPE like '%${certtype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(certno)">
+					AND CERTNO like '%${certno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(gender)">
+					AND GENDER like '%${gender}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(tel)">
+					AND TEL like '%${tel}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(company)">
+					AND COMPANY like '%${company}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(health)">
+					AND HEALTH like '%${health}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntPersonFamily" resultType="int">
+		select count(0) from clnt_person_family
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntPersonFamily">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_person_family (
+        	CLNTNO ,
+        	CLNTRELATION ,
+        	NAME ,
+        	CERTTYPE ,
+        	CERTNO ,
+        	GENDER ,
+        	TEL ,
+        	COMPANY ,
+        	HEALTH ,
+        	REMARK 
+        ) VALUES (
+        	#{clntno} ,
+        	#{clntrelation} ,
+        	#{name} ,
+        	#{certtype} ,
+        	#{certno} ,
+        	#{gender} ,
+        	#{tel} ,
+        	#{company} ,
+        	#{health} ,
+        	#{remark} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntPersonFamily">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO clnt_person_family 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntrelation)">
+				CLNTRELATION,
+			</if>
+			<if test="@Ognl@isNotEmpty(name)">
+				NAME,
+			</if>
+			<if test="@Ognl@isNotEmpty(certtype)">
+				CERTTYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(certno)">
+				CERTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(gender)">
+				GENDER,
+			</if>
+			<if test="@Ognl@isNotEmpty(tel)">
+				TEL,
+			</if>
+			<if test="@Ognl@isNotEmpty(company)">
+				COMPANY,
+			</if>
+			<if test="@Ognl@isNotEmpty(health)">
+				HEALTH,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntrelation)">
+				#{clntrelation},
+			</if>
+			<if test="@Ognl@isNotEmpty(name)">
+				#{name},
+			</if>
+			<if test="@Ognl@isNotEmpty(certtype)">
+				#{certtype},
+			</if>
+			<if test="@Ognl@isNotEmpty(certno)">
+				#{certno},
+			</if>
+			<if test="@Ognl@isNotEmpty(gender)">
+				#{gender},
+			</if>
+			<if test="@Ognl@isNotEmpty(tel)">
+				#{tel},
+			</if>
+			<if test="@Ognl@isNotEmpty(company)">
+				#{company},
+			</if>
+			<if test="@Ognl@isNotEmpty(health)">
+				#{health},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM clnt_person_family WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntPersonFamily">
+		SELECT <include refid="selectId" />
+		    FROM clnt_person_family 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntPersonFamily">
+	    UPDATE clnt_person_family SET
+	        CLNTNO = #{clntno} ,
+	        CLNTRELATION = #{clntrelation} ,
+	        NAME = #{name} ,
+	        CERTTYPE = #{certtype} ,
+	        CERTNO = #{certno} ,
+	        GENDER = #{gender} ,
+	        TEL = #{tel} ,
+	        COMPANY = #{company} ,
+	        HEALTH = #{health} ,
+	        REMARK = #{remark} 
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntrelation)">
+			CLNTRELATION = #{clntrelation},
+		</if>
+		<if test="@Ognl@isNotEmpty(name)">
+			NAME = #{name},
+		</if>
+		<if test="@Ognl@isNotEmpty(certtype)">
+			CERTTYPE = #{certtype},
+		</if>
+		<if test="@Ognl@isNotEmpty(certno)">
+			CERTNO = #{certno},
+		</if>
+		<if test="@Ognl@isNotEmpty(gender)">
+			GENDER = #{gender},
+		</if>
+		<if test="@Ognl@isNotEmpty(tel)">
+			TEL = #{tel},
+		</if>
+		<if test="@Ognl@isNotEmpty(company)">
+			COMPANY = #{company},
+		</if>
+		<if test="@Ognl@isNotEmpty(health)">
+			HEALTH = #{health},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntPersonFamily">
+	    UPDATE clnt_person_family 
+		<include refid="updateset"/>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

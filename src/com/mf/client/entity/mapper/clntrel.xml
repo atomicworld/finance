@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntRelDao">
+
+	<resultMap id="ClntRel" type="com.mf.client.entity.ClntRel">
+        <result property="id" column="ID"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="relclntno" column="RELCLNTNO"/>
+        <result property="relation" column="RELATION"/>
+        <result property="scdate" column="SCDATE"/>
+        <result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ID,
+CLNTNO,
+RELCLNTNO,
+RELATION,
+SCDATE,
+REMARK
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntRel">
+		select
+		<include refid="selectId" />
+		from clnt_rel
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntRel" parameterType="com.mf.client.entity.ClntRel">
+		select
+		<include refid="selectId" />
+		from clnt_rel
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntRel" parameterType="java.util.HashMap">
+		select
+			<include refid="selectId" />
+		from clnt_rel
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select> 
+	
+<!-- 
+	<select id="query" resultType="com.mf.client.entity.ClntRel" parameterType="java.util.HashMap">
+		select
+			a.ID,
+			a.CLNTNO,
+			a.RELCLNTNO,
+			a.RELATION,
+			a.SCDATE,
+			a.REMARK,
+			select clntnm from clnt_client b where ( b.clntid = a.clntno )
+			select clntnm as b.relclntnm from clnt_client b where ( b.clntid = a.RELCLNTNO )
+		from clnt_rel a
+		left join clnt_client b 
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if> 
+	</select>-->
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.relclntno)">
+					AND RELCLNTNO like '%${t.relclntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.relation)">
+					AND RELATION like '%${t.relation}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.scdate)">
+					AND SCDATE like '%${t.scdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(relclntno)">
+					AND RELCLNTNO like '%${relclntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(relation)">
+					AND RELATION like '%${relation}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(scdate)">
+					AND SCDATE like '%${scdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntRel" resultType="int">
+		select count(0) from clnt_rel
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntRel">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_rel (
+        	CLNTNO ,
+        	RELCLNTNO ,
+        	RELATION ,
+        	SCDATE ,
+        	REMARK 
+        ) VALUES (
+        	#{clntno} ,
+        	#{relclntno} ,
+        	#{relation} ,
+        	#{scdate} ,
+        	#{remark} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntRel">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO clnt_rel 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(relclntno)">
+				RELCLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(relation)">
+				RELATION,
+			</if>
+			<if test="@Ognl@isNotEmpty(scdate)">
+				SCDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(relclntno)">
+				#{relclntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(relation)">
+				#{relation},
+			</if>
+			<if test="@Ognl@isNotEmpty(scdate)">
+				#{scdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM clnt_rel WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntRel">
+		SELECT <include refid="selectId" />
+		    FROM clnt_rel 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntRel">
+	    UPDATE clnt_rel SET
+	        CLNTNO = #{clntno} ,
+	        RELCLNTNO = #{relclntno} ,
+	        RELATION = #{relation} ,
+	        SCDATE = #{scdate} ,
+	        REMARK = #{remark} 
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(relclntno)">
+			RELCLNTNO = #{relclntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(relation)">
+			RELATION = #{relation},
+		</if>
+		<if test="@Ognl@isNotEmpty(scdate)">
+			SCDATE = #{scdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntRel">
+	    UPDATE clnt_rel 
+		<include refid="updateset"/>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

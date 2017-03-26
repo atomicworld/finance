@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntEeAttentionDao">
+
+	<resultMap id="ClntEeAttention" type="com.mf.client.entity.ClntEeAttention">
+        <result property="id" column="ID"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="bussdt" column="BUSSDT"/>
+        <result property="idtrecfno" column="IDTRECFNO"/>
+        <result property="plainnm" column="PLAINNM"/>
+        <result property="curtp" column="CURTP"/>
+        <result property="jdexamt" column="JDEXAMT"/>
+        <result property="jdexecdt" column="JDEXECDT"/>
+        <result property="execrlt" column="EXECRLT"/>
+        <result property="idctcau" column="IDCTCAU"/>
+        <result property="memrecfno" column="MEMRECFNO"/>
+        <result property="memordes" column="MEMORDES"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ID,
+CLNTNO,
+BUSSDT,
+IDTRECFNO,
+PLAINNM,
+CURTP,
+JDEXAMT,
+JDEXECDT,
+EXECRLT,
+IDCTCAU,
+MEMRECFNO,
+MEMORDES
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntEeAttention">
+		select
+		<include refid="selectId" />
+		from clnt_ee_attention
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntEeAttention" parameterType="com.mf.client.entity.ClntEeAttention">
+		select
+		<include refid="selectId" />
+		from clnt_ee_attention
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntEeAttention" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_ee_attention
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bussdt)">
+					AND BUSSDT like '%${t.bussdt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.idtrecfno)">
+					AND IDTRECFNO like '%${t.idtrecfno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.plainnm)">
+					AND PLAINNM like '%${t.plainnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.curtp)">
+					AND CURTP like '%${t.curtp}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.jdexamt)">
+					AND JDEXAMT = '${t.jdexamt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.jdexecdt)">
+					AND JDEXECDT like '%${t.jdexecdt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.execrlt)">
+					AND EXECRLT like '%${t.execrlt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.idctcau)">
+					AND IDCTCAU like '%${t.idctcau}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.memrecfno)">
+					AND MEMRECFNO like '%${t.memrecfno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.memordes)">
+					AND MEMORDES like '%${t.memordes}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bussdt)">
+					AND BUSSDT like '%${bussdt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(idtrecfno)">
+					AND IDTRECFNO like '%${idtrecfno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(plainnm)">
+					AND PLAINNM like '%${plainnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(curtp)">
+					AND CURTP like '%${curtp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(jdexamt)">
+					AND JDEXAMT = '${jdexamt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(jdexecdt)">
+					AND JDEXECDT like '%${jdexecdt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(execrlt)">
+					AND EXECRLT like '%${execrlt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(idctcau)">
+					AND IDCTCAU like '%${idctcau}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(memrecfno)">
+					AND MEMRECFNO like '%${memrecfno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(memordes)">
+					AND MEMORDES like '%${memordes}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntEeAttention" resultType="int">
+		select count(0) from clnt_ee_attention
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntEeAttention">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_ee_attention (
+        	CLNTNO ,
+        	BUSSDT ,
+        	IDTRECFNO ,
+        	PLAINNM ,
+        	CURTP ,
+        	JDEXAMT ,
+        	JDEXECDT ,
+        	EXECRLT ,
+        	IDCTCAU ,
+        	MEMRECFNO ,
+        	MEMORDES 
+        ) VALUES (
+        	#{clntno} ,
+        	#{bussdt} ,
+        	#{idtrecfno} ,
+        	#{plainnm} ,
+        	#{curtp} ,
+        	#{jdexamt} ,
+        	#{jdexecdt} ,
+        	#{execrlt} ,
+        	#{idctcau} ,
+        	#{memrecfno} ,
+        	#{memordes} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntEeAttention">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO clnt_ee_attention 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(bussdt)">
+				BUSSDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(idtrecfno)">
+				IDTRECFNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(plainnm)">
+				PLAINNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(curtp)">
+				CURTP,
+			</if>
+			<if test="@Ognl@isNotEmpty(jdexamt)">
+				JDEXAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(jdexecdt)">
+				JDEXECDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(execrlt)">
+				EXECRLT,
+			</if>
+			<if test="@Ognl@isNotEmpty(idctcau)">
+				IDCTCAU,
+			</if>
+			<if test="@Ognl@isNotEmpty(memrecfno)">
+				MEMRECFNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(memordes)">
+				MEMORDES,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(bussdt)">
+				#{bussdt},
+			</if>
+			<if test="@Ognl@isNotEmpty(idtrecfno)">
+				#{idtrecfno},
+			</if>
+			<if test="@Ognl@isNotEmpty(plainnm)">
+				#{plainnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(curtp)">
+				#{curtp},
+			</if>
+			<if test="@Ognl@isNotEmpty(jdexamt)">
+				#{jdexamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(jdexecdt)">
+				#{jdexecdt},
+			</if>
+			<if test="@Ognl@isNotEmpty(execrlt)">
+				#{execrlt},
+			</if>
+			<if test="@Ognl@isNotEmpty(idctcau)">
+				#{idctcau},
+			</if>
+			<if test="@Ognl@isNotEmpty(memrecfno)">
+				#{memrecfno},
+			</if>
+			<if test="@Ognl@isNotEmpty(memordes)">
+				#{memordes},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM clnt_ee_attention WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntEeAttention">
+		SELECT <include refid="selectId" />
+		    FROM clnt_ee_attention 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntEeAttention">
+	    UPDATE clnt_ee_attention SET
+	        CLNTNO = #{clntno} ,
+	        BUSSDT = #{bussdt} ,
+	        IDTRECFNO = #{idtrecfno} ,
+	        PLAINNM = #{plainnm} ,
+	        CURTP = #{curtp} ,
+	        JDEXAMT = #{jdexamt} ,
+	        JDEXECDT = #{jdexecdt} ,
+	        EXECRLT = #{execrlt} ,
+	        IDCTCAU = #{idctcau} ,
+	        MEMRECFNO = #{memrecfno} ,
+	        MEMORDES = #{memordes} 
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(bussdt)">
+			BUSSDT = #{bussdt},
+		</if>
+		<if test="@Ognl@isNotEmpty(idtrecfno)">
+			IDTRECFNO = #{idtrecfno},
+		</if>
+		<if test="@Ognl@isNotEmpty(plainnm)">
+			PLAINNM = #{plainnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(curtp)">
+			CURTP = #{curtp},
+		</if>
+		<if test="@Ognl@isNotEmpty(jdexamt)">
+			JDEXAMT = #{jdexamt},
+		</if>
+		<if test="@Ognl@isNotEmpty(jdexecdt)">
+			JDEXECDT = #{jdexecdt},
+		</if>
+		<if test="@Ognl@isNotEmpty(execrlt)">
+			EXECRLT = #{execrlt},
+		</if>
+		<if test="@Ognl@isNotEmpty(idctcau)">
+			IDCTCAU = #{idctcau},
+		</if>
+		<if test="@Ognl@isNotEmpty(memrecfno)">
+			MEMRECFNO = #{memrecfno},
+		</if>
+		<if test="@Ognl@isNotEmpty(memordes)">
+			MEMORDES = #{memordes},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntEeAttention">
+	    UPDATE clnt_ee_attention 
+		<include refid="updateset"/>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

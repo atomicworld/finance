@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.cntrtmng.dao.BsnsOverdueUrgeDao">
+	
+	<resultMap id="BsnsOverdueUrge" type="com.mf.cntrtmng.entity.BsnsOverdueUrge">
+        <result property="no" column="NO"/>
+        <result property="srlno" column="SRLNO"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="urgeid" column="URGEID"/>
+        <result property="urgename" column="URGENAME"/>
+        <result property="urgedate" column="URGEDATE"/>
+        <result property="cntrctno" column="CNTRCTNO"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		no,srlno,clntno,urgeid,urgename,urgedate,cntrctno
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.cntrtmng.entity.BsnsOverdueUrge">
+		select
+		<include refid="selectId" />
+		from bsns_overdue_urge
+	</select>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.cntrtmng.entity.BsnsOverdueUrge">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO bsns_overdue_urge 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(srlno)">
+				SRLNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(urgeid)">
+				URGEID,
+			</if>
+			<if test="@Ognl@isNotEmpty(urgename)">
+				URGENAME,
+			</if>
+			<if test="@Ognl@isNotEmpty(urgedate)">
+				URGEDATE,
+			</if>
+						<if test="@Ognl@isNotEmpty(cntrctno)">
+				CNTRCTNO,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(srlno)">
+				#{srlno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(urgeid)">
+				#{urgeid},
+			</if>
+			<if test="@Ognl@isNotEmpty(urgename)">
+				#{urgename},
+			</if>
+			<if test="@Ognl@isNotEmpty(urgedate)">
+				#{urgedate},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				#{cntrctno},
+			</if>
+    </trim>
+	</sql>
+	
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsOverdueUrge">
+		SELECT <include refid="selectId" />
+		    FROM bsns_overdue_urge 
+	        WHERE 
+        SRLNO = #{id} 
+	</select>
+	
+	<!-- 根据map，查找当天已做的逾期催收 -->
+  	<select id="queryAll" parameterType="com.mf.cntrtmng.entity.BsnsOverdueUrge" resultType="com.mf.cntrtmng.entity.BsnsOverdueUrge">
+			SELECT <include refid="selectId" />
+		    FROM bsns_overdue_urge 
+			WHERE SRLNO='${srlno}' and URGEDATE='${urgedate}'
+			
+	</select>
+	
+</mapper>

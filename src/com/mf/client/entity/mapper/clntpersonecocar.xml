@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntPersonEcoCarDao">
+
+	<resultMap id="ClntPersonEcoCar" type="com.mf.client.entity.ClntPersonEcoCar">
+        <result property="id" column="ID"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="cartype" column="CARTYPE"/>
+        <result property="carcard" column="CARCARD"/>
+        <result property="carbrand" column="CARBRAND"/>
+        <result property="carmodel" column="CARMODEL"/>
+        <result property="carframeno" column="CARFRAMENO"/>
+        <result property="engineno" column="ENGINENO"/>
+        <result property="runsum" column="RUNSUM"/>
+        <result property="buyflag" column="BUYFLAG"/>
+        <result property="buyamt" column="BUYAMT"/>
+        <result property="buydate" column="BUYDATE"/>
+        <result property="debtamt" column="DEBTAMT"/>
+        <result property="useflag" column="USEFLAG"/>
+        <result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ID,
+CLNTNO,
+CARTYPE,
+CARCARD,
+CARBRAND,
+CARMODEL,
+CARFRAMENO,
+ENGINENO,
+RUNSUM,
+BUYFLAG,
+BUYAMT,
+BUYDATE,
+DEBTAMT,
+USEFLAG,
+REMARK
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntPersonEcoCar">
+		select
+		<include refid="selectId" />
+		from clnt_person_eco_car
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntPersonEcoCar" parameterType="com.mf.client.entity.ClntPersonEcoCar">
+		select
+		<include refid="selectId" />
+		from clnt_person_eco_car
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntPersonEcoCar" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_person_eco_car
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cartype)">
+					AND CARTYPE like '%${t.cartype}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.carcard)">
+					AND CARCARD like '%${t.carcard}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.carbrand)">
+					AND CARBRAND like '%${t.carbrand}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.carmodel)">
+					AND CARMODEL like '%${t.carmodel}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.carframeno)">
+					AND CARFRAMENO like '%${t.carframeno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.engineno)">
+					AND ENGINENO like '%${t.engineno}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.runsum)">
+					AND RUNSUM = '${t.runsum}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.buyflag)">
+					AND BUYFLAG like '%${t.buyflag}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.buyamt)">
+					AND BUYAMT = '${t.buyamt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.buydate)">
+					AND BUYDATE like '%${t.buydate}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.debtamt)">
+					AND DEBTAMT = '${t.debtamt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.useflag)">
+					AND USEFLAG like '%${t.useflag}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cartype)">
+					AND CARTYPE like '%${cartype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(carcard)">
+					AND CARCARD like '%${carcard}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(carbrand)">
+					AND CARBRAND like '%${carbrand}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(carmodel)">
+					AND CARMODEL like '%${carmodel}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(carframeno)">
+					AND CARFRAMENO like '%${carframeno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(engineno)">
+					AND ENGINENO like '%${engineno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(runsum)">
+					AND RUNSUM = '${runsum}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(buyflag)">
+					AND BUYFLAG like '%${buyflag}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(buyamt)">
+					AND BUYAMT = '${buyamt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(buydate)">
+					AND BUYDATE like '%${buydate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(debtamt)">
+					AND DEBTAMT = '${debtamt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(useflag)">
+					AND USEFLAG like '%${useflag}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntPersonEcoCar" resultType="int">
+		select count(0) from clnt_person_eco_car
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntPersonEcoCar">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_person_eco_car (
+        	CLNTNO ,
+        	CARTYPE ,
+        	CARCARD ,
+        	CARBRAND ,
+        	CARMODEL ,
+        	CARFRAMENO ,
+        	ENGINENO ,
+        	RUNSUM ,
+        	BUYFLAG ,
+        	BUYAMT ,
+        	BUYDATE ,
+        	DEBTAMT ,
+        	USEFLAG ,
+        	REMARK 
+        ) VALUES (
+        	#{clntno} ,
+        	#{cartype} ,
+        	#{carcard} ,
+        	#{carbrand} ,
+        	#{carmodel} ,
+        	#{carframeno} ,
+        	#{engineno} ,
+        	#{runsum} ,
+        	#{buyflag} ,
+        	#{buyamt} ,
+        	#{buydate} ,
+        	#{debtamt} ,
+        	#{useflag} ,
+        	#{remark} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntPersonEcoCar">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO clnt_person_eco_car 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(cartype)">
+				CARTYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(carcard)">
+				CARCARD,
+			</if>
+			<if test="@Ognl@isNotEmpty(carbrand)">
+				CARBRAND,
+			</if>
+			<if test="@Ognl@isNotEmpty(carmodel)">
+				CARMODEL,
+			</if>
+			<if test="@Ognl@isNotEmpty(carframeno)">
+				CARFRAMENO,
+			</if>
+			<if test="@Ognl@isNotEmpty(engineno)">
+				ENGINENO,
+			</if>
+			<if test="@Ognl@isNotEmpty(runsum)">
+				RUNSUM,
+			</if>
+			<if test="@Ognl@isNotEmpty(buyflag)">
+				BUYFLAG,
+			</if>
+			<if test="@Ognl@isNotEmpty(buyamt)">
+				BUYAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(buydate)">
+				BUYDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(debtamt)">
+				DEBTAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(useflag)">
+				USEFLAG,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(cartype)">
+				#{cartype},
+			</if>
+			<if test="@Ognl@isNotEmpty(carcard)">
+				#{carcard},
+			</if>
+			<if test="@Ognl@isNotEmpty(carbrand)">
+				#{carbrand},
+			</if>
+			<if test="@Ognl@isNotEmpty(carmodel)">
+				#{carmodel},
+			</if>
+			<if test="@Ognl@isNotEmpty(carframeno)">
+				#{carframeno},
+			</if>
+			<if test="@Ognl@isNotEmpty(engineno)">
+				#{engineno},
+			</if>
+			<if test="@Ognl@isNotEmpty(runsum)">
+				#{runsum},
+			</if>
+			<if test="@Ognl@isNotEmpty(buyflag)">
+				#{buyflag},
+			</if>
+			<if test="@Ognl@isNotEmpty(buyamt)">
+				#{buyamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(buydate)">
+				#{buydate},
+			</if>
+			<if test="@Ognl@isNotEmpty(debtamt)">
+				#{debtamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(useflag)">
+				#{useflag},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM clnt_person_eco_car WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntPersonEcoCar">
+		SELECT <include refid="selectId" />
+		    FROM clnt_person_eco_car 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntPersonEcoCar">
+	    UPDATE clnt_person_eco_car SET
+	        CLNTNO = #{clntno} ,
+	        CARTYPE = #{cartype} ,
+	        CARCARD = #{carcard} ,
+	        CARBRAND = #{carbrand} ,
+	        CARMODEL = #{carmodel} ,
+	        CARFRAMENO = #{carframeno} ,
+	        ENGINENO = #{engineno} ,
+	        RUNSUM = #{runsum} ,
+	        BUYFLAG = #{buyflag} ,
+	        BUYAMT = #{buyamt} ,
+	        BUYDATE = #{buydate} ,
+	        DEBTAMT = #{debtamt} ,
+	        USEFLAG = #{useflag} ,
+	        REMARK = #{remark} 
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(cartype)">
+			CARTYPE = #{cartype},
+		</if>
+		<if test="@Ognl@isNotEmpty(carcard)">
+			CARCARD = #{carcard},
+		</if>
+		<if test="@Ognl@isNotEmpty(carbrand)">
+			CARBRAND = #{carbrand},
+		</if>
+		<if test="@Ognl@isNotEmpty(carmodel)">
+			CARMODEL = #{carmodel},
+		</if>
+		<if test="@Ognl@isNotEmpty(carframeno)">
+			CARFRAMENO = #{carframeno},
+		</if>
+		<if test="@Ognl@isNotEmpty(engineno)">
+			ENGINENO = #{engineno},
+		</if>
+		<if test="@Ognl@isNotEmpty(runsum)">
+			RUNSUM = #{runsum},
+		</if>
+		<if test="@Ognl@isNotEmpty(buyflag)">
+			BUYFLAG = #{buyflag},
+		</if>
+		<if test="@Ognl@isNotEmpty(buyamt)">
+			BUYAMT = #{buyamt},
+		</if>
+		<if test="@Ognl@isNotEmpty(buydate)">
+			BUYDATE = #{buydate},
+		</if>
+		<if test="@Ognl@isNotEmpty(debtamt)">
+			DEBTAMT = #{debtamt},
+		</if>
+		<if test="@Ognl@isNotEmpty(useflag)">
+			USEFLAG = #{useflag},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntPersonEcoCar">
+	    UPDATE clnt_person_eco_car 
+		<include refid="updateset"/>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

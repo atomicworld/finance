@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 命名空间全限定类名，interface xxxDao调用此id方法名 -->
+<mapper namespace="com.mf.sys.dao.CompanyInfoDao">
+
+	<!-- 获取所有字段 -->
+	<sql id="getAllFields">
+	cmpno,
+	cmpnm,
+	 cmptyp,
+	 cmplcns,
+	locate_tax_no,
+	national_tax_no,
+	 fin_lic_cd,
+	 busi_lic_no,
+	 zipcode,
+	 region_no,
+	sdate,
+	openning_docno,
+	 permission_bulid_date,
+	 pre_bulid_docno,
+	 cmpnm_en,
+	comp_kind,
+ 	cmpaccnt,
+	 cmpaddr,
+   	comp_summary,
+	 memo,
+	 orgcode,
+	 email,
+	 email2,
+	 regaddress,
+	 edate,
+	 representername,
+	 representerdocno,
+	 officepriv,
+	 officesize,
+	 regdate,
+	 cmpcptlamnt,
+	 regunit,
+	 regcode,
+	 runscope,
+	 tel,
+	 accntbnk,
+	 linkman,
+	 website,
+	 fax,
+	 facadship,
+	 stockamnt,
+	 cmpfaren,
+	 logonm,
+	 telphone,
+	 accntnm,
+	 representerdocno,
+	 representerdoc
+	</sql>
+	
+	<!-- 查询列表 -->
+	<select id="query" resultType="com.mf.sys.entity.CompanyInfo" >
+		select 
+			<include refid="getAllFields"/>
+		from CompanyInfo
+		limit 1
+	</select>
+	
+	
+	<select id="queryAll" resultType="com.mf.sys.entity.CompanyInfo" >
+		select 
+			<include refid="getAllFields"/>
+		from CompanyInfo
+		limit 1
+	</select>
+	
+	<!-- 查询总数 -->
+	<select id="count" parameterType="com.mf.sys.entity.CompanyInfo" resultType="int">
+		select count(0) from CompanyInfo
+	</select>
+	
+	
+	<!-- 获取公司信息 -->
+	<select id="getById" parameterType="String" resultType="com.mf.sys.entity.CompanyInfo">
+	    select
+		<include refid="getAllFields"/>
+		from CompanyInfo
+		where  cmpno=#{cmpno}
+	</select>
+	
+	<!-- 添加公司信息 -->
+	
+	<insert id="add" parameterType="com.mf.sys.entity.CompanyInfo">
+		INSERT INTO CompanyInfo (CMPNO ,CMPNM,CMPNM_EN,CMPLCNS,CMPTYP,CMPADDR,SDATE,
+								 EDATE,LOGONM,eMAIL ,TELPHONE,REGION_NO,ZipCode, STOCKAMNT  ,
+								 cmpfaren, COMP_KIND  ,PARENT_COMPNO,PRE_BULID_DOCNO,PERMISSION_BULID_DATE,
+								 Openning_DocNo,BUSI_LIC_NO,FIN_LIC_CD,NATIONAL_TAX_NO,LOCATE_TAX_NO,
+								 ACCNTBNK,ACCNTNM,CMPACCNT,COMP_SUMMARY,MEMO,LinkMan,Tel,Fax,Email2,
+								 WebSite,RegCode,RegUnit,RegAddress,OrgCode,CMPCPTLAMNT,RegDate,
+								 OfficeSize,OfficePriv,FacadShip,RunScope,RepresenterDoc,RepresenterDocno,
+								 RepresenterName) VALUES (
+								 	#{cmpno},#{cmpnm},#{cmpnm_en},#{cmplcns},#{cmptyp},#{cmpaddr},#{sdate},
+								 	#{edate},#{logonm},#{email},#{telphone},#{region_no},#{zipcode},#{stockamnt},
+								 	#{cmpfaren},#{comp_kind},'',#{pre_bulid_docno},#{permission_bulid_date},
+								 	#{openning_docno},#{busi_lic_no},#{fin_lic_cd},#{national_tax_no}, 
+								 	#{locate_tax_no},#{accntbnk},#{accntnm},#{cmpaccnt},#{comp_summary},
+								 	#{memo},#{linkman},#{tel},#{fax},#{email2},#{website},#{regcode},#{regunit},
+								 	#{regaddress},#{orgcode},#{cmpcptlamnt},#{regdate},#{officesize},#{officepriv},
+								 	#{facadship},#{runscope},#{representerdoc},#{representerdocno},#{representername}		 
+								 	)
+	</insert>
+	
+	
+	
+	
+	<!-- 更新当前公司信息 -->
+	<update id="modify" parameterType="com.mf.sys.entity.CompanyInfo">
+		update CompanyInfo 
+		<set>
+		cmpnm=#{cmpnm},
+	 	cmptyp=#{cmptyp},
+		locate_tax_no=#{locate_tax_no},
+		national_tax_no=#{national_tax_no},
+		 fin_lic_cd=#{fin_lic_cd},
+		 busi_lic_no=#{busi_lic_no},
+		 zipcode=#{zipcode},
+		 region_no=#{region_no},
+		sdate=#{sdate},
+		openning_docno=#{openning_docno},
+		 cmpnm_en=#{cmpnm_en},
+		  pre_bulid_docno=#{pre_bulid_docno},
+		  cmplcns=#{cmplcns},
+		comp_kind=#{comp_kind},
+ 		cmpaccnt=#{cmpaccnt},
+		 cmpaddr=#{cmpaddr},
+ 	  	comp_summary=#{comp_summary},
+		 memo=#{memo},
+		 orgcode=#{orgcode},
+		 email=#{email},
+		 email2=#{email2},
+		 regaddress=#{regaddress},
+		 edate=#{edate},
+		representername=#{representername},
+		 representerdocno=#{representerdocno},
+		 officepriv=#{officepriv},
+		 officesize=#{officesize},
+		 regdate=#{regdate},
+		 cmpcptlamnt=#{cmpcptlamnt},
+		 regunit=#{regunit},
+		 regcode=#{regcode},
+		 runscope=#{runscope},
+		 tel=#{tel},
+		 linkman=#{linkman},
+		 website=#{website},
+		 fax=#{fax},
+		 cmpfaren=#{cmpfaren},
+		 logonm=#{logonm},
+		 telphone=#{telphone},
+		 accntbnk=#{accntbnk},
+		 stockamnt=#{stockamnt},
+		 representerdoc=#{representerdoc},
+			facadship=#{facadship},
+			accntnm=#{accntnm},
+			permission_bulid_date=#{permission_bulid_date},
+		</set>
+		
+		WHERE  cmpno=#{cmpno}
+	</update>
+	
+	
+</mapper>

@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntEeCapGroupDao">
+
+	<resultMap id="ClntEeCapGroup" type="com.mf.client.entity.ClntEeCapGroup">
+        <result property="id" column="ID"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="supcompnm" column="SUPCOMPNM"/>
+        <result property="uplncardno" column="UPLNCARDNO"/>
+        <result property="orgno" column="ORGNO"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ID,
+CLNTNO,
+SUPCOMPNM,
+UPLNCARDNO,
+ORGNO
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntEeCapGroup">
+		select
+		<include refid="selectId" />
+		from clnt_ee_cap_group
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntEeCapGroup" parameterType="com.mf.client.entity.ClntEeCapGroup">
+		select
+		<include refid="selectId" />
+		from clnt_ee_cap_group
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntEeCapGroup" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_ee_cap_group
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.supcompnm)">
+					AND SUPCOMPNM like '%${t.supcompnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.uplncardno)">
+					AND UPLNCARDNO like '%${t.uplncardno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.orgno)">
+					AND ORGNO like '%${t.orgno}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(supcompnm)">
+					AND SUPCOMPNM like '%${supcompnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(uplncardno)">
+					AND UPLNCARDNO like '%${uplncardno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(orgno)">
+					AND ORGNO like '%${orgno}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntEeCapGroup" resultType="int">
+		select count(0) from clnt_ee_cap_group
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntEeCapGroup">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_ee_cap_group (
+        	CLNTNO ,
+        	SUPCOMPNM ,
+        	UPLNCARDNO ,
+        	ORGNO 
+        ) VALUES (
+        	#{clntno} ,
+        	#{supcompnm} ,
+        	#{uplncardno} ,
+        	#{orgno} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntEeCapGroup">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO clnt_ee_cap_group 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(supcompnm)">
+				SUPCOMPNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(uplncardno)">
+				UPLNCARDNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(orgno)">
+				ORGNO,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(supcompnm)">
+				#{supcompnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(uplncardno)">
+				#{uplncardno},
+			</if>
+			<if test="@Ognl@isNotEmpty(orgno)">
+				#{orgno},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM clnt_ee_cap_group WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntEeCapGroup">
+		SELECT <include refid="selectId" />
+		    FROM clnt_ee_cap_group 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntEeCapGroup">
+	    UPDATE clnt_ee_cap_group SET
+	        CLNTNO = #{clntno} ,
+	        SUPCOMPNM = #{supcompnm} ,
+	        UPLNCARDNO = #{uplncardno} ,
+	        ORGNO = #{orgno} 
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(supcompnm)">
+			SUPCOMPNM = #{supcompnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(uplncardno)">
+			UPLNCARDNO = #{uplncardno},
+		</if>
+		<if test="@Ognl@isNotEmpty(orgno)">
+			ORGNO = #{orgno},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntEeCapGroup">
+	    UPDATE clnt_ee_cap_group 
+		<include refid="updateset"/>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

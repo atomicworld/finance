@@ -1,0 +1,384 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FnncAccntitemDao">
+
+
+	
+	<sql id="selectId">
+		ACCNTNO,
+ACCNTKNDCODE,
+UPACCNTNO,
+ACCNTNM,
+HASCHILDACCNT,
+ACCNTLVL,
+ACCNTDRCT,
+ACCNTTYP,
+FRGNFLG,
+EQLFLG,
+AMTDRCN,
+JAMNT,
+DAMNT
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.FnncAccntitem">
+		select
+		<include refid="selectId" />
+		from fnnc_accntitem
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.FnncAccntitem" parameterType="com.mf.financemng.entity.FnncAccntitem">
+		select
+		<include refid="selectId" />
+		from fnnc_accntitem
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.financemng.entity.FnncAccntitem" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fnnc_accntitem
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	
+	
+	<select id="getChild" resultType="String" parameterType="String">
+		select
+		MAX(accntno)+1 as accntno
+		from fnnc_accntitem  where left(accntno,length(#{accntno})) =#{accntno} and length(accntno)=length(#{accntno})+2
+		   
+	</select>
+	
+	<select id="getByAccntno" resultType="com.mf.financemng.entity.FnncAccntitem" parameterType="String">
+		select
+		<include refid="selectId" />
+		from fnnc_accntitem  where accntno like '${_parameter}%'
+		   
+	</select>
+	<select id="getType" resultType="com.mf.financemng.entity.FnncAccntitem" parameterType="String">
+		select
+		<include refid="selectId" />
+		from fnnc_accntitem  where accntno &lt;&gt; '${_parameter}' and accntkndcode = '${_parameter}'
+	</select>
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.accntkndcode)">
+					AND ACCNTKNDCODE like '%${t.accntkndcode}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.upaccntno)">
+					AND UPACCNTNO like '%${t.upaccntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.accntnm)">
+					AND ACCNTNM like '%${t.accntnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.haschildaccnt)">
+					AND HASCHILDACCNT like '%${t.haschildaccnt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.accntlvl)">
+					AND ACCNTLVL like '%${t.accntlvl}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.accntdrct)">
+					AND ACCNTDRCT like '%${t.accntdrct}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.accnttyp)">
+					AND ACCNTTYP like '%${t.accnttyp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.frgnflg)">
+					AND FRGNFLG like '%${t.frgnflg}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.eqlflg)">
+					AND EQLFLG like '%${t.eqlflg}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.amtdrcn)">
+					AND AMTDRCN like '%${t.amtdrcn}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.jamnt)">
+					AND JAMNT = '${t.jamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.damnt)">
+					AND DAMNT = '${t.damnt}'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(accntkndcode)">
+					AND ACCNTKNDCODE like '%${accntkndcode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(upaccntno)">
+					AND UPACCNTNO like '%${upaccntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(accntnm)">
+					AND ACCNTNM like '%${accntnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(haschildaccnt)">
+					AND HASCHILDACCNT like '%${haschildaccnt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(accntlvl)">
+					AND ACCNTLVL like '%${accntlvl}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(accntdrct)">
+					AND ACCNTDRCT like '%${accntdrct}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(accnttyp)">
+					AND ACCNTTYP like '%${accnttyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(frgnflg)">
+					AND FRGNFLG like '%${frgnflg}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(eqlflg)">
+					AND EQLFLG like '%${eqlflg}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(amtdrcn)">
+					AND AMTDRCN like '%${amtdrcn}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(jamnt)">
+					AND JAMNT = '${jamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(damnt)">
+					AND DAMNT = '${damnt}'
+			   </if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.FnncAccntitem" resultType="int">
+		select count(0) from fnnc_accntitem
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.financemng.entity.FnncAccntitem">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO fnnc_accntitem (
+        	ACCNTKNDCODE ,
+        	UPACCNTNO ,
+        	ACCNTNM ,
+        	HASCHILDACCNT ,
+        	ACCNTLVL ,
+        	ACCNTDRCT ,
+        	ACCNTTYP ,
+        	FRGNFLG ,
+        	EQLFLG ,
+        	AMTDRCN ,
+        	JAMNT ,
+        	DAMNT 
+        ) VALUES (
+        	#{accntkndcode} ,
+        	#{upaccntno} ,
+        	#{accntnm} ,
+        	#{haschildaccnt} ,
+        	#{accntlvl} ,
+        	#{accntdrct} ,
+        	#{accnttyp} ,
+        	#{frgnflg} ,
+        	#{eqlflg} ,
+        	#{amtdrcn} ,
+        	#{jamnt} ,
+        	#{damnt} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.FnncAccntitem">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO fnnc_accntitem 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+	       <if test="@Ognl@isNotEmpty(accntno)">
+				ACCNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(accntkndcode)">
+				ACCNTKNDCODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(upaccntno)">
+				UPACCNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(accntnm)">
+				ACCNTNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(haschildaccnt)">
+				HASCHILDACCNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(accntlvl)">
+				ACCNTLVL,
+			</if>
+			<if test="@Ognl@isNotEmpty(accntdrct)">
+				ACCNTDRCT,
+			</if>
+			<if test="@Ognl@isNotEmpty(accnttyp)">
+				ACCNTTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(frgnflg)">
+				FRGNFLG,
+			</if>
+			<if test="@Ognl@isNotEmpty(eqlflg)">
+				EQLFLG,
+			</if>
+			<if test="@Ognl@isNotEmpty(amtdrcn)">
+				AMTDRCN,
+			</if>
+			<if test="@Ognl@isNotEmpty(jamnt)">
+				JAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(damnt)">
+				DAMNT,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+            <if test="@Ognl@isNotEmpty(accntno)">
+				#{accntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(accntkndcode)">
+				#{accntkndcode},
+			</if>
+			<if test="@Ognl@isNotEmpty(upaccntno)">
+				#{upaccntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(accntnm)">
+				#{accntnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(haschildaccnt)">
+				#{haschildaccnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(accntlvl)">
+				#{accntlvl},
+			</if>
+			<if test="@Ognl@isNotEmpty(accntdrct)">
+				#{accntdrct},
+			</if>
+			<if test="@Ognl@isNotEmpty(accnttyp)">
+				#{accnttyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(frgnflg)">
+				#{frgnflg},
+			</if>
+			<if test="@Ognl@isNotEmpty(eqlflg)">
+				#{eqlflg},
+			</if>
+			<if test="@Ognl@isNotEmpty(amtdrcn)">
+				#{amtdrcn},
+			</if>
+			<if test="@Ognl@isNotEmpty(jamnt)">
+				#{jamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(damnt)">
+				#{damnt},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM fnnc_accntitem WHERE
+        ACCNTNO = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.FnncAccntitem">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_accntitem 
+	        WHERE 
+        ACCNTNO = #{accntno} 
+	</select>
+	<!-- 根据主键查实体 -->
+	<select id="getByUp" parameterType="com.mf.financemng.entity.FnncAccntitem" resultType="com.mf.financemng.entity.FnncAccntitem">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_accntitem 
+	        WHERE accntno=#{accntno} and haschildaccnt=#{haschildaccnt}
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.financemng.entity.FnncAccntitem">
+	    UPDATE fnnc_accntitem SET
+	        ACCNTKNDCODE = #{accntkndcode} ,
+	        UPACCNTNO = #{upaccntno} ,
+	        ACCNTNM = #{accntnm} ,
+	        HASCHILDACCNT = #{haschildaccnt} ,
+	        ACCNTLVL = #{accntlvl} ,
+	        ACCNTDRCT = #{accntdrct} ,
+	        ACCNTTYP = #{accnttyp} ,
+	        FRGNFLG = #{frgnflg} ,
+	        EQLFLG = #{eqlflg} ,
+	        AMTDRCN = #{amtdrcn} ,
+	        JAMNT = #{jamnt} ,
+	        DAMNT = #{damnt} 
+        WHERE 
+	        ACCNTNO = #{accntno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(accntkndcode)">
+			ACCNTKNDCODE = #{accntkndcode},
+		</if>
+		<if test="@Ognl@isNotEmpty(upaccntno)">
+			UPACCNTNO = #{upaccntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(accntnm)">
+			ACCNTNM = #{accntnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(haschildaccnt)">
+			HASCHILDACCNT = #{haschildaccnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(accntlvl)">
+			ACCNTLVL = #{accntlvl},
+		</if>
+		<if test="@Ognl@isNotEmpty(accntdrct)">
+			ACCNTDRCT = #{accntdrct},
+		</if>
+		<if test="@Ognl@isNotEmpty(accnttyp)">
+			ACCNTTYP = #{accnttyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(frgnflg)">
+			FRGNFLG = #{frgnflg},
+		</if>
+		<if test="@Ognl@isNotEmpty(eqlflg)">
+			EQLFLG = #{eqlflg},
+		</if>
+		<if test="@Ognl@isNotEmpty(amtdrcn)">
+			AMTDRCN = #{amtdrcn},
+		</if>
+		<if test="@Ognl@isNotEmpty(jamnt)">
+			JAMNT = #{jamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(damnt)">
+			DAMNT = #{damnt},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.financemng.entity.FnncAccntitem">
+	    UPDATE fnnc_accntitem 
+		<include refid="updateset"/>
+        WHERE 
+	        ACCNTNO = #{accntno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

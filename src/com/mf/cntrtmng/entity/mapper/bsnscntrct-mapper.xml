@@ -1,0 +1,1806 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.cntrtmng.dao.BsnsCntrctDao">
+
+	<resultMap id="BsnsCntrct" type="com.mf.cntrtmng.entity.BsnsCntrct">
+        <result property="dptno" column="DPTNO"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="clntnm" column="CLNTNM"/>
+        <result property="cntrctno" column="CNTRCTNO"/>
+        <result property="applyno" column="APPLYNO"/>
+        <result property="isfixrepay" column="ISFIXREPAY"/>
+        <result property="kndno" column="KNDNO"/>
+        <result property="bsnstyp" column="BSNSTYP"/>
+        <result property="cntrctamnt" column="CNTRCTAMNT"/>
+        <result property="outamnt" column="OUTAMNT"/>
+        <result property="rmnamnt" column="RMNAMNT"/>
+        <result property="currncy" column="CURRNCY"/>
+        <result property="cntrctsdate" column="CNTRCTSDATE"/>
+        <result property="cntrctedate" column="CNTRCTEDATE"/>
+        <result property="bsrtyp" column="BSRTYP"/>
+        <result property="rtfltprcnt" column="RTFLTPRCNT"/>
+        <result property="bsnsrt" column="BSNSRT"/>
+        <result property="intrstmd" column="INTRSTMD"/>
+        <result property="rpmntway" column="RPMNTWAY"/>
+        <result property="extrt" column="EXTRT"/>
+        <result property="fnrt" column="FNRT"/>
+        <result property="termtyp" column="TERMTYP"/>
+        <result property="trmyr" column="TRMYR"/>
+        <result property="trmmnth" column="TRMMNTH"/>
+        <result property="trmday" column="TRMDAY"/>
+        <result property="grtway" column="GRTWAY"/>
+        <result property="grtwaydtl" column="GRTWAYDTL"/>
+        <result property="useno" column="USENO"/>
+        <result property="mngdptno" column="MNGDPTNO"/>
+        <result property="mngopno" column="MNGOPNO"/>
+        <result property="bsnsdptno" column="BSNSDPTNO"/>
+        <result property="bsnsopno" column="BSNSOPNO"/>
+        <result property="lnamnt" column="LNAMNT"/>
+        <result property="applyamnt" column="APPLYAMNT"/>
+        <result property="applyrt" column="APPLYRT"/>
+        <result property="applydate" column="APPLYDATE"/>
+        <result property="cntrctstt" column="CNTRCTSTT"/>
+        <result property="fnshflg" column="FNSHFLG"/>
+        <result property="sgndate" column="SGNDATE"/>
+        <result property="extflg" column="EXTFLG"/>
+        <result property="clntaccnt" column="CLNTACCNT"/>
+        <result property="clntbnknm" column="CLNTBNKNM"/>
+        <result property="regdptno" column="REGDPTNO"/>
+        <result property="regopno" column="REGOPNO"/>
+        <result property="regdate" column="REGDATE"/>
+        <result property="updtdate" column="UPDTDATE"/>
+        <result property="remark" column="REMARK"/>
+        <result property="rlcntrctno" column="RLCNTRCTNO"/>
+        <result property="oldcntrctno" column="OLDCNTRCTNO"/>
+        <result property="cntrctyp" column="CNTRCTYP"/>
+        <result property="rtno" column="RTNO"/>
+        <result property="ovrfltprcnt" column="OVRFLTPRCNT"/>
+        <result property="fnfltprcnt" column="FNFLTPRCNT"/>
+        <result property="cmpdfltprcn" column="CMPDFLTPRCN"/>
+        <result property="extfltprcnt" column="EXTFLTPRCNT"/>
+        <result property="cnsltamnt" column="CNSLTAMNT"/>
+        <result property="cnslthspy" column="CNSLTHSPY"/>
+        <result property="rpyinst" column="RPYINST"/>
+        <result property="fxdate" column="FXDATE"/>
+        <result property="fxinst" column="FXINST"/>
+        <result property="fxinstblnc" column="FXINSTBLNC"/>
+        <result property="fxinsthspy" column="FXINSTHSPY"/>
+        <result property="cnsltblnc" column="CNSLTBLNC"/>
+        <result property="outflg" column="OUTFLG"/>
+        <result property="rtyp" column="RTYP"/>
+        <result property="cntrctedflg" column="CNTRCTEDFLG"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		DPTNO,
+CLNTNO,
+CLNTNM,
+CNTRCTNO,
+APPLYNO,
+ISFIXREPAY,
+KNDNO,
+BSNSTYP,
+CNTRCTAMNT,
+OUTAMNT,
+RMNAMNT,
+CURRNCY,
+CNTRCTSDATE,
+CNTRCTEDATE,
+BSRTYP,
+RTFLTPRCNT,
+BSNSRT,
+INTRSTMD,
+RPMNTWAY,
+EXTRT,
+FNRT,
+TERMTYP,
+TRMYR,
+TRMMNTH,
+TRMDAY,
+GRTWAY,
+GRTWAYDTL,
+USENO,
+MNGDPTNO,
+MNGOPNO,
+BSNSDPTNO,
+BSNSOPNO,
+LNAMNT,
+APPLYAMNT,
+APPLYRT,
+APPLYDATE,
+CNTRCTSTT,
+FNSHFLG,
+SGNDATE,
+EXTFLG,
+CLNTACCNT,
+CLNTBNKNM,
+REGDPTNO,
+REGOPNO,
+REGDATE,
+UPDTDATE,
+REMARK,
+RLCNTRCTNO,
+OLDCNTRCTNO,
+CNTRCTYP,
+RTNO,
+OVRFLTPRCNT,
+FNFLTPRCNT,
+CMPDFLTPRCN,
+EXTFLTPRCNT,
+CNSLTAMNT,
+CNSLTHSPY,
+RPYINST,
+FXDATE,
+FXINST,
+FXINSTBLNC,
+FXINSTHSPY,
+CNSLTBLNC,
+OUTFLG,
+RTYP,
+CNTRCTEDFLG
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.cntrtmng.entity.BsnsCntrct">
+		select
+		<include refid="selectId" />
+		from bsns_cntrct
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.cntrtmng.entity.BsnsCntrct" parameterType="com.mf.cntrtmng.entity.BsnsCntrct">
+		select
+		<include refid="selectId" />
+		from bsns_cntrct
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+	
+    <select id="getByClntNo"  parameterType="String" resultType="String">
+            SELECT MAX(RIGHT(CNTRCTNO,8))+1 FROM BSNS_CNTRCT where cntrctno like concat('%',date_format(now(),'%Y%m%d'),'%')
+    </select>
+    
+    <select id="isHave"  parameterType="String" resultType="Integer">
+             SELECT count(*) FROM bsns_cntrct where clntno=#{clntno} 
+    </select>
+
+	<select id="query" resultType="com.mf.cntrtmng.entity.BsnsCntrct" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_cntrct
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	<!-- wangyaowei 补录合同 -->
+	<select id="queryNine" resultType="com.mf.cntrtmng.entity.BsnsCntrct" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_cntrct
+		 where (CNTRCTSTT='9' OR CNTRCTSTT='91')
+		 <if test="@Ognl@isNotEmpty(t.clntnm)">
+			AND CLNTNM like '%${t.clntnm}%'
+		</if>
+		 <if test="@Ognl@isNotEmpty(t.clntno)">
+			AND CLNTNO like '%${t.clntno}%'
+		</if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 	order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	<select id="queryPend" resultType="com.mf.cntrtmng.entity.BsnsCntrct" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_cntrct
+		where (CNTRCTSTT='1' OR CNTRCTSTT='2' OR CNTRCTSTT='3')
+		AND FNSHFLG='0' 
+		AND (OUTFLG&lt;2 OR OUTAMNT&lt;CNTRCTAMNT) 
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<select id="querySignNew" resultType="com.mf.cntrtmng.entity.BsnsCntrct" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_cntrct
+		where CNTRCTSTT=#{t.cntrctstt}
+		AND FNSHFLG='0' 
+		<!--  modified by fankb on 2015-06-01
+		<if test="@Ognl@isNotEmpty(t.regopno)">
+				AND REGOPNO = '${t.regopno}'  
+		</if>
+		-->
+		<if test="@Ognl@isNotEmpty(t.mngopno)">
+				AND MNGOPNO = '${t.mngopno}'  
+		</if>
+		
+		<if test="@Ognl@isNotEmpty(t.cntrctno)">
+				AND CNTRCTNO LIKE '%${t.cntrctno}%'
+		</if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	
+	<select id="querySignEnd" resultType="com.mf.cntrtmng.entity.BsnsCntrct" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_cntrct
+		where (CNTRCTSTT='2' OR CNTRCTSTT='3')
+		AND FNSHFLG='0' 
+				
+		<if test="@Ognl@isNotEmpty(t.mngopno)">
+				AND MNGOPNO = '${t.mngopno}'  
+		</if>
+		
+		<if test="@Ognl@isNotEmpty(t.cntrctno)">
+				AND CNTRCTNO LIKE '%${t.cntrctno}%'
+		</if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+
+	<select id="queryOuting" resultType="com.mf.cntrtmng.entity.BsnsCntrct">
+		select
+		<include refid="selectId" />
+		from bsns_cntrct
+		where CNTRCTSTT in 
+		<foreach collection="sttList" index="index" item="item" open="(" separator="," close=")">  
+        	#{item}  
+    	</foreach>
+    	AND CNTRCTNO IN (SELECT CNTRCTNO FROM bsns_lnout WHERE OUTSTT IN (1,2)) 
+    	
+    	<if test="@Ognl@isNotEmpty(t.regopno)">
+				AND REGOPNO = '${t.regopno}'
+		</if>
+		
+		
+    	<if test="@Ognl@isNotEmpty(t.cntrctno)">
+				AND CNTRCTNO LIKE '%${t.cntrctno}%'
+		</if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	
+	<select id="queryCntrctEnd" resultType="com.mf.cntrtmng.entity.BsnsCntrct">
+		select
+		<include refid="selectId" />
+		from bsns_cntrct
+		where CNTRCTEDFLG = #{t.cntrctedflg}
+		<if test="@Ognl@isNotEmpty(t.regopno)">
+				AND REGOPNO = '${t.regopno}'
+		</if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	
+	<select id="queryNrmlOuted" resultType="com.mf.cntrtmng.entity.BsnsCntrct">
+		select
+		<include refid="selectId" />
+		from bsns_cntrct
+		where OUTFLG = #{t.outflg} 
+		<if test="t.cntrctstt!=null and t.cntrctstt='9' ">
+		 and cntrctstt &lt;&gt; '9' and cntrctstt &lt;&gt; '91'
+		</if>
+		<if test="@Ognl@isNotEmpty(t.cntrctno)">
+			and CNTRCTNO LIKE '%${t.cntrctno}%'
+		</if>
+		<if test="@Ognl@isNotEmpty(t.clntnm)">
+			and CLNTNM LIKE '%${t.clntnm}%'
+		</if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<select id="queryBlOuted" resultType="com.mf.cntrtmng.entity.BsnsCntrct">
+		select
+		<include refid="selectId" />
+		from bsns_cntrct
+		where OUTFLG = #{t.outflg} 
+		<if test="t.cntrctstt!=null and t.cntrctstt='9' ">
+		  and (cntrctstt = '9' or cntrctstt = '91')
+		</if>
+		<if test="@Ognl@isNotEmpty(t.cntrctno)">
+			and CNTRCTNO LIKE '%${t.cntrctno}%'
+		</if>
+		<if test="@Ognl@isNotEmpty(t.clntnm)">
+			and CLNTNM LIKE '%${t.clntnm}%'
+		</if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.dptno)">
+					AND DPTNO like '%${t.dptno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntnm)">
+					AND CLNTNM like '%${t.clntnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.applyno)">
+					AND APPLYNO like '%${t.applyno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.isfixrepay)">
+					AND ISFIXREPAY like '%${t.isfixrepay}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.kndno)">
+					AND KNDNO like '%${t.kndno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bsnstyp)">
+					AND BSNSTYP like '%${t.bsnstyp}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.cntrctamnt)">
+					AND CNTRCTAMNT = '${t.cntrctamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.outamnt)">
+					AND OUTAMNT = '${t.outamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rmnamnt)">
+					AND RMNAMNT = '${t.rmnamnt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.currncy)">
+					AND CURRNCY like '%${t.currncy}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cntrctsdate)">
+					AND CNTRCTSDATE like '%${t.cntrctsdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cntrctedate)">
+					AND CNTRCTEDATE like '%${t.cntrctedate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bsrtyp)">
+					AND BSRTYP like '%${t.bsrtyp}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rtfltprcnt)">
+					AND RTFLTPRCNT = '${t.rtfltprcnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.bsnsrt)">
+					AND BSNSRT = '${t.bsnsrt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.intrstmd)">
+					AND INTRSTMD like '%${t.intrstmd}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rpmntway)">
+					AND RPMNTWAY like '%${t.rpmntway}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.extrt)">
+					AND EXTRT = '${t.extrt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.fnrt)">
+					AND FNRT = '${t.fnrt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.termtyp)">
+					AND TERMTYP like '%${t.termtyp}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.trmyr)">
+					AND TRMYR = '${t.trmyr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.trmmnth)">
+					AND TRMMNTH = '${t.trmmnth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.trmday)">
+					AND TRMDAY = '${t.trmday}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.grtway)">
+					AND GRTWAY like '%${t.grtway}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.grtwaydtl)">
+					AND GRTWAYDTL like '%${t.grtwaydtl}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.useno)">
+					AND USENO like '%${t.useno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.mngdptno)">
+					AND MNGDPTNO like '%${t.mngdptno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.mngopno)">
+					AND MNGOPNO like '%${t.mngopno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bsnsdptno)">
+					AND BSNSDPTNO like '%${t.bsnsdptno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bsnsopno)">
+					AND BSNSOPNO like '%${t.bsnsopno}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.lnamnt)">
+					AND LNAMNT = '${t.lnamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.applyamnt)">
+					AND APPLYAMNT = '${t.applyamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.applyrt)">
+					AND APPLYRT = '${t.applyrt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.applydate)">
+					AND APPLYDATE like '%${t.applydate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cntrctstt)">
+					AND CNTRCTSTT like '%${t.cntrctstt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.fnshflg)">
+					AND FNSHFLG like '%${t.fnshflg}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.sgndate)">
+					AND SGNDATE like '%${t.sgndate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.extflg)">
+					AND EXTFLG like '%${t.extflg}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntaccnt)">
+					AND CLNTACCNT like '%${t.clntaccnt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntbnknm)">
+					AND CLNTBNKNM like '%${t.clntbnknm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regdptno)">
+					AND REGDPTNO like '%${t.regdptno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regopno)">
+					AND REGOPNO like '%${t.regopno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regdate)">
+					AND REGDATE like '%${t.regdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.updtdate)">
+					AND UPDTDATE like '%${t.updtdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rlcntrctno)">
+					AND RLCNTRCTNO like '%${t.rlcntrctno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.oldcntrctno)">
+					AND OLDCNTRCTNO like '%${t.oldcntrctno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cntrctyp)">
+					AND CNTRCTYP like '%${t.cntrctyp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rtno)">
+					AND RTNO like '%${t.rtno}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.ovrfltprcnt)">
+					AND OVRFLTPRCNT = '${t.ovrfltprcnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.fnfltprcnt)">
+					AND FNFLTPRCNT = '${t.fnfltprcnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.cmpdfltprcn)">
+					AND CMPDFLTPRCN = '${t.cmpdfltprcn}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.extfltprcnt)">
+					AND EXTFLTPRCNT = '${t.extfltprcnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.cnsltamnt)">
+					AND CNSLTAMNT = '${t.cnsltamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.cnslthspy)">
+					AND CNSLTHSPY = '${t.cnslthspy}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rpyinst)">
+					AND RPYINST = '${t.rpyinst}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.fxdate)">
+					AND FXDATE like '%${t.fxdate}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.fxinst)">
+					AND FXINST = '${t.fxinst}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.fxinstblnc)">
+					AND FXINSTBLNC = '${t.fxinstblnc}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.fxinsthspy)">
+					AND FXINSTHSPY = '${t.fxinsthspy}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.cnsltblnc)">
+					AND CNSLTBLNC = '${t.cnsltblnc}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.outflg)">
+					AND OUTFLG like '%${t.outflg}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rtyp)">
+					AND RTYP like '%${t.rtyp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cntrctedflg)">
+					AND CNTRCTEDFLG like '%${t.cntrctedflg}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(dptno)">
+					AND DPTNO like '%${dptno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntnm)">
+					AND CLNTNM like '%${clntnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(applyno)">
+					AND APPLYNO like '%${applyno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(isfixrepay)">
+					AND ISFIXREPAY like '%${isfixrepay}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(kndno)">
+					AND KNDNO like '%${kndno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bsnstyp)">
+					AND BSNSTYP like '%${bsnstyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cntrctamnt)">
+					AND CNTRCTAMNT = '${cntrctamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(outamnt)">
+					AND OUTAMNT = '${outamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rmnamnt)">
+					AND RMNAMNT = '${rmnamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(currncy)">
+					AND CURRNCY like '%${currncy}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cntrctsdate)">
+					AND CNTRCTSDATE like '%${cntrctsdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cntrctedate)">
+					AND CNTRCTEDATE like '%${cntrctedate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bsrtyp)">
+					AND BSRTYP like '%${bsrtyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rtfltprcnt)">
+					AND RTFLTPRCNT = '${rtfltprcnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(bsnsrt)">
+					AND BSNSRT = '${bsnsrt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(intrstmd)">
+					AND INTRSTMD like '%${intrstmd}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rpmntway)">
+					AND RPMNTWAY like '%${rpmntway}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(extrt)">
+					AND EXTRT = '${extrt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(fnrt)">
+					AND FNRT = '${fnrt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(termtyp)">
+					AND TERMTYP like '%${termtyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(trmyr)">
+					AND TRMYR = '${trmyr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(trmmnth)">
+					AND TRMMNTH = '${trmmnth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(trmday)">
+					AND TRMDAY = '${trmday}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(grtway)">
+					AND GRTWAY like '%${grtway}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(grtwaydtl)">
+					AND GRTWAYDTL like '%${grtwaydtl}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(useno)">
+					AND USENO like '%${useno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(mngdptno)">
+					AND MNGDPTNO like '%${mngdptno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(mngopno)">
+					AND MNGOPNO like '%${mngopno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bsnsdptno)">
+					AND BSNSDPTNO like '%${bsnsdptno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bsnsopno)">
+					AND BSNSOPNO like '%${bsnsopno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(lnamnt)">
+					AND LNAMNT = '${lnamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(applyamnt)">
+					AND APPLYAMNT = '${applyamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(applyrt)">
+					AND APPLYRT = '${applyrt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(applydate)">
+					AND APPLYDATE like '%${applydate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cntrctstt)">
+					AND CNTRCTSTT like '%${cntrctstt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(fnshflg)">
+					AND FNSHFLG like '%${fnshflg}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(sgndate)">
+					AND SGNDATE like '%${sgndate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(extflg)">
+					AND EXTFLG like '%${extflg}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntaccnt)">
+					AND CLNTACCNT like '%${clntaccnt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntbnknm)">
+					AND CLNTBNKNM like '%${clntbnknm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regdptno)">
+					AND REGDPTNO like '%${regdptno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regopno)">
+					AND REGOPNO like '%${regopno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regdate)">
+					AND REGDATE like '%${regdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(updtdate)">
+					AND UPDTDATE like '%${updtdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rlcntrctno)">
+					AND RLCNTRCTNO like '%${rlcntrctno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(oldcntrctno)">
+					AND OLDCNTRCTNO like '%${oldcntrctno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cntrctyp)">
+					AND CNTRCTYP like '%${cntrctyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rtno)">
+					AND RTNO like '%${rtno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(ovrfltprcnt)">
+					AND OVRFLTPRCNT = '${ovrfltprcnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(fnfltprcnt)">
+					AND FNFLTPRCNT = '${fnfltprcnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(cmpdfltprcn)">
+					AND CMPDFLTPRCN = '${cmpdfltprcn}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(extfltprcnt)">
+					AND EXTFLTPRCNT = '${extfltprcnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(cnsltamnt)">
+					AND CNSLTAMNT = '${cnsltamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(cnslthspy)">
+					AND CNSLTHSPY = '${cnslthspy}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rpyinst)">
+					AND RPYINST = '${rpyinst}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(fxdate)">
+					AND FXDATE like '%${fxdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(fxinst)">
+					AND FXINST = '${fxinst}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(fxinstblnc)">
+					AND FXINSTBLNC = '${fxinstblnc}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(fxinsthspy)">
+					AND FXINSTHSPY = '${fxinsthspy}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(cnsltblnc)">
+					AND CNSLTBLNC = '${cnsltblnc}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(outflg)">
+					AND OUTFLG like '%${outflg}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rtyp)">
+					AND RTYP like '%${rtyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cntrctedflg)">
+					AND CNTRCTEDFLG like '%${cntrctedflg}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.cntrtmng.entity.BsnsCntrct" resultType="int">
+		select count(0) from bsns_cntrct
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.cntrtmng.entity.BsnsCntrct">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO bsns_cntrct (
+        	DPTNO ,
+        	CLNTNO ,
+        	CLNTNM ,
+        	APPLYNO ,
+        	ISFIXREPAY ,
+        	KNDNO ,
+        	BSNSTYP ,
+        	CNTRCTAMNT ,
+        	OUTAMNT ,
+        	RMNAMNT ,
+        	CURRNCY ,
+        	CNTRCTSDATE ,
+        	CNTRCTEDATE ,
+        	BSRTYP ,
+        	RTFLTPRCNT ,
+        	BSNSRT ,
+        	INTRSTMD ,
+        	RPMNTWAY ,
+        	EXTRT ,
+        	FNRT ,
+        	TERMTYP ,
+        	TRMYR ,
+        	TRMMNTH ,
+        	TRMDAY ,
+        	GRTWAY ,
+        	GRTWAYDTL ,
+        	USENO ,
+        	MNGDPTNO ,
+        	MNGOPNO ,
+        	BSNSDPTNO ,
+        	BSNSOPNO ,
+        	LNAMNT ,
+        	APPLYAMNT ,
+        	APPLYRT ,
+        	APPLYDATE ,
+        	CNTRCTSTT ,
+        	FNSHFLG ,
+        	SGNDATE ,
+        	EXTFLG ,
+        	CLNTACCNT ,
+        	CLNTBNKNM ,
+        	REGDPTNO ,
+        	REGOPNO ,
+        	REGDATE ,
+        	UPDTDATE ,
+        	REMARK ,
+        	RLCNTRCTNO ,
+        	OLDCNTRCTNO ,
+        	CNTRCTYP ,
+        	RTNO ,
+        	OVRFLTPRCNT ,
+        	FNFLTPRCNT ,
+        	CMPDFLTPRCN ,
+        	EXTFLTPRCNT ,
+        	CNSLTAMNT ,
+        	CNSLTHSPY ,
+        	RPYINST ,
+        	FXDATE ,
+        	FXINST ,
+        	FXINSTBLNC ,
+        	FXINSTHSPY ,
+        	CNSLTBLNC ,
+        	OUTFLG ,
+        	RTYP ,
+        	CNTRCTEDFLG 
+        ) VALUES (
+        	#{dptno} ,
+        	#{clntno} ,
+        	#{clntnm} ,
+        	#{applyno} ,
+        	#{isfixrepay} ,
+        	#{kndno} ,
+        	#{bsnstyp} ,
+        	#{cntrctamnt} ,
+        	#{outamnt} ,
+        	#{rmnamnt} ,
+        	#{currncy} ,
+        	#{cntrctsdate} ,
+        	#{cntrctedate} ,
+        	#{bsrtyp} ,
+        	#{rtfltprcnt} ,
+        	#{bsnsrt} ,
+        	#{intrstmd} ,
+        	#{rpmntway} ,
+        	#{extrt} ,
+        	#{fnrt} ,
+        	#{termtyp} ,
+        	#{trmyr} ,
+        	#{trmmnth} ,
+        	#{trmday} ,
+        	#{grtway} ,
+        	#{grtwaydtl} ,
+        	#{useno} ,
+        	#{mngdptno} ,
+        	#{mngopno} ,
+        	#{bsnsdptno} ,
+        	#{bsnsopno} ,
+        	#{lnamnt} ,
+        	#{applyamnt} ,
+        	#{applyrt} ,
+        	#{applydate} ,
+        	#{cntrctstt} ,
+        	#{fnshflg} ,
+        	#{sgndate} ,
+        	#{extflg} ,
+        	#{clntaccnt} ,
+        	#{clntbnknm} ,
+        	#{regdptno} ,
+        	#{regopno} ,
+        	#{regdate} ,
+        	#{updtdate} ,
+        	#{remark} ,
+        	#{rlcntrctno} ,
+        	#{oldcntrctno} ,
+        	#{cntrctyp} ,
+        	#{rtno} ,
+        	#{ovrfltprcnt} ,
+        	#{fnfltprcnt} ,
+        	#{cmpdfltprcn} ,
+        	#{extfltprcnt} ,
+        	#{cnsltamnt} ,
+        	#{cnslthspy} ,
+        	#{rpyinst} ,
+        	#{fxdate} ,
+        	#{fxinst} ,
+        	#{fxinstblnc} ,
+        	#{fxinsthspy} ,
+        	#{cnsltblnc} ,
+        	#{outflg} ,
+        	#{rtyp} ,
+        	#{cntrctedflg} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.cntrtmng.entity.BsnsCntrct">
+		INSERT INTO bsns_cntrct 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+	
+	       <if test="@Ognl@isNotEmpty(cntrctno)">
+				CNTRCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(dptno)">
+				DPTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				CLNTNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				APPLYNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(isfixrepay)">
+				ISFIXREPAY,
+			</if>
+			<if test="@Ognl@isNotEmpty(kndno)">
+				KNDNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnstyp)">
+				BSNSTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctamnt)">
+				CNTRCTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(outamnt)">
+				OUTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(rmnamnt)">
+				RMNAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(currncy)">
+				CURRNCY,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctsdate)">
+				CNTRCTSDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctedate)">
+				CNTRCTEDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsrtyp)">
+				BSRTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(rtfltprcnt)">
+				RTFLTPRCNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsrt)">
+				BSNSRT,
+			</if>
+			<if test="@Ognl@isNotEmpty(intrstmd)">
+				INTRSTMD,
+			</if>
+			<if test="@Ognl@isNotEmpty(rpmntway)">
+				RPMNTWAY,
+			</if>
+			<if test="@Ognl@isNotEmpty(extrt)">
+				EXTRT,
+			</if>
+			<if test="@Ognl@isNotEmpty(fnrt)">
+				FNRT,
+			</if>
+			<if test="@Ognl@isNotEmpty(termtyp)">
+				TERMTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(trmyr)">
+				TRMYR,
+			</if>
+			<if test="@Ognl@isNotEmpty(trmmnth)">
+				TRMMNTH,
+			</if>
+			<if test="@Ognl@isNotEmpty(trmday)">
+				TRMDAY,
+			</if>
+			<if test="@Ognl@isNotEmpty(grtway)">
+				GRTWAY,
+			</if>
+			<if test="@Ognl@isNotEmpty(grtwaydtl)">
+				GRTWAYDTL,
+			</if>
+			<if test="@Ognl@isNotEmpty(useno)">
+				USENO,
+			</if>
+			<if test="@Ognl@isNotEmpty(mngdptno)">
+				MNGDPTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(mngopno)">
+				MNGOPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsdptno)">
+				BSNSDPTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsopno)">
+				BSNSOPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(lnamnt)">
+				LNAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(applyamnt)">
+				APPLYAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(applyrt)">
+				APPLYRT,
+			</if>
+			<if test="@Ognl@isNotEmpty(applydate)">
+				APPLYDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctstt)">
+				CNTRCTSTT,
+			</if>
+			<if test="@Ognl@isNotEmpty(fnshflg)">
+				FNSHFLG,
+			</if>
+			<if test="@Ognl@isNotEmpty(sgndate)">
+				SGNDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(extflg)">
+				EXTFLG,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntaccnt)">
+				CLNTACCNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntbnknm)">
+				CLNTBNKNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(regdptno)">
+				REGDPTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				REGOPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(regdate)">
+				REGDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				UPDTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+			<if test="@Ognl@isNotEmpty(rlcntrctno)">
+				RLCNTRCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(oldcntrctno)">
+				OLDCNTRCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctyp)">
+				CNTRCTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(rtno)">
+				RTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(ovrfltprcnt)">
+				OVRFLTPRCNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(fnfltprcnt)">
+				FNFLTPRCNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(cmpdfltprcn)">
+				CMPDFLTPRCN,
+			</if>
+			<if test="@Ognl@isNotEmpty(extfltprcnt)">
+				EXTFLTPRCNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(cnsltamnt)">
+				CNSLTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(cnslthspy)">
+				CNSLTHSPY,
+			</if>
+			<if test="@Ognl@isNotEmpty(rpyinst)">
+				RPYINST,
+			</if>
+			<if test="@Ognl@isNotEmpty(fxdate)">
+				FXDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(fxinst)">
+				FXINST,
+			</if>
+			<if test="@Ognl@isNotEmpty(fxinstblnc)">
+				FXINSTBLNC,
+			</if>
+			<if test="@Ognl@isNotEmpty(fxinsthspy)">
+				FXINSTHSPY,
+			</if>
+			<if test="@Ognl@isNotEmpty(cnsltblnc)">
+				CNSLTBLNC,
+			</if>
+			<if test="@Ognl@isNotEmpty(outflg)">
+				OUTFLG,
+			</if>
+			<if test="@Ognl@isNotEmpty(rtyp)">
+				RTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctedflg)">
+				CNTRCTEDFLG,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+     <if test="@Ognl@isNotEmpty(cntrctno)">
+				#{cntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(dptno)">
+				#{dptno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				#{clntnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				#{applyno},
+			</if>
+			<if test="@Ognl@isNotEmpty(isfixrepay)">
+				#{isfixrepay},
+			</if>
+			<if test="@Ognl@isNotEmpty(kndno)">
+				#{kndno},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnstyp)">
+				#{bsnstyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctamnt)">
+				#{cntrctamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(outamnt)">
+				#{outamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(rmnamnt)">
+				#{rmnamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(currncy)">
+				#{currncy},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctsdate)">
+				#{cntrctsdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctedate)">
+				#{cntrctedate},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsrtyp)">
+				#{bsrtyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(rtfltprcnt)">
+				#{rtfltprcnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsrt)">
+				#{bsnsrt},
+			</if>
+			<if test="@Ognl@isNotEmpty(intrstmd)">
+				#{intrstmd},
+			</if>
+			<if test="@Ognl@isNotEmpty(rpmntway)">
+				#{rpmntway},
+			</if>
+			<if test="@Ognl@isNotEmpty(extrt)">
+				#{extrt},
+			</if>
+			<if test="@Ognl@isNotEmpty(fnrt)">
+				#{fnrt},
+			</if>
+			<if test="@Ognl@isNotEmpty(termtyp)">
+				#{termtyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(trmyr)">
+				#{trmyr},
+			</if>
+			<if test="@Ognl@isNotEmpty(trmmnth)">
+				#{trmmnth},
+			</if>
+			<if test="@Ognl@isNotEmpty(trmday)">
+				#{trmday},
+			</if>
+			<if test="@Ognl@isNotEmpty(grtway)">
+				#{grtway},
+			</if>
+			<if test="@Ognl@isNotEmpty(grtwaydtl)">
+				#{grtwaydtl},
+			</if>
+			<if test="@Ognl@isNotEmpty(useno)">
+				#{useno},
+			</if>
+			<if test="@Ognl@isNotEmpty(mngdptno)">
+				#{mngdptno},
+			</if>
+			<if test="@Ognl@isNotEmpty(mngopno)">
+				#{mngopno},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsdptno)">
+				#{bsnsdptno},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsopno)">
+				#{bsnsopno},
+			</if>
+			<if test="@Ognl@isNotEmpty(lnamnt)">
+				#{lnamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(applyamnt)">
+				#{applyamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(applyrt)">
+				#{applyrt},
+			</if>
+			<if test="@Ognl@isNotEmpty(applydate)">
+				#{applydate},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctstt)">
+				#{cntrctstt},
+			</if>
+			<if test="@Ognl@isNotEmpty(fnshflg)">
+				#{fnshflg},
+			</if>
+			<if test="@Ognl@isNotEmpty(sgndate)">
+				#{sgndate},
+			</if>
+			<if test="@Ognl@isNotEmpty(extflg)">
+				#{extflg},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntaccnt)">
+				#{clntaccnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntbnknm)">
+				#{clntbnknm},
+			</if>
+			<if test="@Ognl@isNotEmpty(regdptno)">
+				#{regdptno},
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				#{regopno},
+			</if>
+			<if test="@Ognl@isNotEmpty(regdate)">
+				#{regdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				#{updtdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@Ognl@isNotEmpty(rlcntrctno)">
+				#{rlcntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(oldcntrctno)">
+				#{oldcntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctyp)">
+				#{cntrctyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(rtno)">
+				#{rtno},
+			</if>
+			<if test="@Ognl@isNotEmpty(ovrfltprcnt)">
+				#{ovrfltprcnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(fnfltprcnt)">
+				#{fnfltprcnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(cmpdfltprcn)">
+				#{cmpdfltprcn},
+			</if>
+			<if test="@Ognl@isNotEmpty(extfltprcnt)">
+				#{extfltprcnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(cnsltamnt)">
+				#{cnsltamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(cnslthspy)">
+				#{cnslthspy},
+			</if>
+			<if test="@Ognl@isNotEmpty(rpyinst)">
+				#{rpyinst},
+			</if>
+			<if test="@Ognl@isNotEmpty(fxdate)">
+				#{fxdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(fxinst)">
+				#{fxinst},
+			</if>
+			<if test="@Ognl@isNotEmpty(fxinstblnc)">
+				#{fxinstblnc},
+			</if>
+			<if test="@Ognl@isNotEmpty(fxinsthspy)">
+				#{fxinsthspy},
+			</if>
+			<if test="@Ognl@isNotEmpty(cnsltblnc)">
+				#{cnsltblnc},
+			</if>
+			<if test="@Ognl@isNotEmpty(outflg)">
+				#{outflg},
+			</if>
+			<if test="@Ognl@isNotEmpty(rtyp)">
+				#{rtyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctedflg)">
+				#{cntrctedflg},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM bsns_cntrct WHERE
+        CNTRCTNO = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsCntrct">
+		SELECT 
+			A.DPTNO,
+			A.CLNTNO,
+			A.CLNTNM,
+			A.CNTRCTNO,
+			A.APPLYNO,
+			A.ISFIXREPAY,
+			A.KNDNO,
+			A.BSNSTYP,
+			A.CNTRCTAMNT,
+			A.OUTAMNT,
+			A.RMNAMNT,
+			A.CURRNCY,
+			A.CNTRCTSDATE,
+			A.CNTRCTEDATE,
+			A.BSRTYP,
+			A.RTFLTPRCNT,
+			A.BSNSRT,
+			A.INTRSTMD,
+			A.RPMNTWAY,
+			A.EXTRT,
+			A.FNRT,
+			A.TERMTYP,
+			A.TRMYR,
+			A.TRMMNTH,
+			A.TRMDAY,
+			A.GRTWAY,
+			A.GRTWAYDTL,
+			A.USENO,
+			A.MNGDPTNO,
+			A.MNGOPNO,
+			A.BSNSDPTNO,
+			A.BSNSOPNO,
+			A.LNAMNT,
+			A.APPLYAMNT,
+			A.APPLYRT,
+			A.APPLYDATE,
+			A.CNTRCTSTT,
+			A.FNSHFLG,
+			A.SGNDATE,
+			A.EXTFLG,
+			A.CLNTACCNT,
+			A.CLNTBNKNM,
+			A.REGDPTNO,
+			A.REGOPNO,
+			A.REGDATE,
+			A.UPDTDATE,
+			A.REMARK,
+			A.RLCNTRCTNO,
+			A.OLDCNTRCTNO,
+			A.CNTRCTYP,
+			F.BASERT AS RTNO,
+			A.OVRFLTPRCNT,
+			A.FNFLTPRCNT,
+			A.CMPDFLTPRCN,
+			A.EXTFLTPRCNT,
+			A.CNSLTAMNT,
+			A.CNSLTHSPY,
+			A.RPYINST,
+			A.FXDATE,
+			A.FXINST,
+			A.FXINSTBLNC,
+			A.FXINSTHSPY,
+			A.CNSLTBLNC,
+			A.OUTFLG,
+			A.RTYP,
+			A.CNTRCTEDFLG
+		    FROM BSNS_CNTRCT A LEFT JOIN  BASERATE F ON (A.TERMTYP+0)=F.RTNO
+	        WHERE 
+        CNTRCTNO = #{id} 
+	</select>
+	<select id="getByApplyno" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsCntrct">
+		select
+		<include refid="selectId" />
+		from bsns_cntrct
+		where applyno = #{applyno} 
+	</select>
+	
+	<!-- 合同签订 更新起止日期和签订日期 -->
+	<update id="signCntrct" parameterType="com.mf.cntrtmng.entity.BsnsCntrct">
+		UPDATE bsns_cntrct SET
+			CNTRCTSDATE = #{cntrctsdate} ,
+	        CNTRCTEDATE = #{cntrctedate} ,
+	        RLCNTRCTNO = #{rlcntrctno} ,
+	        SGNDATE = #{sgndate} ,
+	        CNTRCTSTT = #{cntrctstt} ,
+	        <!-- 还有两个字段也得跟新 add by huangwen -->
+	        RMNAMNT = #{rmnamnt} ,
+	        LNAMNT = #{lnamnt} ,
+	        
+	        UPDTDATE = DATE_FORMAT(NOW(),'%Y%m%d') ,
+	        REGDATE = DATE_FORMAT(NOW(),'%Y%m%d') ,
+	        REMARK = #{remark} 
+	    WHERE 
+	        CNTRCTNO = #{cntrctno}
+	</update>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.cntrtmng.entity.BsnsCntrct">
+	    UPDATE bsns_cntrct SET
+	        DPTNO = #{dptno} ,
+	        CLNTNO = #{clntno} ,
+	        CLNTNM = #{clntnm} ,
+	        APPLYNO = #{applyno} ,
+	        ISFIXREPAY = #{isfixrepay} ,
+	        KNDNO = #{kndno} ,
+	        BSNSTYP = #{bsnstyp} ,
+	        CNTRCTAMNT = #{cntrctamnt} ,
+	        OUTAMNT = #{outamnt} ,
+	        RMNAMNT = #{rmnamnt} ,
+	        CURRNCY = #{currncy} ,
+	        CNTRCTSDATE = #{cntrctsdate} ,
+	        CNTRCTEDATE = #{cntrctedate} ,
+	        BSRTYP = #{bsrtyp} ,
+	        RTFLTPRCNT = #{rtfltprcnt} ,
+	        BSNSRT = #{bsnsrt} ,
+	        INTRSTMD = #{intrstmd} ,
+	        RPMNTWAY = #{rpmntway} ,
+	        EXTRT = #{extrt} ,
+	        FNRT = #{fnrt} ,
+	        TERMTYP = #{termtyp} ,
+	        TRMYR = #{trmyr} ,
+	        TRMMNTH = #{trmmnth} ,
+	        TRMDAY = #{trmday} ,
+	        GRTWAY = #{grtway} ,
+	        GRTWAYDTL = #{grtwaydtl} ,
+	        USENO = #{useno} ,
+	        MNGDPTNO = #{mngdptno} ,
+	        MNGOPNO = #{mngopno} ,
+	        BSNSDPTNO = #{bsnsdptno} ,
+	        BSNSOPNO = #{bsnsopno} ,
+	        LNAMNT = #{lnamnt} ,
+	        APPLYAMNT = #{applyamnt} ,
+	        APPLYRT = #{applyrt} ,
+	        APPLYDATE = #{applydate} ,
+	        CNTRCTSTT = #{cntrctstt} ,
+	        FNSHFLG = #{fnshflg} ,
+	        SGNDATE = #{sgndate} ,
+	        EXTFLG = #{extflg} ,
+	        CLNTACCNT = #{clntaccnt} ,
+	        CLNTBNKNM = #{clntbnknm} ,
+	        REGDPTNO = #{regdptno} ,
+	        REGOPNO = #{regopno} ,
+	        REGDATE = #{regdate} ,
+	        UPDTDATE = #{updtdate} ,
+	        REMARK = #{remark} ,
+	        RLCNTRCTNO = #{rlcntrctno} ,
+	        OLDCNTRCTNO = #{oldcntrctno} ,
+	        CNTRCTYP = #{cntrctyp} ,
+	        RTNO = #{rtno} ,
+	        OVRFLTPRCNT = #{ovrfltprcnt} ,
+	        FNFLTPRCNT = #{fnfltprcnt} ,
+	        CMPDFLTPRCN = #{cmpdfltprcn} ,
+	        EXTFLTPRCNT = #{extfltprcnt} ,
+	        CNSLTAMNT = #{cnsltamnt} ,
+	        CNSLTHSPY = #{cnslthspy} ,
+	        RPYINST = #{rpyinst} ,
+	        FXDATE = #{fxdate} ,
+	        FXINST = #{fxinst} ,
+	        FXINSTBLNC = #{fxinstblnc} ,
+	        FXINSTHSPY = #{fxinsthspy} ,
+	        CNSLTBLNC = #{cnsltblnc} ,
+	        OUTFLG = #{outflg} ,
+	        RTYP = #{rtyp} ,
+	        CNTRCTEDFLG = #{cntrctedflg} 
+        WHERE 
+	        CNTRCTNO = #{cntrctno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(dptno)">
+			DPTNO = #{dptno},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntnm)">
+			CLNTNM = #{clntnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(applyno)">
+			APPLYNO = #{applyno},
+		</if>
+		<if test="@Ognl@isNotEmpty(isfixrepay)">
+			ISFIXREPAY = #{isfixrepay},
+		</if>
+		<if test="@Ognl@isNotEmpty(kndno)">
+			KNDNO = #{kndno},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnstyp)">
+			BSNSTYP = #{bsnstyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctamnt)">
+			CNTRCTAMNT = #{cntrctamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(outamnt)">
+			OUTAMNT = #{outamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(rmnamnt)">
+			RMNAMNT = #{rmnamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(currncy)">
+			CURRNCY = #{currncy},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctsdate)">
+			CNTRCTSDATE = #{cntrctsdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctedate)">
+			CNTRCTEDATE = #{cntrctedate},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsrtyp)">
+			BSRTYP = #{bsrtyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(rtfltprcnt)">
+			RTFLTPRCNT = #{rtfltprcnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnsrt)">
+			BSNSRT = #{bsnsrt},
+		</if>
+		<if test="@Ognl@isNotEmpty(intrstmd)">
+			INTRSTMD = #{intrstmd},
+		</if>
+		<if test="@Ognl@isNotEmpty(rpmntway)">
+			RPMNTWAY = #{rpmntway},
+		</if>
+		<if test="@Ognl@isNotEmpty(extrt)">
+			EXTRT = #{extrt},
+		</if>
+		<if test="@Ognl@isNotEmpty(fnrt)">
+			FNRT = #{fnrt},
+		</if>
+		<if test="@Ognl@isNotEmpty(termtyp)">
+			TERMTYP = #{termtyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(trmyr)">
+			TRMYR = #{trmyr},
+		</if>
+		<if test="@Ognl@isNotEmpty(trmmnth)">
+			TRMMNTH = #{trmmnth},
+		</if>
+		<if test="@Ognl@isNotEmpty(trmday)">
+			TRMDAY = #{trmday},
+		</if>
+		<if test="@Ognl@isNotEmpty(grtway)">
+			GRTWAY = #{grtway},
+		</if>
+		<if test="@Ognl@isNotEmpty(grtwaydtl)">
+			GRTWAYDTL = #{grtwaydtl},
+		</if>
+		<if test="@Ognl@isNotEmpty(useno)">
+			USENO = #{useno},
+		</if>
+		<if test="@Ognl@isNotEmpty(mngdptno)">
+			MNGDPTNO = #{mngdptno},
+		</if>
+		<if test="@Ognl@isNotEmpty(mngopno)">
+			MNGOPNO = #{mngopno},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnsdptno)">
+			BSNSDPTNO = #{bsnsdptno},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnsopno)">
+			BSNSOPNO = #{bsnsopno},
+		</if>
+		<if test="@Ognl@isNotEmpty(lnamnt)">
+			LNAMNT = #{lnamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(applyamnt)">
+			APPLYAMNT = #{applyamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(applyrt)">
+			APPLYRT = #{applyrt},
+		</if>
+		<if test="@Ognl@isNotEmpty(applydate)">
+			APPLYDATE = #{applydate},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctstt)">
+			CNTRCTSTT = #{cntrctstt},
+		</if>
+		<if test="@Ognl@isNotEmpty(fnshflg)">
+			FNSHFLG = #{fnshflg},
+		</if>
+		<if test="@Ognl@isNotEmpty(sgndate)">
+			SGNDATE = #{sgndate},
+		</if>
+		<if test="@Ognl@isNotEmpty(extflg)">
+			EXTFLG = #{extflg},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntaccnt)">
+			CLNTACCNT = #{clntaccnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntbnknm)">
+			CLNTBNKNM = #{clntbnknm},
+		</if>
+		<if test="@Ognl@isNotEmpty(regdptno)">
+			REGDPTNO = #{regdptno},
+		</if>
+		<if test="@Ognl@isNotEmpty(regopno)">
+			REGOPNO = #{regopno},
+		</if>
+		<if test="@Ognl@isNotEmpty(regdate)">
+			REGDATE = #{regdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(updtdate)">
+			UPDTDATE = #{updtdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(rlcntrctno)">
+			RLCNTRCTNO = #{rlcntrctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(oldcntrctno)">
+			OLDCNTRCTNO = #{oldcntrctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctyp)">
+			CNTRCTYP = #{cntrctyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(rtno)">
+			RTNO = #{rtno},
+		</if>
+		<if test="@Ognl@isNotEmpty(ovrfltprcnt)">
+			OVRFLTPRCNT = #{ovrfltprcnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(fnfltprcnt)">
+			FNFLTPRCNT = #{fnfltprcnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(cmpdfltprcn)">
+			CMPDFLTPRCN = #{cmpdfltprcn},
+		</if>
+		<if test="@Ognl@isNotEmpty(extfltprcnt)">
+			EXTFLTPRCNT = #{extfltprcnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(cnsltamnt)">
+			CNSLTAMNT = #{cnsltamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(cnslthspy)">
+			CNSLTHSPY = #{cnslthspy},
+		</if>
+		<if test="@Ognl@isNotEmpty(rpyinst)">
+			RPYINST = #{rpyinst},
+		</if>
+		<if test="@Ognl@isNotEmpty(fxdate)">
+			FXDATE = #{fxdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(fxinst)">
+			FXINST = #{fxinst},
+		</if>
+		<if test="@Ognl@isNotEmpty(fxinstblnc)">
+			FXINSTBLNC = #{fxinstblnc},
+		</if>
+		<if test="@Ognl@isNotEmpty(fxinsthspy)">
+			FXINSTHSPY = #{fxinsthspy},
+		</if>
+		<if test="@Ognl@isNotEmpty(cnsltblnc)">
+			CNSLTBLNC = #{cnsltblnc},
+		</if>
+		<if test="@Ognl@isNotEmpty(outflg)">
+			OUTFLG = #{outflg},
+		</if>
+		<if test="@Ognl@isNotEmpty(rtyp)">
+			RTYP = #{rtyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctedflg)">
+			CNTRCTEDFLG = #{cntrctedflg},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.cntrtmng.entity.BsnsCntrct">
+	    UPDATE bsns_cntrct 
+		<include refid="updateset"/>
+        WHERE 
+	        CNTRCTNO = #{cntrctno} 
+	</update>
+	
+	<select id="findByCntrctno" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsCntrct">
+		SELECT <include refid="selectId" />
+		    FROM bsns_cntrct 
+	        WHERE 
+        CNTRCTNO = #{cntrctno} 
+	</select>
+	
+	<!-- 合同金额等于未发放金额 可取消 -->
+	<select id="queryCancel" resultType="com.mf.cntrtmng.entity.BsnsCntrct" parameterType="java.util.HashMap">
+		select a.clntnm,a.cntrctno,b.kndnm as kndno,a.cntrctamnt,a.cntrctsdate,a.cntrctedate,a.cntrctstt,a.clntno
+		from bsns_cntrct a 
+		left join bsnskind b on a.kndno=b.kndno 
+		where cntrctstt  in('1','2','9','99')
+		<if test="@Ognl@isNotEmpty(t.clntnm)">
+			and clntnm like '%${t.clntnm}%'
+		</if>
+		order by a.cntrctstt
+	</select>
+	
+	<!-- addByGuo StART -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM bsns_cntrct WHERE
+        CNTRCTNO = #{id} 
+	</delete>
+	<!-- addByGuo END -->
+	
+	<select id="queryExcel" parameterType="com.mf.cntrtmng.entity.BsnsCntrct" resultType="com.mf.cntrtmng.entity.BsnsCntrct">
+		 select cntrctno,
+		 concat(clntnm,'(',clntno,')')as clntnm,
+		 b.kndnm as kndno,
+		 cntrctamnt,
+		 concat(trmmnth,"月",trmday,"日")as applydate,
+		 cntrctsdate,cntrctedate,
+		 concat(c.opnm,'(',regopno,')') as regopno 
+		 from bsns_cntrct  a 
+		 left join bsnskind b on a.kndno=b.kndno 
+		 left join operator c on a.regopno=c.emplyno where 1=1
+        <if test="clntnm!=null and clntnm!='' ">
+		    and clntnm like '%${clntnm}%'
+	    </if>
+		<if test="cntrctstt!=null and cntrctstt='9'">
+		    and (cntrctstt='9' or cntrctstt='91')
+		</if>
+		<if test="cntrctedflg!=null and cntrctedflg!='' ">
+		    and cntrctedflg = #{cntrctedflg}
+		</if>
+		 
+	</select>
+	
+	<delete id="delCntrct" parameterType="String">
+		delete from bsns_cntrct where cntrctno = #{cntrctno}
+	</delete>
+	<insert id="copyLog" parameterType="String">
+	 	insert bsns_cntrct_log select *from bsns_cntrct where cntrctno=#{cntrctno}
+	</insert>
+	<select id="getByPrintInfo" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsCntrct">
+		select 
+		a.clntno,
+		a.clntnm,
+		a.cntrctno,
+		a.cntrctamnt,
+		a.cntrctsdate,
+		a.cntrctedate,
+		a.applyrt,
+		a.rpmntway,
+		b.usenm as useno ,
+		a.trmmnth,
+		a.trmday,c.certno as kndno
+		from bsns_cntrct a 
+		left join loanuse b on a.useno=b.useno left join clnt_client c on a.clntno=c.clntid
+		where  a.cntrctno= #{cntrctno} 
+	</select>
+	
+	<select id="findList" resultType="com.mf.cntrtmng.entity.BsnsCntrct"  parameterType="com.mf.cntrtmng.entity.BsnsCntrct">
+		select
+		<include refid="selectId" />
+		from bsns_cntrct
+		where (CNTRCTSTT='2' OR CNTRCTSTT='3')
+		AND FNSHFLG='0' 
+		<if test="@Ognl@isNotEmpty(regopno)">
+				AND REGOPNO = '${regopno}'
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctno)">
+				AND CNTRCTNO LIKE '%${cntrctno}%'
+		</if>
+	</select>
+	
+	<!-- add by hw -->
+	<select id="getByDueno" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsCntrct">
+		select
+		<include refid="selectId" />
+		from bsns_cntrct
+		where applyno = #{applyno} 
+	</select>
+	
+	<!-- add by hw -->
+	<select id="queryCntrctRevoke" resultType="com.mf.cntrtmng.entity.BsnsCntrct">
+		select
+		<include refid="selectId" />
+		from bsns_cntrct
+		where CNTRCTSTT = #{t.cntrctstt}
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<!-- add by hw -->
+	<update id="revokeCntrct" parameterType="String" >
+		UPDATE bsns_cntrct SET
+	        CNTRCTSTT = 99
+	    WHERE 
+	        CNTRCTNO = #{cntrctno}
+	</update>
+	
+	<!-- add by hw -->
+	<select id="queryRevokeExcel" parameterType="com.mf.cntrtmng.entity.BsnsCntrct" resultType="com.mf.cntrtmng.entity.BsnsCntrct">
+		 select 
+		 cntrctno,
+		 concat(clntnm,'(',clntno,')')as clntnm,
+		 b.kndnm as kndno,
+		 cntrctamnt,
+		 concat(c.opnm,'(',regopno,')') as regopno 
+		 from bsns_cntrct  a 
+		 left join bsnskind b on a.kndno=b.kndno 
+		 left join operator c on a.regopno=c.emplyno where 1=1
+        <if test="clntnm!=null and clntnm!='' ">
+		    and clntnm like '%${clntnm}%'
+	    </if>
+		<if test="cntrctstt!=null and cntrctstt='99'">
+		    and cntrctstt='99'
+		</if>
+	</select>
+	
+</mapper>
+

@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FinanceShareholderDao">
+
+	<resultMap id="FinanceShareholder" type="com.mf.financemng.entity.FinanceShareholder">
+        <result property="id" column="id"/>
+        <result property="equity" column="Equity"/>
+        <result property="capitalReserve" column="CapitalReserve"/>
+        <result property="surplusReserve" column="SurplusReserve"/>
+        <result property="generalRiskPreparation" column="GeneralRiskPreparation"/>
+        <result property="noProfitDistribution" column="NoProfitDistribution"/>
+        <result property="translationStatements" column="TranslationStatements"/>
+        <result property="paredId" column="paredId"/>
+	</resultMap>
+	
+	<sql id="selectId">
+			rptmonth,shareholderid as id,itemvalue as Equity,itemvalue1 as CapitalReserve,
+			itemvalue2 as SurplusReserve,itemvalue3 as GeneralRiskPreparation,
+			itemvalue4 as NoProfitDistribution,itemvalue5 as TranslationStatements,
+			rptid as paredId
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.FinanceShareholder">
+		select
+				rptmonth,shareholderid as id,itemvalue as Equity,itemvalue1 as CapitalReserve,
+				itemvalue2 as SurplusReserve,itemvalue3 as GeneralRiskPreparation,
+				itemvalue4 as NoProfitDistribution,itemvalue5 as TranslationStatements,
+				rptid as paredId
+		from finreportshareholder
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.FinanceShareholder" parameterType="com.mf.financemng.entity.FinanceShareholder">
+		select
+		<include refid="selectId" />
+		from finreportshareholder
+		<include refid="querywhere1"/>
+		 order by itemcode
+	</select>
+
+	<select id="query" resultType="com.mf.financemng.entity.FinanceShareholder" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from finreportshareholder
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		     deleteflag=0
+		       <if test="@Ognl@isNotEmpty(t.rptmonth)">
+					AND rptmonth = '${t.rptmonth}'
+			   </if>
+			   
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	    
+		 			deleteflag=0  				
+		        <if test="@Ognl@isNotEmpty(rptmonth)">
+					AND rptmonth = '${rptmonth}'
+			   </if>
+			     <if test="@Ognl@isNotEmpty(paredId)">
+					AND rptid = '${paredId}'
+			   </if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.FinanceShareholder" resultType="int">
+		select count(0) from finreportshareholder
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.FinanceShareholder">
+		INSERT INTO finreportshareholder 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(id)">
+				shareholderid,
+			</if>
+			<if test="@Ognl@isNotEmpty(equity)">
+				itemvalue,
+			</if>
+			<if test="@Ognl@isNotEmpty(capitalReserve)">
+				itemvalue1,
+			</if>
+			<if test="@Ognl@isNotEmpty(surplusReserve)">
+				itemvalue2,
+			</if>
+			<if test="@Ognl@isNotEmpty(generalRiskPreparation)">
+				itemvalue3,
+			</if>
+			<if test="@Ognl@isNotEmpty(noProfitDistribution)">
+				itemvalue4,
+			</if>
+			<if test="@Ognl@isNotEmpty(translationStatements)">
+				itemvalue5,
+			</if>
+			<if test="@Ognl@isNotEmpty(paredId)">
+				rptid,
+			</if>
+			<if test="@Ognl@isNotEmpty(orgcode)">
+				orgcode,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptbatch)">
+				rptmonth,
+			</if>
+			<if test="@Ognl@isNotEmpty(deleteflag)">
+				deleteflag,
+			</if>
+			<if test="@Ognl@isNotEmpty(itemcode)">
+				itemcode,
+			</if>
+			<if test="@Ognl@isNotEmpty(validate)">
+				rpttype,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+   			 <if test="@Ognl@isNotEmpty(id)">
+				#{id},
+			</if>
+			<if test="@Ognl@isNotEmpty(equity)">
+				#{equity},
+			</if>
+			<if test="@Ognl@isNotEmpty(capitalReserve)">
+				#{capitalReserve},
+			</if>
+			<if test="@Ognl@isNotEmpty(surplusReserve)">
+				#{surplusReserve},
+			</if>
+			<if test="@Ognl@isNotEmpty(generalRiskPreparation)">
+				#{generalRiskPreparation},
+			</if>
+			<if test="@Ognl@isNotEmpty(noProfitDistribution)">
+				#{noProfitDistribution},
+			</if>
+			<if test="@Ognl@isNotEmpty(translationStatements)">
+				#{translationStatements},
+			</if>
+			<if test="@Ognl@isNotEmpty(paredId)">
+				#{paredId},
+			</if>
+			<if test="@Ognl@isNotEmpty(orgcode)">
+				#{orgcode},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptbatch)">
+				#{rptbatch},
+			</if>
+			<if test="@Ognl@isNotEmpty(deleteflag)">
+				#{deleteflag},
+			</if>
+			<if test="@Ognl@isNotEmpty(itemcode)">
+				#{itemcode},
+			</if>
+			<if test="@Ognl@isNotEmpty(validate)">
+				#{validate},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删  deleteByIdRptid DELETEFLAG=1 -->
+	<delete id="deleteByIdRptid" parameterType="String">
+		UPDATE finreportshareholder SET DELETEFLAG=1 WHERE
+        rptid = #{ids} 
+	</delete>
+	<!-- 根据主键查实体    rptmonth-->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.FinanceShareholder">
+		SELECT <include refid="selectId" />
+		    FROM finreportshareholder 
+	        WHERE 
+        rptmonth = #{id} and deleteflag=0
+	</select>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(equity)">
+			itemvalue = #{equity},
+		</if>
+		<if test="@Ognl@isNotEmpty(capitalReserve)">
+			itemvalue1 = #{capitalReserve},
+		</if>
+		<if test="@Ognl@isNotEmpty(surplusReserve)">
+			itemvalue2 = #{surplusReserve},
+		</if>
+		<if test="@Ognl@isNotEmpty(generalRiskPreparation)">
+			itemvalue3 = #{generalRiskPreparation},
+		</if>
+		<if test="@Ognl@isNotEmpty(noProfitDistribution)">
+			itemvalue4 = #{noProfitDistribution},
+		</if>
+		<if test="@Ognl@isNotEmpty(translationStatements)">
+			itemvalue5 = #{translationStatements},
+		</if>
+		<if test="@Ognl@isNotEmpty(id)">
+			shareholderid = #{id},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.financemng.entity.FinanceShareholder">
+	    UPDATE finreportshareholder 
+		<include refid="updateset"/>
+        WHERE 
+	        shareholderid = #{id} 
+	</update>
+	
+	
+</mapper>
+

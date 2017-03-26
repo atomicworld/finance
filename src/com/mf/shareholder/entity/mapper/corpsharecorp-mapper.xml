@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.shareholder.dao.CorpSharecorpDao">
+
+	<resultMap id="CorpSharecorp" type="com.mf.shareholder.entity.CorpSharecorp">
+        <result property="shareno" column="shareno"/>
+        <result property="corpno" column="corpno"/>
+        <result property="corpName" column="CorpName"/>
+        <result property="regCapital" column="RegCapital"/>
+        <result property="amount" column="Amount"/>
+        <result property="proportion" column="Proportion"/>
+        <result property="workInfo2" column="WorkInfo2"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		shareno,
+corpno,
+CorpName,
+RegCapital,
+Amount,
+Proportion,
+WorkInfo2
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.shareholder.entity.CorpSharecorp">
+		select
+		<include refid="selectId" />
+		from corp_sharecorp
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.shareholder.entity.CorpSharecorp" parameterType="com.mf.shareholder.entity.CorpSharecorp">
+		select
+		<include refid="selectId" />
+		from corp_sharecorp
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.shareholder.entity.CorpSharecorp" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from corp_sharecorp
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.shareno)">
+					AND shareno = '${t.shareno}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.corpno)">
+					AND corpno like '%${t.corpno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.corpName)">
+					AND CorpName like '%${t.corpName}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regCapital)">
+					AND RegCapital like '%${t.regCapital}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.amount)">
+					AND Amount like '%${t.amount}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.proportion)">
+					AND Proportion like '%${t.proportion}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.workInfo2)">
+					AND WorkInfo2 like '%${t.workInfo2}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(shareno)">
+					AND shareno like '%${shareno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(corpno)">
+					AND corpno like '%${corpno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(corpName)">
+					AND CorpName like '%${corpName}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regCapital)">
+					AND RegCapital like '%${regCapital}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(amount)">
+					AND Amount like '%${amount}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(proportion)">
+					AND Proportion like '%${proportion}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(workInfo2)">
+					AND WorkInfo2 like '%${workInfo2}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.shareholder.entity.CorpSharecorp" resultType="int">
+		select count(0) from corp_sharecorp
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.shareholder.entity.CorpSharecorp">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO corp_sharecorp (
+        	shareno ,
+        	corpno ,
+        	CorpName ,
+        	RegCapital ,
+        	Amount ,
+        	Proportion ,
+        	WorkInfo2 
+        ) VALUES (
+        	#{shareno} ,
+        	#{corpno} ,
+        	#{corpName} ,
+        	#{regCapital} ,
+        	#{amount} ,
+        	#{proportion} ,
+        	#{workInfo2} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.shareholder.entity.CorpSharecorp">
+		INSERT INTO corp_sharecorp 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(shareno)">
+				shareno,
+			</if>
+			<if test="@Ognl@isNotEmpty(corpno)">
+				corpno,
+			</if>
+			<if test="@Ognl@isNotEmpty(corpName)">
+				CorpName,
+			</if>
+			<if test="@Ognl@isNotEmpty(regCapital)">
+				RegCapital,
+			</if>
+			<if test="@Ognl@isNotEmpty(amount)">
+				Amount,
+			</if>
+			<if test="@Ognl@isNotEmpty(proportion)">
+				Proportion,
+			</if>
+			<if test="@Ognl@isNotEmpty(workInfo2)">
+				WorkInfo2,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(shareno)">
+				#{shareno},
+			</if>
+			<if test="@Ognl@isNotEmpty(corpno)">
+				#{corpno},
+			</if>
+			<if test="@Ognl@isNotEmpty(corpName)">
+				#{corpName},
+			</if>
+			<if test="@Ognl@isNotEmpty(regCapital)">
+				#{regCapital},
+			</if>
+			<if test="@Ognl@isNotEmpty(amount)">
+				#{amount},
+			</if>
+			<if test="@Ognl@isNotEmpty(proportion)">
+				#{proportion},
+			</if>
+			<if test="@Ognl@isNotEmpty(workInfo2)">
+				#{workInfo2},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM corp_sharecorp WHERE corpno = #{corpno}
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.shareholder.entity.CorpSharecorp">
+		SELECT <include refid="selectId" />
+		    FROM corp_sharecorp 
+	        WHERE corpno = #{corpno}
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.shareholder.entity.CorpSharecorp">
+	    UPDATE corp_sharecorp SET
+	        shareno = #{shareno} ,
+	        corpno = #{corpno} ,
+	        CorpName = #{corpName} ,
+	        RegCapital = #{regCapital} ,
+	        Amount = #{amount} ,
+	        Proportion = #{proportion} ,
+	        WorkInfo2 = #{workInfo2} 
+        WHERE 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(shareno)">
+			shareno = #{shareno},
+		</if>
+		<if test="@Ognl@isNotEmpty(corpno)">
+			corpno = #{corpno},
+		</if>
+		<if test="@Ognl@isNotEmpty(corpName)">
+			CorpName = #{corpName},
+		</if>
+		<if test="@Ognl@isNotEmpty(regCapital)">
+			RegCapital = #{regCapital},
+		</if>
+		<if test="@Ognl@isNotEmpty(amount)">
+			Amount = #{amount},
+		</if>
+		<if test="@Ognl@isNotEmpty(proportion)">
+			Proportion = #{proportion},
+		</if>
+		<if test="@Ognl@isNotEmpty(workInfo2)">
+			WorkInfo2 = #{workInfo2},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.shareholder.entity.CorpSharecorp">
+	    UPDATE corp_sharecorp 
+		<include refid="updateset"/>
+        WHERE corpno = #{corpno}
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

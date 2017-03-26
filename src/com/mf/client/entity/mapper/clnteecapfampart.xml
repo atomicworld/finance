@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntEeCapFampartDao">
+
+	<resultMap id="ClntEeCapFampart" type="com.mf.client.entity.ClntEeCapFampart">
+        <result property="id" column="ID"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="leagnm" column="LEAGNM"/>
+        <result property="certtype" column="CERTTYPE"/>
+        <result property="certno" column="CERTNO"/>
+        <result property="famrela" column="FAMRELA"/>
+        <result property="compnm" column="COMPNM"/>
+        <result property="entlnno" column="ENTLNNO"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ID,
+CLNTNO,
+LEAGNM,
+CERTTYPE,
+CERTNO,
+FAMRELA,
+COMPNM,
+ENTLNNO
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntEeCapFampart">
+		select
+		<include refid="selectId" />
+		from clnt_ee_cap_fampart
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntEeCapFampart" parameterType="com.mf.client.entity.ClntEeCapFampart">
+		select
+		<include refid="selectId" />
+		from clnt_ee_cap_fampart
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntEeCapFampart" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_ee_cap_fampart
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.leagnm)">
+					AND LEAGNM like '%${t.leagnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.certtype)">
+					AND CERTTYPE like '%${t.certtype}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.certno)">
+					AND CERTNO like '%${t.certno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.famrela)">
+					AND FAMRELA like '%${t.famrela}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.compnm)">
+					AND COMPNM like '%${t.compnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.entlnno)">
+					AND ENTLNNO like '%${t.entlnno}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(leagnm)">
+					AND LEAGNM like '%${leagnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(certtype)">
+					AND CERTTYPE like '%${certtype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(certno)">
+					AND CERTNO like '%${certno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(famrela)">
+					AND FAMRELA like '%${famrela}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(compnm)">
+					AND COMPNM like '%${compnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(entlnno)">
+					AND ENTLNNO like '%${entlnno}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntEeCapFampart" resultType="int">
+		select count(0) from clnt_ee_cap_fampart
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntEeCapFampart">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_ee_cap_fampart (
+        	CLNTNO ,
+        	LEAGNM ,
+        	CERTTYPE ,
+        	CERTNO ,
+        	FAMRELA ,
+        	COMPNM ,
+        	ENTLNNO 
+        ) VALUES (
+        	#{clntno} ,
+        	#{leagnm} ,
+        	#{certtype} ,
+        	#{certno} ,
+        	#{famrela} ,
+        	#{compnm} ,
+        	#{entlnno} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntEeCapFampart">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO clnt_ee_cap_fampart 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(leagnm)">
+				LEAGNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(certtype)">
+				CERTTYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(certno)">
+				CERTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(famrela)">
+				FAMRELA,
+			</if>
+			<if test="@Ognl@isNotEmpty(compnm)">
+				COMPNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(entlnno)">
+				ENTLNNO,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(leagnm)">
+				#{leagnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(certtype)">
+				#{certtype},
+			</if>
+			<if test="@Ognl@isNotEmpty(certno)">
+				#{certno},
+			</if>
+			<if test="@Ognl@isNotEmpty(famrela)">
+				#{famrela},
+			</if>
+			<if test="@Ognl@isNotEmpty(compnm)">
+				#{compnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(entlnno)">
+				#{entlnno},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM clnt_ee_cap_fampart WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntEeCapFampart">
+		SELECT <include refid="selectId" />
+		    FROM clnt_ee_cap_fampart 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntEeCapFampart">
+	    UPDATE clnt_ee_cap_fampart SET
+	        CLNTNO = #{clntno} ,
+	        LEAGNM = #{leagnm} ,
+	        CERTTYPE = #{certtype} ,
+	        CERTNO = #{certno} ,
+	        FAMRELA = #{famrela} ,
+	        COMPNM = #{compnm} ,
+	        ENTLNNO = #{entlnno} 
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(leagnm)">
+			LEAGNM = #{leagnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(certtype)">
+			CERTTYPE = #{certtype},
+		</if>
+		<if test="@Ognl@isNotEmpty(certno)">
+			CERTNO = #{certno},
+		</if>
+		<if test="@Ognl@isNotEmpty(famrela)">
+			FAMRELA = #{famrela},
+		</if>
+		<if test="@Ognl@isNotEmpty(compnm)">
+			COMPNM = #{compnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(entlnno)">
+			ENTLNNO = #{entlnno},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntEeCapFampart">
+	    UPDATE clnt_ee_cap_fampart 
+		<include refid="updateset"/>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

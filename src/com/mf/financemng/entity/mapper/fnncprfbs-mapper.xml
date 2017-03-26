@@ -1,0 +1,346 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FnncPrfbsDao">
+
+	<resultMap id="FnncPrfbs" type="com.mf.financemng.entity.FnncPrfbs">
+        <result property="prftrcno" column="PRFTRCNO"/>
+        <result property="txdt" column="TXDT"/>
+        <result property="checkdt" column="CHECKDT"/>
+        <result property="opno" column="OPNO"/>
+        <result property="prftyp" column="PRFTYP"/>
+        <result property="prfno" column="PRFNO"/>
+        <result property="dptno" column="DPTNO"/>
+        <result property="stt" column="STT"/>
+         <result property="regdt" column="REGDt"/>
+        <result property="remark" column="REMARK" />
+	</resultMap>
+	
+	<sql id="selectId">
+PRFTRCNO,
+TXDT,
+CHECKDT,
+OPNO,
+PRFTYP,
+PRFNO,
+DPTNO,
+STT,
+REGDT,
+REMARK
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.FnncPrfbs">
+		select
+		<include refid="selectId" />
+		from fnnc_prfbs
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.FnncPrfbs" parameterType="com.mf.financemng.entity.FnncPrfbs">
+		select
+		<include refid="selectId" />
+		from fnnc_prfbs
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="queryWFHBase" resultType="com.mf.financemng.entity.FnncPrfbs" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fnnc_prfbs
+		where stt='1' 
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<select id="query" resultType="com.mf.financemng.entity.FnncPrfbs" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fnnc_prfbs
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.txdt)">
+					AND TXDT like '%${t.txdt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.checkdt)">
+					AND CHECKDT like '%${t.checkdt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.opno)">
+					AND OPNO like '%${t.opno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.prftyp)">
+					AND PRFTYP like '%${t.prftyp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.prfno)">
+					AND PRFNO like '%${t.prfno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.dptno)">
+					AND DPTNO like '%${t.dptno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.stt)">
+					AND STT like '%${t.stt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regdt)">
+					AND REGDT like '%${t.regdt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND STT like '%${t.remark}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(txdt)">
+					AND TXDT like '%${txdt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(checkdt)">
+					AND CHECKDT like '%${checkdt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(opno)">
+					AND OPNO like '%${opno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(prftyp)">
+					AND PRFTYP like '%${prftyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(prfno)">
+					AND PRFNO like '%${prfno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(dptno)">
+					AND DPTNO like '%${dptno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(stt)">
+					AND STT like '%${stt}%'
+				</if>
+				<if test="@Ognl@isNotEmpty(t.regdt)">
+					AND REGDT like '%${t.regdt}%'
+			    </if>
+	       		<if test="@Ognl@isNotEmpty(remark)">
+					AND STT like '%${remark}%'
+			   </if>
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.FnncPrfbs" resultType="int">
+		select count(0) from fnnc_prfbs
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.financemng.entity.FnncPrfbs">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO fnnc_prfbs (
+        	TXDT ,
+        	CHECKDT ,
+        	OPNO ,
+        	PRFTYP ,
+        	PRFNO ,
+        	DPTNO ,
+        	STT ,
+        	REGDT,
+        	REMARK 
+        ) VALUES (
+        	#{txdt} ,
+        	#{checkdt} ,
+        	#{opno} ,
+        	#{prftyp} ,
+        	#{prfno} ,
+        	#{dptno} ,
+        	#{stt} ,
+        	#{regdt},
+        	#{remark}
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.FnncPrfbs">
+		INSERT INTO fnnc_prfbs 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(prftrcno)">
+				PRFTRCNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(txdt)">
+				TXDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(checkdt)">
+				CHECKDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(opno)">
+				OPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(prftyp)">
+				PRFTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(prfno)">
+				PRFNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(dptno)">
+				DPTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(stt)">
+				STT,
+			</if>
+			<if test="@Ognl@isNotEmpty(regdt)">
+				REGDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    <if test="@Ognl@isNotEmpty(prftrcno)">
+				#{prftrcno},
+			</if>
+			<if test="@Ognl@isNotEmpty(txdt)">
+				#{txdt},
+			</if>
+			<if test="@Ognl@isNotEmpty(checkdt)">
+				#{checkdt},
+			</if>
+			<if test="@Ognl@isNotEmpty(opno)">
+				#{opno},
+			</if>
+			<if test="@Ognl@isNotEmpty(prftyp)">
+				#{prftyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(prfno)">
+				#{prfno},
+			</if>
+			<if test="@Ognl@isNotEmpty(dptno)">
+				#{dptno},
+			</if>
+			<if test="@Ognl@isNotEmpty(stt)">
+				#{stt},
+			</if>
+			<if test="@Ognl@isNotEmpty(regdt)">
+				#{regdt},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM fnnc_prfbs WHERE
+        PRFTRCNO = #{prftrcno}
+	</delete>
+	
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.FnncPrfbs">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_prfbs 
+	        WHERE 
+        PRFTRCNO = #{id} 
+	</select>
+	<select id="getByprfno" parameterType="String" resultType="com.mf.financemng.entity.FnncPrfbs">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_prfbs 
+	        WHERE 
+        PRFNO = #{prfno} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.financemng.entity.FnncPrfbs">
+	    UPDATE fnnc_prfbs SET
+	        TXDT = #{txdt} ,
+	        CHECKDT = #{checkdt} ,
+	        OPNO = #{opno} ,
+	        PRFTYP = #{prftyp} ,
+	        PRFNO = #{prfno} ,
+	        DPTNO = #{dptno} ,
+	        STT = #{stt} ,
+	        REMARK = #{remark}
+        WHERE 
+	        PRFTRCNO = #{prftrcno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(txdt)">
+			TXDT = #{txdt},
+		</if>
+		<if test="@Ognl@isNotEmpty(checkdt)">
+			CHECKDT = #{checkdt},
+		</if>
+		<if test="@Ognl@isNotEmpty(opno)">
+			OPNO = #{opno},
+		</if>
+		<if test="@Ognl@isNotEmpty(prftyp)">
+			PRFTYP = #{prftyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(prfno)">
+			PRFNO = #{prfno},
+		</if>
+		<if test="@Ognl@isNotEmpty(dptno)">
+			DPTNO = #{dptno},
+		</if>
+		<if test="@Ognl@isNotEmpty(stt)">
+			STT = #{stt},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.financemng.entity.FnncPrfbs">
+	    UPDATE fnnc_prfbs 
+		<include refid="updateset"/>
+        WHERE 
+	        PRFTRCNO = #{prftrcno} 
+	</update>
+	<update id="modify" parameterType="com.mf.financemng.entity.FnncPrfbs">
+	    UPDATE fnnc_prfbs 
+		<include refid="updateset"/>
+        WHERE 
+	        PRFNO = #{prfno} 
+	</update>
+	
+	<!-- 查找凭证信息 -->
+	<select id="querylist" resultType="com.mf.financemng.entity.FnncPrfbsList" parameterType="java.util.HashMap">
+		select 
+		a.prftrcno,
+		a.prfno,
+		a.remark,
+		sum(truncate(amnt/2,2)) jamnt,
+		sum(case when b.jdflg='2' then 1 else 0 end) jtotal,
+		sum(truncate(amnt/2,2)) damnt,
+		sum(case when b.jdflg='1' then 1 else 0 end) dtotal,
+		c.opnm,a.stt,
+		a.txdt  
+		from fnnc_prfbs a 
+		left join fnnc_prfdtl b on a.prftrcno=b.prftrcno 
+		left join operator c on a.opno=emplyno where a.stt=${t.stt}
+		<if test="@Ognl@isNotEmpty(t.prfno)">
+			and prfno like '%${t.prfno}%'
+		</if>
+		group by a.prfno order by a.regdt  desc
+	</select>
+	
+</mapper>
+

@@ -1,0 +1,440 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntBlacklistDao">
+
+	<resultMap id="ClntBlacklist" type="com.mf.client.entity.ClntBlacklist">
+        <result property="id" column="ID"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="bldegree" column="BLDEGREE"/>
+        <result property="appruserid" column="APPRUSERID"/>
+        <result property="blreason" column="BLREASON"/>
+        <result property="validflag" column="VALIDFLAG"/>
+        <result property="scdate" column="SCDATE"/>
+        <result property="lastmoddate" column="LASTMODDATE"/>
+        <result property="userid" column="USERID"/>
+        <result property="remark" column="REMARK"/>
+        <result property="loantrade" column="LOANTRADE"/>
+        <result property="loanarea" column="LOANAREA"/>
+        <result property="trade" column="TRADE"/>
+        <result property="validdate" column="VALIDDATE"/>
+        <result property="invaliddate" column="INVALIDDATE"/>
+        <result property="submitmark" column="SUBMITMARK"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ID,
+CLNTNO,
+(SELECT CLNTNAME FROM clnt_client  WHERE CLNTID = CLNTNO) CLNTNAME,
+BLDEGREE,
+APPRUSERID,
+BLREASON,
+VALIDFLAG,
+SCDATE,
+LASTMODDATE,
+USERID,
+(SELECT OPNM FROM operator  WHERE EMPLYNO = USERID) OPNM,
+(SELECT DPTNO FROM operator  WHERE EMPLYNO = USERID) DPTNO,
+(SELECT DPTNAME FROM dptmnt WHERE DPTNO = (SELECT DPTNO FROM operator  WHERE EMPLYNO = USERID)) DPTNAME,
+REMARK,
+LOANTRADE,
+LOANAREA,
+TRADE,
+VALIDDATE,
+INVALIDDATE,
+SUBMITMARK
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntBlacklist">
+		select
+		<include refid="selectId" />
+		from clnt_blacklist
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntBlacklist" parameterType="com.mf.client.entity.ClntBlacklist">
+		select
+		<include refid="selectId" />
+		from clnt_blacklist
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntBlacklist" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_blacklist
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bldegree)">
+					AND BLDEGREE like '%${t.bldegree}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.appruserid)">
+					AND APPRUSERID like '%${t.appruserid}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.blreason)">
+					AND BLREASON like '%${t.blreason}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.validflag)">
+					AND VALIDFLAG like '%${t.validflag}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.scdate)">
+					AND SCDATE like '%${t.scdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.lastmoddate)">
+					AND LASTMODDATE like '%${t.lastmoddate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.userid)">
+					AND USERID = '${t.userid}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+	       		<if test="@Ognl@isNotEmpty(t.loantrade)">
+					AND LOANTRADE like '%${t.loantrade}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.loanarea)">
+					AND LOANAREA like '%${t.loanarea}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.trade)">
+					AND TRADE like '%${t.trade}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.validdate)">
+					AND VALIDDATE like '%${t.validdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.invaliddate)">
+					AND INVALIDDATE like '%${t.invaliddate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.submitmark)">
+					AND SUBMITMARK like '%${t.submitmark}%'
+			   </if>
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bldegree)">
+					AND BLDEGREE like '%${bldegree}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(appruserid)">
+					AND APPRUSERID like '%${appruserid}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(blreason)">
+					AND BLREASON like '%${blreason}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(validflag)">
+					AND VALIDFLAG like '%${validflag}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(scdate)">
+					AND SCDATE like '%${scdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(lastmoddate)">
+					AND LASTMODDATE like '%${lastmoddate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(userid)">
+					AND USERID like '%${userid}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+	       		<if test="@Ognl@isNotEmpty(loantrade)">
+					AND LOANTRADE like '%${t.loantrade}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(loanarea)">
+					AND LOANAREA like '%${loanarea}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(trade)">
+					AND TRADE like '%${trade}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(validdate)">
+					AND VALIDDATE like '%${validdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(invaliddate)">
+					AND INVALIDDATE like '%${invaliddate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(submitmark)">
+					AND SUBMITMARK like '%${submitmark}%'
+			   </if>
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntBlacklist" resultType="int">
+		select count(0) from clnt_blacklist
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntBlacklist">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_blacklist (
+        	CLNTNO ,
+        	BLDEGREE ,
+        	APPRUSERID ,
+        	BLREASON ,
+        	VALIDFLAG ,
+        	SCDATE ,
+        	LASTMODDATE ,
+        	USERID ,
+        	REMARK ,
+        	LOANTRADE,
+			LOANAREA,
+			TRADE,
+			VALIDDATE,
+			INVALIDDATE,
+			SUBMITMARK
+        ) VALUES (
+        	#{clntno} ,
+        	#{bldegree} ,
+        	#{appruserid} ,
+        	#{blreason} ,
+        	#{validflag} ,
+        	#{scdate} ,
+        	#{lastmoddate} ,
+        	#{userid} ,
+        	#{remark} ,
+        	#{loantrade} ,
+			#{loanarea} ,
+			#{trade} ,
+			#{validdate} ,
+			#{invaliddate} ,
+			#{submitmark}
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntBlacklist">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO clnt_blacklist 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(bldegree)">
+				BLDEGREE,
+			</if>
+			<if test="@Ognl@isNotEmpty(appruserid)">
+				APPRUSERID,
+			</if>
+			<if test="@Ognl@isNotEmpty(blreason)">
+				BLREASON,
+			</if>
+			<if test="@Ognl@isNotEmpty(validflag)">
+				VALIDFLAG,
+			</if>
+			<if test="@Ognl@isNotEmpty(scdate)">
+				SCDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(lastmoddate)">
+				LASTMODDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(userid)">
+				USERID,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+			<if test="@Ognl@isNotEmpty(loantrade)">
+				LOANTRADE,
+			</if>
+			<if test="@Ognl@isNotEmpty(loanarea)">
+				LOANAREA,
+			</if>
+			<if test="@Ognl@isNotEmpty(trade)">
+				TRADE,
+			</if>
+			<if test="@Ognl@isNotEmpty(validdate)">
+				VALIDDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(invaliddate)">
+				INVALIDDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(submitmark)">
+				SUBMITMARK,
+			</if>
+			
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(bldegree)">
+				#{bldegree},
+			</if>
+			<if test="@Ognl@isNotEmpty(appruserid)">
+				#{appruserid},
+			</if>
+			<if test="@Ognl@isNotEmpty(blreason)">
+				#{blreason},
+			</if>
+			<if test="@Ognl@isNotEmpty(validflag)">
+				#{validflag},
+			</if>
+			<if test="@Ognl@isNotEmpty(scdate)">
+				#{scdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(lastmoddate)">
+				#{lastmoddate},
+			</if>
+			<if test="@Ognl@isNotEmpty(userid)">
+				#{userid},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@Ognl@isNotEmpty(loantrade)">
+				#{loantrade},
+			</if>
+			<if test="@Ognl@isNotEmpty(loanarea)">
+				#{loanarea},
+			</if>
+			<if test="@Ognl@isNotEmpty(trade)">
+				#{trade},
+			</if>
+			<if test="@Ognl@isNotEmpty(validdate)">
+				#{validdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(invaliddate)">
+				#{invaliddate},
+			</if>
+			<if test="@Ognl@isNotEmpty(submitmark)">
+				#{submitmark},
+			</if>
+			
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM clnt_blacklist WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntBlacklist">
+		SELECT <include refid="selectId" />
+		    FROM clnt_blacklist 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntBlacklist">
+	    UPDATE clnt_blacklist SET
+	        CLNTNO = #{clntno} ,
+	        BLDEGREE = #{bldegree} ,
+	        APPRUSERID = #{appruserid} ,
+	        BLREASON = #{blreason} ,
+	        VALIDFLAG = #{validflag} ,
+	        SCDATE = #{scdate} ,
+	        LASTMODDATE = #{lastmoddate} ,
+	        USERID = #{userid} ,
+	        REMARK = #{remark} ,
+	        LOANTRADE = #{loantrade} ,
+			LOANAREA = #{loanarea} ,
+			TRADE = #{trade} ,
+			VALIDDATE = #{validdate} ,
+			INVALIDDATE = #{invaliddate} ,
+			SUBMITMARK = #{submitmark}
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(bldegree)">
+			BLDEGREE = #{bldegree},
+		</if>
+		<if test="@Ognl@isNotEmpty(appruserid)">
+			APPRUSERID = #{appruserid},
+		</if>
+		<if test="@Ognl@isNotEmpty(blreason)">
+			BLREASON = #{blreason},
+		</if>
+		<if test="@Ognl@isNotEmpty(validflag)">
+			VALIDFLAG = #{validflag},
+		</if>
+		<if test="@Ognl@isNotEmpty(scdate)">
+			SCDATE = #{scdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(lastmoddate)">
+			LASTMODDATE = #{lastmoddate},
+		</if>
+		<if test="@Ognl@isNotEmpty(userid)">
+			USERID = #{userid},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(loantrade)">
+			LOANTRADE = #{loantrade},
+		</if>
+		<if test="@Ognl@isNotEmpty(loanarea)">
+			LOANAREA = #{loanarea},
+		</if>
+		<if test="@Ognl@isNotEmpty(trade)">
+			TRADE = #{trade},
+		</if>
+		<if test="@Ognl@isNotEmpty(validdate)">
+			VALIDDATE = #{validdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(invaliddate)">
+			INVALIDDATE = #{invaliddate},
+		</if>
+		<if test="@Ognl@isNotEmpty(submitmark)">
+			SUBMITMARK = #{submitmark},
+		</if>
+		
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntBlacklist">
+	    UPDATE clnt_blacklist 
+		<include refid="updateset"/>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+	<!-- 找到所有未提交的黑名单客户 -->
+	<select id="queryUnSubmit" resultType="com.mf.client.entity.ClntBlacklist" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_blacklist
+		WHERE
+			SUBMITMARK = 0
+	</select>
+	
+</mapper>
+

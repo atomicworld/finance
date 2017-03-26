@@ -1,0 +1,366 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntEventEwdDao">
+
+	<resultMap id="ClntEventEwd" type="com.mf.client.entity.ClntEventEwd">
+        <result property="id" column="ID"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="ewdtp" column="EWDTP"/>
+        <result property="ewdamnt" column="EWDAMNT"/>
+        <result property="ewdinst" column="EWDINST"/>
+        <result property="updtamnt" column="UPDTAMNT"/>
+        <result property="updtinst" column="UPDTINST"/>
+        <result property="dealflag" column="DEALFLAG"/>
+        <result property="curtp" column="CURTP"/>
+        <result property="scdate" column="SCDATE"/>
+        <result property="lastmoddate" column="LASTMODDATE"/>
+        <result property="userid" column="USERID"/>
+        <result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ID,
+CLNTNO,
+EWDTP,
+EWDAMNT,
+EWDINST,
+UPDTAMNT,
+UPDTINST,
+DEALFLAG,
+CURTP,
+SCDATE,
+LASTMODDATE,
+USERID,
+REMARK
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntEventEwd">
+		select
+		<include refid="selectId" />
+		from clnt_event_ewd
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntEventEwd" parameterType="com.mf.client.entity.ClntEventEwd">
+		select
+		<include refid="selectId" />
+		from clnt_event_ewd
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntEventEwd" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_event_ewd
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.ewdtp)">
+					AND EWDTP like '%${t.ewdtp}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.ewdamnt)">
+					AND EWDAMNT = '${t.ewdamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.ewdinst)">
+					AND EWDINST = '${t.ewdinst}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.updtamnt)">
+					AND UPDTAMNT = '${t.updtamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.updtinst)">
+					AND UPDTINST = '${t.updtinst}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.dealflag)">
+					AND DEALFLAG like '%${t.dealflag}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.curtp)">
+					AND CURTP like '%${t.curtp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.scdate)">
+					AND SCDATE like '%${t.scdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.lastmoddate)">
+					AND LASTMODDATE like '%${t.lastmoddate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.userid)">
+					AND USERID like '%${t.userid}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(ewdtp)">
+					AND EWDTP like '%${ewdtp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(ewdamnt)">
+					AND EWDAMNT = '${ewdamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(ewdinst)">
+					AND EWDINST = '${ewdinst}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(updtamnt)">
+					AND UPDTAMNT = '${updtamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(updtinst)">
+					AND UPDTINST = '${updtinst}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(dealflag)">
+					AND DEALFLAG like '%${dealflag}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(curtp)">
+					AND CURTP like '%${curtp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(scdate)">
+					AND SCDATE like '%${scdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(lastmoddate)">
+					AND LASTMODDATE like '%${lastmoddate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(userid)">
+					AND USERID like '%${userid}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntEventEwd" resultType="int">
+		select count(0) from clnt_event_ewd
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntEventEwd">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_event_ewd (
+        	CLNTNO ,
+        	EWDTP ,
+        	EWDAMNT ,
+        	EWDINST ,
+        	UPDTAMNT ,
+        	UPDTINST ,
+        	DEALFLAG ,
+        	CURTP ,
+        	SCDATE ,
+        	LASTMODDATE ,
+        	USERID ,
+        	REMARK 
+        ) VALUES (
+        	#{clntno} ,
+        	#{ewdtp} ,
+        	#{ewdamnt} ,
+        	#{ewdinst} ,
+        	#{updtamnt} ,
+        	#{updtinst} ,
+        	#{dealflag} ,
+        	#{curtp} ,
+        	#{scdate} ,
+        	#{lastmoddate} ,
+        	#{userid} ,
+        	#{remark} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntEventEwd">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO clnt_event_ewd 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(ewdtp)">
+				EWDTP,
+			</if>
+			<if test="@Ognl@isNotEmpty(ewdamnt)">
+				EWDAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(ewdinst)">
+				EWDINST,
+			</if>
+			<if test="@Ognl@isNotEmpty(updtamnt)">
+				UPDTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(updtinst)">
+				UPDTINST,
+			</if>
+			<if test="@Ognl@isNotEmpty(dealflag)">
+				DEALFLAG,
+			</if>
+			<if test="@Ognl@isNotEmpty(curtp)">
+				CURTP,
+			</if>
+			<if test="@Ognl@isNotEmpty(scdate)">
+				SCDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(lastmoddate)">
+				LASTMODDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(userid)">
+				USERID,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(ewdtp)">
+				#{ewdtp},
+			</if>
+			<if test="@Ognl@isNotEmpty(ewdamnt)">
+				#{ewdamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(ewdinst)">
+				#{ewdinst},
+			</if>
+			<if test="@Ognl@isNotEmpty(updtamnt)">
+				#{updtamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(updtinst)">
+				#{updtinst},
+			</if>
+			<if test="@Ognl@isNotEmpty(dealflag)">
+				#{dealflag},
+			</if>
+			<if test="@Ognl@isNotEmpty(curtp)">
+				#{curtp},
+			</if>
+			<if test="@Ognl@isNotEmpty(scdate)">
+				#{scdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(lastmoddate)">
+				#{lastmoddate},
+			</if>
+			<if test="@Ognl@isNotEmpty(userid)">
+				#{userid},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM clnt_event_ewd WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntEventEwd">
+		SELECT <include refid="selectId" />
+		    FROM clnt_event_ewd 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntEventEwd">
+	    UPDATE clnt_event_ewd SET
+	        CLNTNO = #{clntno} ,
+	        EWDTP = #{ewdtp} ,
+	        EWDAMNT = #{ewdamnt} ,
+	        EWDINST = #{ewdinst} ,
+	        UPDTAMNT = #{updtamnt} ,
+	        UPDTINST = #{updtinst} ,
+	        DEALFLAG = #{dealflag} ,
+	        CURTP = #{curtp} ,
+	        SCDATE = #{scdate} ,
+	        LASTMODDATE = #{lastmoddate} ,
+	        USERID = #{userid} ,
+	        REMARK = #{remark} 
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(ewdtp)">
+			EWDTP = #{ewdtp},
+		</if>
+		<if test="@Ognl@isNotEmpty(ewdamnt)">
+			EWDAMNT = #{ewdamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(ewdinst)">
+			EWDINST = #{ewdinst},
+		</if>
+		<if test="@Ognl@isNotEmpty(updtamnt)">
+			UPDTAMNT = #{updtamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(updtinst)">
+			UPDTINST = #{updtinst},
+		</if>
+		<if test="@Ognl@isNotEmpty(dealflag)">
+			DEALFLAG = #{dealflag},
+		</if>
+		<if test="@Ognl@isNotEmpty(curtp)">
+			CURTP = #{curtp},
+		</if>
+		<if test="@Ognl@isNotEmpty(scdate)">
+			SCDATE = #{scdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(lastmoddate)">
+			LASTMODDATE = #{lastmoddate},
+		</if>
+		<if test="@Ognl@isNotEmpty(userid)">
+			USERID = #{userid},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntEventEwd">
+	    UPDATE clnt_event_ewd 
+		<include refid="updateset"/>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

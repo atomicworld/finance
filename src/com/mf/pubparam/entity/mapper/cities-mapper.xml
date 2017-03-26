@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.pubparam.dao.CitiesDao">
+
+	<resultMap id="Cities" type="com.mf.pubparam.entity.Cities">
+        <result property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="url" column="url"/>
+        <result property="leaf" column="leaf"/>
+        <result property="parentId" column="parentId"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		id,
+		name,
+		url,
+		leaf,
+		parentId
+    </sql>
+    
+    <select id="getByparentId" resultType="com.mf.pubparam.entity.Cities" parameterType="String">
+		select
+		<include refid="selectId" />
+		from cities where parentId=#{parentId}
+	</select>
+	 <select id="getById" resultType="com.mf.pubparam.entity.Cities" parameterType="String">
+		 select  group_concat(name) as name from cities where id in(#{id},concat(left(#{id},2),'0000'),concat(left(#{id},4),'00'))
+	</select>
+	
+</mapper>
+

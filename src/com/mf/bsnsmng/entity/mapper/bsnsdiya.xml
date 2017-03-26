@@ -1,0 +1,578 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.bsnsmng.dao.BsnsDiyaDao">
+
+	
+	<sql id="selectId">
+		CLNTNO,
+CLNTNM,
+APPLYNO,
+RCRDID,
+CNTRCTNO,
+ZHIYACNTRCTNO,
+OWNERNO,
+OWNERNM,
+DIYASHARE,
+DIYATYP,
+DIYANM,
+DIYALCTN,
+KEEPER,
+KEEPDATE,
+DIYANO,
+RGSTRNO,
+PRVFILE,
+PWNNO,
+ORGNLVAL,
+ORGNLDATE,
+AMNT,
+LMTYR,
+RMNYR,
+DPRCTNRT,
+REGORG,
+PREEVLVAL,
+PREEVALDATE,
+EVLMTHD,
+EVLVAL,
+EVALDATE,
+MRTGGRT,
+ASSRRT,
+NTRZTNORG,
+NTRZTNDATE,
+NTRZTNNO,
+DIYAREGDATE,
+DIYAEDATE,
+POLNO,
+POLAMNT,
+DEPNO,
+REGOPNO,
+REGDATE,
+UPDTDATE,
+REMARK,
+EVLORG,
+USETYP,
+DSCP,
+OTHER,
+EXPRTFLG,
+DIYARENDZ,
+DIYAFAREN
+    </sql>
+    
+   
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.bsnsmng.entity.BsnsDiya">
+	
+		INSERT INTO bsns_diya 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				CLNTNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				APPLYNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				CNTRCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyacntrctno)">
+				ZHIYACNTRCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(ownerno)">
+				OWNERNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(ownernm)">
+				OWNERNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(diyashare)">
+				DIYASHARE,
+			</if>
+			<if test="@Ognl@isNotEmpty(diyatyp)">
+				DIYATYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(diyanm)">
+				DIYANM,
+			</if>
+			<if test="@Ognl@isNotEmpty(diyalctn)">
+				DIYALCTN,
+			</if>
+			<if test="@Ognl@isNotEmpty(keeper)">
+				KEEPER,
+			</if>
+			<if test="@Ognl@isNotEmpty(keepdate)">
+				KEEPDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(diyano)">
+				DIYANO,
+			</if>
+			<if test="@Ognl@isNotEmpty(rgstrno)">
+				RGSTRNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(prvfile)">
+				PRVFILE,
+			</if>
+			<if test="@Ognl@isNotEmpty(pwnno)">
+				PWNNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(orgnlval)">
+				ORGNLVAL,
+			</if>
+			<if test="@Ognl@isNotEmpty(orgnldate)">
+				ORGNLDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(amnt)">
+				AMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(lmtyr)">
+				LMTYR,
+			</if>
+			<if test="@Ognl@isNotEmpty(rmnyr)">
+				RMNYR,
+			</if>
+			<if test="@Ognl@isNotEmpty(dprctnrt)">
+				DPRCTNRT,
+			</if>
+			<if test="@Ognl@isNotEmpty(regorg)">
+				REGORG,
+			</if>
+			<if test="@Ognl@isNotEmpty(preevlval)">
+				PREEVLVAL,
+			</if>
+			<if test="@Ognl@isNotEmpty(preevaldate)">
+				PREEVALDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(evlmthd)">
+				EVLMTHD,
+			</if>
+			<if test="@Ognl@isNotEmpty(evlval)">
+				EVLVAL,
+			</if>
+			<if test="@Ognl@isNotEmpty(evaldate)">
+				EVALDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(mrtggrt)">
+				MRTGGRT,
+			</if>
+			<if test="@Ognl@isNotEmpty(assrrt)">
+				ASSRRT,
+			</if>
+			<if test="@Ognl@isNotEmpty(ntrztnorg)">
+				NTRZTNORG,
+			</if>
+			<if test="@Ognl@isNotEmpty(ntrztndate)">
+				NTRZTNDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(ntrztnno)">
+				NTRZTNNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(diyaregdate)">
+				DIYAREGDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(diyaedate)">
+				DIYAEDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(polno)">
+				POLNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(polamnt)">
+				POLAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(depno)">
+				DEPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				REGOPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(regdate)">
+				REGDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				UPDTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+			<if test="@Ognl@isNotEmpty(evlorg)">
+				EVLORG,
+			</if>
+			<if test="@Ognl@isNotEmpty(usetyp)">
+				USETYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(dscp)">
+				DSCP,
+			</if>
+			<if test="@Ognl@isNotEmpty(other)">
+				OTHER,
+			</if>
+			<if test="@Ognl@isNotEmpty(exprtflg)">
+				EXPRTFLG,
+			</if>
+			<if test="@Ognl@isNotEmpty(diyarendz)">
+				DIYARENDZ,
+			</if>
+			<if test="@Ognl@isNotEmpty(diyafaren)">
+				DIYAFAREN,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				#{clntnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				#{applyno},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				#{cntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyacntrctno)">
+				#{zhiyacntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(ownerno)">
+				#{ownerno},
+			</if>
+			<if test="@Ognl@isNotEmpty(ownernm)">
+				#{ownernm},
+			</if>
+			<if test="@Ognl@isNotEmpty(diyashare)">
+				#{diyashare},
+			</if>
+			<if test="@Ognl@isNotEmpty(diyatyp)">
+				#{diyatyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(diyanm)">
+				#{diyanm},
+			</if>
+			<if test="@Ognl@isNotEmpty(diyalctn)">
+				#{diyalctn},
+			</if>
+			<if test="@Ognl@isNotEmpty(keeper)">
+				#{keeper},
+			</if>
+			<if test="@Ognl@isNotEmpty(keepdate)">
+				#{keepdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(diyano)">
+				#{diyano},
+			</if>
+			<if test="@Ognl@isNotEmpty(rgstrno)">
+				#{rgstrno},
+			</if>
+			<if test="@Ognl@isNotEmpty(prvfile)">
+				#{prvfile},
+			</if>
+			<if test="@Ognl@isNotEmpty(pwnno)">
+				#{pwnno},
+			</if>
+			<if test="@Ognl@isNotEmpty(orgnlval)">
+				#{orgnlval},
+			</if>
+			<if test="@Ognl@isNotEmpty(orgnldate)">
+				#{orgnldate},
+			</if>
+			<if test="@Ognl@isNotEmpty(amnt)">
+				#{amnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(lmtyr)">
+				#{lmtyr},
+			</if>
+			<if test="@Ognl@isNotEmpty(rmnyr)">
+				#{rmnyr},
+			</if>
+			<if test="@Ognl@isNotEmpty(dprctnrt)">
+				#{dprctnrt},
+			</if>
+			<if test="@Ognl@isNotEmpty(regorg)">
+				#{regorg},
+			</if>
+			<if test="@Ognl@isNotEmpty(preevlval)">
+				#{preevlval},
+			</if>
+			<if test="@Ognl@isNotEmpty(preevaldate)">
+				#{preevaldate},
+			</if>
+			<if test="@Ognl@isNotEmpty(evlmthd)">
+				#{evlmthd},
+			</if>
+			<if test="@Ognl@isNotEmpty(evlval)">
+				#{evlval},
+			</if>
+			<if test="@Ognl@isNotEmpty(evaldate)">
+				#{evaldate},
+			</if>
+			<if test="@Ognl@isNotEmpty(mrtggrt)">
+				#{mrtggrt},
+			</if>
+			<if test="@Ognl@isNotEmpty(assrrt)">
+				#{assrrt},
+			</if>
+			<if test="@Ognl@isNotEmpty(ntrztnorg)">
+				#{ntrztnorg},
+			</if>
+			<if test="@Ognl@isNotEmpty(ntrztndate)">
+				#{ntrztndate},
+			</if>
+			<if test="@Ognl@isNotEmpty(ntrztnno)">
+				#{ntrztnno},
+			</if>
+			<if test="@Ognl@isNotEmpty(diyaregdate)">
+				#{diyaregdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(diyaedate)">
+				#{diyaedate},
+			</if>
+			<if test="@Ognl@isNotEmpty(polno)">
+				#{polno},
+			</if>
+			<if test="@Ognl@isNotEmpty(polamnt)">
+				#{polamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(depno)">
+				#{depno},
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				#{regopno},
+			</if>
+			<if test="@Ognl@isNotEmpty(regdate)">
+				#{regdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				#{updtdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@Ognl@isNotEmpty(evlorg)">
+				#{evlorg},
+			</if>
+			<if test="@Ognl@isNotEmpty(usetyp)">
+				#{usetyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(dscp)">
+				#{dscp},
+			</if>
+			<if test="@Ognl@isNotEmpty(other)">
+				#{other},
+			</if>
+			<if test="@Ognl@isNotEmpty(exprtflg)">
+				#{exprtflg},
+			</if>
+			<if test="@Ognl@isNotEmpty(diyarendz)">
+				#{diyarendz},
+			</if>
+			<if test="@Ognl@isNotEmpty(diyafaren)">
+				#{diyafaren},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM bsns_diya WHERE
+        applyNo = #{applyno} 
+	</delete>
+	<delete id="deleteCntrctno" parameterType="String">
+		DELETE FROM bsns_diya WHERE
+        cntrctno = #{cntrctno} 
+	</delete>
+	
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.bsnsmng.entity.BsnsDiya">
+		SELECT <include refid="selectId" />
+		    FROM bsns_diya 
+	        WHERE 
+               applyNo = #{applyNo} 
+	</select>
+	<!-- 根据主键查实体 -->
+	<select id="getByCntrctno" parameterType="String" resultType="com.mf.bsnsmng.entity.BsnsDiya">
+		SELECT <include refid="selectId" />
+		    FROM bsns_diya 
+	        WHERE 
+               cntrctno = #{cntrctno} 
+	</select>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntnm)">
+			CLNTNM = #{clntnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(applyno)">
+			APPLYNO = #{applyno},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctno)">
+			CNTRCTNO = #{cntrctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(zhiyacntrctno)">
+			ZHIYACNTRCTNO = #{zhiyacntrctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(ownerno)">
+			OWNERNO = #{ownerno},
+		</if>
+		<if test="@Ognl@isNotEmpty(ownernm)">
+			OWNERNM = #{ownernm},
+		</if>
+		<if test="@Ognl@isNotEmpty(diyashare)">
+			DIYASHARE = #{diyashare},
+		</if>
+		<if test="@Ognl@isNotEmpty(diyatyp)">
+			DIYATYP = #{diyatyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(diyanm)">
+			DIYANM = #{diyanm},
+		</if>
+		<if test="@Ognl@isNotEmpty(diyalctn)">
+			DIYALCTN = #{diyalctn},
+		</if>
+		<if test="@Ognl@isNotEmpty(keeper)">
+			KEEPER = #{keeper},
+		</if>
+		<if test="@Ognl@isNotEmpty(keepdate)">
+			KEEPDATE = #{keepdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(diyano)">
+			DIYANO = #{diyano},
+		</if>
+		<if test="@Ognl@isNotEmpty(rgstrno)">
+			RGSTRNO = #{rgstrno},
+		</if>
+		<if test="@Ognl@isNotEmpty(prvfile)">
+			PRVFILE = #{prvfile},
+		</if>
+		<if test="@Ognl@isNotEmpty(pwnno)">
+			PWNNO = #{pwnno},
+		</if>
+		<if test="@Ognl@isNotEmpty(orgnlval)">
+			ORGNLVAL = #{orgnlval},
+		</if>
+		<if test="@Ognl@isNotEmpty(orgnldate)">
+			ORGNLDATE = #{orgnldate},
+		</if>
+		<if test="@Ognl@isNotEmpty(amnt)">
+			AMNT = #{amnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(lmtyr)">
+			LMTYR = #{lmtyr},
+		</if>
+		<if test="@Ognl@isNotEmpty(rmnyr)">
+			RMNYR = #{rmnyr},
+		</if>
+		<if test="@Ognl@isNotEmpty(dprctnrt)">
+			DPRCTNRT = #{dprctnrt},
+		</if>
+		<if test="@Ognl@isNotEmpty(regorg)">
+			REGORG = #{regorg},
+		</if>
+		<if test="@Ognl@isNotEmpty(preevlval)">
+			PREEVLVAL = #{preevlval},
+		</if>
+		<if test="@Ognl@isNotEmpty(preevaldate)">
+			PREEVALDATE = #{preevaldate},
+		</if>
+		<if test="@Ognl@isNotEmpty(evlmthd)">
+			EVLMTHD = #{evlmthd},
+		</if>
+		<if test="@Ognl@isNotEmpty(evlval)">
+			EVLVAL = #{evlval},
+		</if>
+		<if test="@Ognl@isNotEmpty(evaldate)">
+			EVALDATE = #{evaldate},
+		</if>
+		<if test="@Ognl@isNotEmpty(mrtggrt)">
+			MRTGGRT = #{mrtggrt},
+		</if>
+		<if test="@Ognl@isNotEmpty(assrrt)">
+			ASSRRT = #{assrrt},
+		</if>
+		<if test="@Ognl@isNotEmpty(ntrztnorg)">
+			NTRZTNORG = #{ntrztnorg},
+		</if>
+		<if test="@Ognl@isNotEmpty(ntrztndate)">
+			NTRZTNDATE = #{ntrztndate},
+		</if>
+		<if test="@Ognl@isNotEmpty(ntrztnno)">
+			NTRZTNNO = #{ntrztnno},
+		</if>
+		<if test="@Ognl@isNotEmpty(diyaregdate)">
+			DIYAREGDATE = #{diyaregdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(diyaedate)">
+			DIYAEDATE = #{diyaedate},
+		</if>
+		<if test="@Ognl@isNotEmpty(polno)">
+			POLNO = #{polno},
+		</if>
+		<if test="@Ognl@isNotEmpty(polamnt)">
+			POLAMNT = #{polamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(depno)">
+			DEPNO = #{depno},
+		</if>
+		<if test="@Ognl@isNotEmpty(regopno)">
+			REGOPNO = #{regopno},
+		</if>
+		<if test="@Ognl@isNotEmpty(regdate)">
+			REGDATE = #{regdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(updtdate)">
+			UPDTDATE = #{updtdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(evlorg)">
+			EVLORG = #{evlorg},
+		</if>
+		<if test="@Ognl@isNotEmpty(usetyp)">
+			USETYP = #{usetyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(dscp)">
+			DSCP = #{dscp},
+		</if>
+		<if test="@Ognl@isNotEmpty(other)">
+			OTHER = #{other},
+		</if>
+		<if test="@Ognl@isNotEmpty(exprtflg)">
+			EXPRTFLG = #{exprtflg},
+		</if>
+		<if test="@Ognl@isNotEmpty(diyarendz)">
+			DIYARENDZ = #{diyarendz},
+		</if>
+		<if test="@Ognl@isNotEmpty(diyafaren)">
+			DIYAFAREN = #{diyafaren},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.bsnsmng.entity.BsnsDiya">
+	    UPDATE bsns_diya 
+		<include refid="updateset"/>
+        WHERE 
+	        applyNo = #{applyno} 
+	</update>
+	<update id="modifyCntrct" parameterType="com.mf.bsnsmng.entity.BsnsDiya">
+	    UPDATE bsns_diya 
+		<include refid="updateset"/>
+        WHERE 
+	        cntrctno = #{cntrctno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

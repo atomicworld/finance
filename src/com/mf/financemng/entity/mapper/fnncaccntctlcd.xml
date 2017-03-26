@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FnncAccntctlcdDao">
+
+	<resultMap id="FnncAccntctlcd" type="com.mf.financemng.entity.FnncAccntctlcd">
+        <result property="accntno" column="ACCNTNO"/>
+        <result property="accntctlcd" column="ACCNTCTLCD"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ACCNTNO,
+ACCNTCTLCD
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.FnncAccntctlcd">
+		select
+		<include refid="selectId" />
+		from fnnc_accntctlcd
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.FnncAccntctlcd" parameterType="com.mf.financemng.entity.FnncAccntctlcd">
+		select
+		<include refid="selectId" />
+		from fnnc_accntctlcd
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.financemng.entity.FnncAccntctlcd" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fnnc_accntctlcd
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.accntctlcd)">
+					AND ACCNTCTLCD like '%${t.accntctlcd}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(accntctlcd)">
+					AND ACCNTCTLCD like '%${accntctlcd}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.FnncAccntctlcd" resultType="int">
+		select count(0) from fnnc_accntctlcd
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.financemng.entity.FnncAccntctlcd">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO fnnc_accntctlcd (
+        	ACCNTCTLCD 
+        ) VALUES (
+        	#{accntctlcd} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.FnncAccntctlcd">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO fnnc_accntctlcd 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(accntctlcd)">
+				ACCNTCTLCD,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(accntctlcd)">
+				#{accntctlcd},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM fnnc_accntctlcd WHERE
+        ACCNTNO = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.FnncAccntctlcd">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_accntctlcd 
+	        WHERE 
+        ACCNTNO = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.financemng.entity.FnncAccntctlcd">
+	    UPDATE fnnc_accntctlcd SET
+	        ACCNTCTLCD = #{accntctlcd} 
+        WHERE 
+	        ACCNTNO = #{accntno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(accntctlcd)">
+			ACCNTCTLCD = #{accntctlcd},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.financemng.entity.FnncAccntctlcd">
+	    UPDATE fnnc_accntctlcd 
+		<include refid="updateset"/>
+        WHERE 
+	        ACCNTNO = #{accntno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

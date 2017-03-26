@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.cntrtmng.dao.BsnsExtendDao">
+
+	<resultMap id="BsnsExtend" type="com.mf.cntrtmng.entity.BsnsExtend">
+        <result property="extendno" column="EXTENDNO"/>
+        <result property="bsnsno" column="BSNSNO"/>
+        <result property="cntrctno" column="CNTRCTNO"/>
+        <result property="rate" column="RATE"/>
+        <result property="num" column="NUM"/>
+        <result property="trmyr" column="TRMYR"/>
+        <result property="trmmnth" column="TRMMNTH"/>
+        <result property="trmday" column="TRMDAY"/>
+        <result property="extendedate" column="ENDDATE"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		EXTENDNO,
+BSNSNO,
+CNTRCTNO,
+RATE,
+NUM,
+TRMYR,
+TRMMNTH,
+TRMDAY,
+EXTENDEDATE
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.cntrtmng.entity.BsnsExtend">
+		select
+		<include refid="selectId" />
+		from bsns_extend
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.cntrtmng.entity.BsnsExtend" parameterType="com.mf.cntrtmng.entity.BsnsExtend">
+		select
+		<include refid="selectId" />
+		from bsns_extend
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.cntrtmng.entity.BsnsExtend" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_extend
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.extendno)">
+					AND EXTENDNO like '%${t.extendno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bsnsno)">
+					AND BSNSNO like '%${t.bsnsno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cntrctno)">
+					AND CNTRCTNO like '%${t.cntrctno}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rate)">
+					AND RATE = '${t.rate}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.num)">
+					AND NUM like '%${t.num}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.trmyr)">
+					AND TRMYR = '${t.trmyr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.trmmnth)">
+					AND TRMMNTH = '${t.trmmnth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.trmday)">
+					AND TRMDAY = '${t.trmday}'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(extendno)">
+					AND EXTENDNO like '%${extendno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bsnsno)">
+					AND BSNSNO like '%${bsnsno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cntrctno)">
+					AND CNTRCTNO like '%${cntrctno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rate)">
+					AND RATE = '${rate}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(num)">
+					AND NUM like '%${num}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(trmyr)">
+					AND TRMYR = '${trmyr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(trmmnth)">
+					AND TRMMNTH = '${trmmnth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(trmday)">
+					AND TRMDAY = '${trmday}'
+			   </if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.cntrtmng.entity.BsnsExtend" resultType="int">
+		select count(0) from bsns_extend
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.cntrtmng.entity.BsnsExtend">
+		INSERT INTO bsns_extend 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(extendno)">
+				EXTENDNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsno)">
+				BSNSNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				CNTRCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(rate)">
+				RATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(num)">
+				NUM,
+			</if>
+			<if test="@Ognl@isNotEmpty(trmyr)">
+				TRMYR,
+			</if>
+			<if test="@Ognl@isNotEmpty(trmmnth)">
+				TRMMNTH,
+			</if>
+			<if test="@Ognl@isNotEmpty(trmday)">
+				TRMDAY,
+			</if>
+			<if test="@Ognl@isNotEmpty(extendedate)">
+				EXTENDEDATE,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(extendno)">
+				#{extendno},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsno)">
+				#{bsnsno},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				#{cntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(rate)">
+				#{rate},
+			</if>
+			<if test="@Ognl@isNotEmpty(num)">
+				#{num},
+			</if>
+			<if test="@Ognl@isNotEmpty(trmyr)">
+				#{trmyr},
+			</if>
+			<if test="@Ognl@isNotEmpty(trmmnth)">
+				#{trmmnth},
+			</if>
+			<if test="@Ognl@isNotEmpty(trmday)">
+				#{trmday},
+			</if>
+			<if test="@Ognl@isNotEmpty(extendedate)">
+				#{extendedate},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM bsns_extend WHERE
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsExtend">
+		SELECT <include refid="selectId" />
+		    FROM bsns_extend 
+	        WHERE EXTENDNO = #{extendno}
+	</select>
+	
+	<!-- 根据借据号查询展期结束日期 -->
+	<select id="getByDueno" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsExtend">
+		SELECT <include refid="selectId" />
+		    FROM bsns_extend 
+	        WHERE BSNSNO= #{dueno}
+	</select>
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.cntrtmng.entity.BsnsExtend">
+	    UPDATE bsns_extend SET
+	        EXTENDNO = #{extendno} ,
+	        BSNSNO = #{bsnsno} ,
+	        CNTRCTNO = #{cntrctno} ,
+	        RATE = #{rate} ,
+	        NUM = #{num} ,
+	        TRMYR = #{trmyr} ,
+	        TRMMNTH = #{trmmnth} ,
+	        TRMDAY = #{trmday},
+	        EXTENDEDATE = #{extendedate} 
+        WHERE 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(extendno)">
+			EXTENDNO = #{extendno},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnsno)">
+			BSNSNO = #{bsnsno},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctno)">
+			CNTRCTNO = #{cntrctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(rate)">
+			RATE = #{rate},
+		</if>
+		<if test="@Ognl@isNotEmpty(num)">
+			NUM = #{num},
+		</if>
+		<if test="@Ognl@isNotEmpty(trmyr)">
+			TRMYR = #{trmyr},
+		</if>
+		<if test="@Ognl@isNotEmpty(trmmnth)">
+			TRMMNTH = #{trmmnth},
+		</if>
+		<if test="@Ognl@isNotEmpty(trmday)">
+			TRMDAY = #{trmday},
+		</if>
+		<if test="@Ognl@isNotEmpty(extendedate)">
+			EXTENDEDATE = #{extendedate},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.cntrtmng.entity.BsnsExtend">
+	    UPDATE bsns_extend 
+		<include refid="updateset"/>
+        WHERE 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

@@ -1,0 +1,469 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.aftrmng.dao.AfterSurveydocDao">
+
+	<resultMap id="AfterSurveydoc" type="com.mf.aftrmng.entity.AfterSurveydoc">
+        <result property="clntno" column="CLNTNO"/>
+        <result property="clntnm" column="CLNTNM"/>
+        <result property="srlno" column="SRLNO"/>
+        <result property="refinfno" column="REFINFNO"/>
+        <result property="doctyp" column="DOCTYP"/>
+        <result property="docnm" column="DOCNM"/>
+        <result property="clntinf" column="CLNTINF"/>
+        <result property="assuerinf" column="ASSUERINF"/>
+        <result property="vouchinf" column="VOUCHINF"/>
+        <result property="conclusion" column="CONCLUSION"/>
+        <result property="dptno" column="DPTNO"/>
+        <result property="opno" column="OPNO"/>
+        <result property="docdt" column="DOCDT"/>
+        <result property="updtdt" column="UPDTDT"/>
+        <result property="remark" column="REMARK"/>
+        <result property="useinf" column="USEINF"/>
+        <result property="liabilityinf" column="LIABILITYINF"/>
+        <result property="runinf" column="RUNINF"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		CLNTNO,
+CLNTNM,
+SRLNO,
+REFINFNO,
+DOCTYP,
+DOCNM,
+CLNTINF,
+ASSUERINF,
+VOUCHINF,
+CONCLUSION,
+DPTNO,
+OPNO,
+DOCDT,
+UPDTDT,
+REMARK,
+USEINF,
+LIABILITYINF,
+RUNINF
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.aftrmng.entity.AfterSurveydoc">
+		select
+		<include refid="selectId" />
+		from after_surveydoc
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.aftrmng.entity.AfterSurveydoc" parameterType="com.mf.aftrmng.entity.AfterSurveydoc">
+		select
+		<include refid="selectId" />
+		from after_surveydoc
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.aftrmng.entity.AfterSurveydoc" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from after_surveydoc
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntnm)">
+					AND CLNTNM like '%${t.clntnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.refinfno)">
+					AND REFINFNO like '%${t.refinfno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.doctyp)">
+					AND DOCTYP like '%${t.doctyp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.docnm)">
+					AND DOCNM like '%${t.docnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntinf)">
+					AND CLNTINF like '%${t.clntinf}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.assuerinf)">
+					AND ASSUERINF like '%${t.assuerinf}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.vouchinf)">
+					AND VOUCHINF like '%${t.vouchinf}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.conclusion)">
+					AND CONCLUSION like '%${t.conclusion}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.dptno)">
+					AND DPTNO like '%${t.dptno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.opno)">
+					AND OPNO like '%${t.opno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.docdt)">
+					AND DOCDT like '%${t.docdt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.updtdt)">
+					AND UPDTDT like '%${t.updtdt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.useinf)">
+					AND USEINF like '%${t.useinf}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.liabilityinf)">
+					AND LIABILITYINF like '%${t.liabilityinf}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.runinf)">
+					AND RUNINF like '%${t.runinf}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntnm)">
+					AND CLNTNM like '%${clntnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(refinfno)">
+					AND REFINFNO like '%${refinfno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(doctyp)">
+					AND DOCTYP like '%${doctyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(docnm)">
+					AND DOCNM like '%${docnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntinf)">
+					AND CLNTINF like '%${clntinf}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(assuerinf)">
+					AND ASSUERINF like '%${assuerinf}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(vouchinf)">
+					AND VOUCHINF like '%${vouchinf}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(conclusion)">
+					AND CONCLUSION like '%${conclusion}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(dptno)">
+					AND DPTNO like '%${dptno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(opno)">
+					AND OPNO like '%${opno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(docdt)">
+					AND DOCDT like '%${docdt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(updtdt)">
+					AND UPDTDT like '%${updtdt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(useinf)">
+					AND USEINF like '%${useinf}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(liabilityinf)">
+					AND LIABILITYINF like '%${liabilityinf}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(runinf)">
+					AND RUNINF like '%${runinf}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.aftrmng.entity.AfterSurveydoc" resultType="int">
+		select count(0) from after_surveydoc
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.aftrmng.entity.AfterSurveydoc">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO after_surveydoc (
+        	CLNTNO ,
+        	CLNTNM ,
+        	REFINFNO ,
+        	DOCTYP ,
+        	DOCNM ,
+        	CLNTINF ,
+        	ASSUERINF ,
+        	VOUCHINF ,
+        	CONCLUSION ,
+        	DPTNO ,
+        	OPNO ,
+        	DOCDT ,
+        	UPDTDT ,
+        	REMARK ,
+        	USEINF ,
+        	LIABILITYINF ,
+        	RUNINF 
+        ) VALUES (
+        	#{clntno} ,
+        	#{clntnm} ,
+        	#{refinfno} ,
+        	#{doctyp} ,
+        	#{docnm} ,
+        	#{clntinf} ,
+        	#{assuerinf} ,
+        	#{vouchinf} ,
+        	#{conclusion} ,
+        	#{dptno} ,
+        	#{opno} ,
+        	#{docdt} ,
+        	#{updtdt} ,
+        	#{remark} ,
+        	#{useinf} ,
+        	#{liabilityinf} ,
+        	#{runinf} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.aftrmng.entity.AfterSurveydoc">
+		INSERT INTO after_surveydoc 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(srlno)">
+				SRLNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				CLNTNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(refinfno)">
+				REFINFNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(doctyp)">
+				DOCTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(docnm)">
+				DOCNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntinf)">
+				CLNTINF,
+			</if>
+			<if test="@Ognl@isNotEmpty(assuerinf)">
+				ASSUERINF,
+			</if>
+			<if test="@Ognl@isNotEmpty(vouchinf)">
+				VOUCHINF,
+			</if>
+			<if test="@Ognl@isNotEmpty(conclusion)">
+				CONCLUSION,
+			</if>
+			<if test="@Ognl@isNotEmpty(dptno)">
+				DPTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(opno)">
+				OPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(docdt)">
+				DOCDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdt)">
+				UPDTDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+			<if test="@Ognl@isNotEmpty(useinf)">
+				USEINF,
+			</if>
+			<if test="@Ognl@isNotEmpty(liabilityinf)">
+				LIABILITYINF,
+			</if>
+			<if test="@Ognl@isNotEmpty(runinf)">
+				RUNINF,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(srlno)">
+				#{srlno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				#{clntnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(refinfno)">
+				#{refinfno},
+			</if>
+			<if test="@Ognl@isNotEmpty(doctyp)">
+				#{doctyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(docnm)">
+				#{docnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntinf)">
+				#{clntinf},
+			</if>
+			<if test="@Ognl@isNotEmpty(assuerinf)">
+				#{assuerinf},
+			</if>
+			<if test="@Ognl@isNotEmpty(vouchinf)">
+				#{vouchinf},
+			</if>
+			<if test="@Ognl@isNotEmpty(conclusion)">
+				#{conclusion},
+			</if>
+			<if test="@Ognl@isNotEmpty(dptno)">
+				#{dptno},
+			</if>
+			<if test="@Ognl@isNotEmpty(opno)">
+				#{opno},
+			</if>
+			<if test="@Ognl@isNotEmpty(docdt)">
+				#{docdt},
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdt)">
+				#{updtdt},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@Ognl@isNotEmpty(useinf)">
+				#{useinf},
+			</if>
+			<if test="@Ognl@isNotEmpty(liabilityinf)">
+				#{liabilityinf},
+			</if>
+			<if test="@Ognl@isNotEmpty(runinf)">
+				#{runinf},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM after_surveydoc WHERE
+        SRLNO = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.aftrmng.entity.AfterSurveydoc">
+		SELECT <include refid="selectId" />
+		    FROM after_surveydoc 
+	        WHERE 
+        SRLNO = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.aftrmng.entity.AfterSurveydoc">
+	    UPDATE after_surveydoc SET
+	        CLNTNO = #{clntno} ,
+	        CLNTNM = #{clntnm} ,
+	        REFINFNO = #{refinfno} ,
+	        DOCTYP = #{doctyp} ,
+	        DOCNM = #{docnm} ,
+	        CLNTINF = #{clntinf} ,
+	        ASSUERINF = #{assuerinf} ,
+	        VOUCHINF = #{vouchinf} ,
+	        CONCLUSION = #{conclusion} ,
+	        DPTNO = #{dptno} ,
+	        OPNO = #{opno} ,
+	        DOCDT = #{docdt} ,
+	        UPDTDT = #{updtdt} ,
+	        REMARK = #{remark} ,
+	        USEINF = #{useinf} ,
+	        LIABILITYINF = #{liabilityinf} ,
+	        RUNINF = #{runinf} 
+        WHERE 
+	        SRLNO = #{srlno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntnm)">
+			CLNTNM = #{clntnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(refinfno)">
+			REFINFNO = #{refinfno},
+		</if>
+		<if test="@Ognl@isNotEmpty(doctyp)">
+			DOCTYP = #{doctyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(docnm)">
+			DOCNM = #{docnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntinf)">
+			CLNTINF = #{clntinf},
+		</if>
+		<if test="@Ognl@isNotEmpty(assuerinf)">
+			ASSUERINF = #{assuerinf},
+		</if>
+		<if test="@Ognl@isNotEmpty(vouchinf)">
+			VOUCHINF = #{vouchinf},
+		</if>
+		<if test="@Ognl@isNotEmpty(conclusion)">
+			CONCLUSION = #{conclusion},
+		</if>
+		<if test="@Ognl@isNotEmpty(dptno)">
+			DPTNO = #{dptno},
+		</if>
+		<if test="@Ognl@isNotEmpty(opno)">
+			OPNO = #{opno},
+		</if>
+		<if test="@Ognl@isNotEmpty(docdt)">
+			DOCDT = #{docdt},
+		</if>
+		<if test="@Ognl@isNotEmpty(updtdt)">
+			UPDTDT = #{updtdt},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(useinf)">
+			USEINF = #{useinf},
+		</if>
+		<if test="@Ognl@isNotEmpty(liabilityinf)">
+			LIABILITYINF = #{liabilityinf},
+		</if>
+		<if test="@Ognl@isNotEmpty(runinf)">
+			RUNINF = #{runinf},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.aftrmng.entity.AfterSurveydoc">
+	    UPDATE after_surveydoc 
+		<include refid="updateset"/>
+        WHERE 
+	        SRLNO = #{srlno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

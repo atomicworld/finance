@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.bsnsmng.dao.BsnsZhengxinDao">
+
+	<resultMap id="BsnsZhengxin" type="com.mf.bsnsmng.entity.BsnsZhengxin">
+        <result property="clntno" column="CLNTNO"/>
+        <result property="appliedAt" column="appliedAt"/>
+        <result property="confirmedAt" column="confirmedAt"/>
+        <result property="loanType" column="loanType"/>
+        <result property="confirmType" column="confirmType"/>
+        <result property="confirmDetails" column="confirmDetails"/>
+        <result property="name" column="name"/>
+        <result property="pid" column="pid"/>
+        <result property="mobile" column="mobile"/>
+        <result property="workName" column="workName"/>
+        <result property="workAddress" column="workAddress"/>
+        <result property="homeAddress" column="homeAddress"/>
+        <result property="homePhone" column="homePhone"/>
+        <result property="createTime" column="createTime"/>
+        <result property="idStatus" column="idStatus"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		CLNTNO,
+appliedAt,
+confirmedAt,
+loanType,
+confirmType,
+confirmDetails,
+name,
+pid,
+mobile,
+workName,
+workAddress,
+homeAddress,
+homePhone,
+createTime,
+idStatus
+    </sql>
+    
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.bsnsmng.entity.BsnsZhengxin">
+		INSERT INTO bsns_zhengxin 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(appliedAt)">
+				appliedAt,
+			</if>
+			<if test="@Ognl@isNotEmpty(confirmedAt)">
+				confirmedAt,
+			</if>
+			<if test="@Ognl@isNotEmpty(loanType)">
+				loanType,
+			</if>
+			<if test="@Ognl@isNotEmpty(confirmType)">
+				confirmType,
+			</if>
+			<if test="@Ognl@isNotEmpty(confirmDetails)">
+				confirmDetails,
+			</if>
+			<if test="@Ognl@isNotEmpty(name)">
+				name,
+			</if>
+			<if test="@Ognl@isNotEmpty(pid)">
+				pid,
+			</if>
+			<if test="@Ognl@isNotEmpty(mobile)">
+				mobile,
+			</if>
+			<if test="@Ognl@isNotEmpty(workName)">
+				workName,
+			</if>
+			<if test="@Ognl@isNotEmpty(workAddress)">
+				workAddress,
+			</if>
+			<if test="@Ognl@isNotEmpty(homeAddress)">
+				homeAddress,
+			</if>
+			<if test="@Ognl@isNotEmpty(homePhone)">
+				homePhone,
+			</if>
+			<if test="@Ognl@isNotEmpty(createTime)">
+				createTime,
+			</if>
+			<if test="@Ognl@isNotEmpty(idStatus)">
+				idStatus,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(appliedAt)">
+				#{appliedAt},
+			</if>
+			<if test="@Ognl@isNotEmpty(confirmedAt)">
+				#{confirmedAt},
+			</if>
+			<if test="@Ognl@isNotEmpty(loanType)">
+				#{loanType},
+			</if>
+			<if test="@Ognl@isNotEmpty(confirmType)">
+				#{confirmType},
+			</if>
+			<if test="@Ognl@isNotEmpty(confirmDetails)">
+				#{confirmDetails},
+			</if>
+			<if test="@Ognl@isNotEmpty(name)">
+				#{name},
+			</if>
+			<if test="@Ognl@isNotEmpty(pid)">
+				#{pid},
+			</if>
+			<if test="@Ognl@isNotEmpty(mobile)">
+				#{mobile},
+			</if>
+			<if test="@Ognl@isNotEmpty(workName)">
+				#{workName},
+			</if>
+			<if test="@Ognl@isNotEmpty(workAddress)">
+				#{workAddress},
+			</if>
+			<if test="@Ognl@isNotEmpty(homeAddress)">
+				#{homeAddress},
+			</if>
+			<if test="@Ognl@isNotEmpty(homePhone)">
+				#{homePhone},
+			</if>
+			<if test="@Ognl@isNotEmpty(createTime)">
+				#{createTime},
+			</if>
+			<if test="@Ognl@isNotEmpty(idStatus)">
+				#{idStatus},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM bsns_zhengxin WHERE
+        CLNTNO = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.bsnsmng.entity.BsnsZhengxin">
+		SELECT <include refid="selectId" />
+		    FROM bsns_zhengxin 
+	        WHERE 
+        CLNTNO = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.bsnsmng.entity.BsnsZhengxin">
+	    UPDATE bsns_zhengxin SET
+	        appliedAt = #{appliedAt} ,
+	        confirmedAt = #{confirmedAt} ,
+	        loanType = #{loanType} ,
+	        confirmType = #{confirmType} ,
+	        confirmDetails = #{confirmDetails} ,
+	        name = #{name} ,
+	        pid = #{pid} ,
+	        mobile = #{mobile} ,
+	        workName = #{workName} ,
+	        workAddress = #{workAddress} ,
+	        homeAddress = #{homeAddress} ,
+	        homePhone = #{homePhone} ,
+	        createTime = #{createTime} 
+        WHERE 
+	        CLNTNO = #{clntno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(appliedAt)">
+			appliedAt = #{appliedAt},
+		</if>
+		<if test="@Ognl@isNotEmpty(confirmedAt)">
+			confirmedAt = #{confirmedAt},
+		</if>
+		<if test="@Ognl@isNotEmpty(loanType)">
+			loanType = #{loanType},
+		</if>
+		<if test="@Ognl@isNotEmpty(confirmType)">
+			confirmType = #{confirmType},
+		</if>
+		<if test="@Ognl@isNotEmpty(confirmDetails)">
+			confirmDetails = #{confirmDetails},
+		</if>
+		<if test="@Ognl@isNotEmpty(name)">
+			name = #{name},
+		</if>
+		<if test="@Ognl@isNotEmpty(pid)">
+			pid = #{pid},
+		</if>
+		<if test="@Ognl@isNotEmpty(mobile)">
+			mobile = #{mobile},
+		</if>
+		<if test="@Ognl@isNotEmpty(workName)">
+			workName = #{workName},
+		</if>
+		<if test="@Ognl@isNotEmpty(workAddress)">
+			workAddress = #{workAddress},
+		</if>
+		<if test="@Ognl@isNotEmpty(homeAddress)">
+			homeAddress = #{homeAddress},
+		</if>
+		<if test="@Ognl@isNotEmpty(homePhone)">
+			homePhone = #{homePhone},
+		</if>
+		<if test="@Ognl@isNotEmpty(createTime)">
+			createTime = #{createTime},
+		</if>
+    </set>
+	</sql>
+	
+</mapper>
+

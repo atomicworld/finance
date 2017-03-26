@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.sms.dao.AutoMessageDao">
+
+	<resultMap id="Message" type="com.mf.sms.entity.Message">
+        <result property="no" column="NO"/>
+        <result property="cntrctno" column="CNTRCTNO"/>
+        <result property="srlno" column="SRLNO"/>
+        <result property="mstype" column="MSTYPE"/>
+        <result property="recipientname" column="RECIPIENTNAME"/>
+        <result property="recipienttype" column="RECIPIENTTYPE"/>
+        <result property="recipientcertno" column="RECIPIENTCERTNO"/>
+        <result property="recipienttel" column="RECIPIENTTEL"/>
+        <result property="modelno" column="MODELNO"/>
+        <result property="sendername" column="SENDERNAME"/>
+        <result property="senderid" column="SENDERID"/>
+        <result property="sdate" column="SDATE"/>
+        <result property="state" column="STATE"/>
+        <result property="stime" column="STIME"/>
+        <result property="remark" column="REMRAK"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		NO,CNTRCTNO,SRLNO,MSTYPE,RECIPIENTNAME,RECIPIENTTYPE,RECIPIENTCERTNO,
+		RECIPIENTTEL,MODELNO,SENDERNAME,SENDERID,SDATE,STIME,STATE,REMRAK
+    </sql>
+    
+   <!-- queryLoanTime 合同到期 -->
+   <select id="queryLoanTime" resultType="com.mf.cntrtmng.entity.BsnsBill" parameterType="String">
+		select
+			a.dueno,a.outno,a.cntrctno,a.applyno,a.clntno,a.clntnm,a.mtrtydate,a.recflg,a.lnamnt
+		from bsns_bill a
+		where recflg &lt;&gt;1 and datediff(mtrtydate,CURDATE())&lt;#{flag} and mtrtydate&gt;=CURDATE() 
+		and a.cntrctno not in (select cntrctno from message b group by cntrctno )
+	</select>
+   
+   <!-- queryRtrnTime 还款到期 -->
+   <select id="queryRtrnTime" resultType="com.mf.aftrmng.entity.BsnsRepayplanAll" parameterType="java.util.HashMap">
+		select a.cntrctno,
+		b.dueno,
+		c.srlno,	
+		a.clntno,
+		a.clntnm,
+		c.currepayamnt,
+		c.cyclesdt,
+		c.cycleedt ,
+		c.repaytermno 
+		from bsns_cntrct a 
+		left join bsns_bill b on a.cntrctno=b.cntrctno 
+		left join bsns_repayplan c on a.cntrctno=c.cntrctno  
+		where c.repaystt &lt;&gt; 1 and c.srlno is not null and (datediff(CURDATE(),c.cycleedt)&lt;#{flag}) and CURDATE()&gt;c.cycleedt
+		and a.cntrctno not in (select cntrctno from message b group by cntrctno )
+	</select>
+	
+	
+</mapper>
+

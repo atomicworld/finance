@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.shareholder.dao.CorpPersondetailDao">
+
+	<resultMap id="CorpPersondetail" type="com.mf.shareholder.entity.CorpPersondetail">
+        <result property="shareno" column="shareno"/>
+        <result property="birthdate" column="Birthdate"/>
+        <result property="gender" column="Gender"/>
+        <result property="marryStatus" column="MarryStatus"/>
+        <result property="regAddress" column="RegAddress"/>
+        <result property="education" column="Education"/>
+        <result property="politicalState" column="PoliticalState"/>
+        <result property="title" column="Title"/>
+        <result property="jobResume" column="JobResume"/>
+        <result property="tel" column="Tel"/>
+        <result property="mobile" column="Mobile"/>
+        <result property="homeTel" column="HomeTel"/>
+        <result property="fax" column="Fax"/>
+        <result property="postal" column="Postal"/>
+         <result property="email" column="Email"/>
+        <result property="address" column="Address"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		shareno,
+Birthdate,
+Gender,
+MarryStatus,
+RegAddress,
+Education,
+PoliticalState,
+Title,
+JobResume,
+Tel,
+Mobile,
+HomeTel,
+Fax,
+Postal,
+Email,
+Address
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.shareholder.entity.CorpPersondetail">
+		select
+		<include refid="selectId" />
+		from corp_persondetail
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.shareholder.entity.CorpPersondetail" parameterType="com.mf.shareholder.entity.CorpPersondetail">
+		select
+		<include refid="selectId" />
+		from corp_persondetail
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.shareholder.entity.CorpPersondetail" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from corp_persondetail
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.shareno)">
+					AND shareno like '%${t.shareno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.birthdate)">
+					AND Birthdate like '%${t.birthdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.gender)">
+					AND Gender like '%${t.gender}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.marryStatus)">
+					AND MarryStatus like '%${t.marryStatus}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regAddress)">
+					AND RegAddress like '%${t.regAddress}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.education)">
+					AND Education like '%${t.education}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.politicalState)">
+					AND PoliticalState like '%${t.politicalState}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.title)">
+					AND Title like '%${t.title}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.jobResume)">
+					AND JobResume like '%${t.jobResume}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.tel)">
+					AND Tel like '%${t.tel}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.mobile)">
+					AND Mobile like '%${t.mobile}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.homeTel)">
+					AND HomeTel like '%${t.homeTel}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.fax)">
+					AND Fax like '%${t.fax}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.postal)">
+					AND Postal like '%${t.postal}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.address)">
+					AND Address like '%${t.address}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(shareno)">
+					AND shareno like '%${shareno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(birthdate)">
+					AND Birthdate like '%${birthdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(gender)">
+					AND Gender like '%${gender}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(marryStatus)">
+					AND MarryStatus like '%${marryStatus}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regAddress)">
+					AND RegAddress like '%${regAddress}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(education)">
+					AND Education like '%${education}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(politicalState)">
+					AND PoliticalState like '%${politicalState}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(title)">
+					AND Title like '%${title}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(jobResume)">
+					AND JobResume like '%${jobResume}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(tel)">
+					AND Tel like '%${tel}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(mobile)">
+					AND Mobile like '%${mobile}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(homeTel)">
+					AND HomeTel like '%${homeTel}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(fax)">
+					AND Fax like '%${fax}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(postal)">
+					AND Postal like '%${postal}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(address)">
+					AND Address like '%${address}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.shareholder.entity.CorpPersondetail" resultType="int">
+		select count(0) from corp_persondetail
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.shareholder.entity.CorpPersondetail">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO corp_persondetail (
+        	shareno ,
+        	Birthdate ,
+        	Gender ,
+        	MarryStatus ,
+        	RegAddress ,
+        	Education ,
+        	PoliticalState ,
+        	Title ,
+        	JobResume ,
+        	Tel ,
+        	Mobile ,
+        	HomeTel ,
+        	Fax ,
+        	Postal ,
+        	Address 
+        ) VALUES (
+        	#{shareno} ,
+        	#{birthdate} ,
+        	#{gender} ,
+        	#{marryStatus} ,
+        	#{regAddress} ,
+        	#{education} ,
+        	#{politicalState} ,
+        	#{title} ,
+        	#{jobResume} ,
+        	#{tel} ,
+        	#{mobile} ,
+        	#{homeTel} ,
+        	#{fax} ,
+        	#{postal} ,
+        	#{address} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.shareholder.entity.CorpPersondetail">
+		INSERT INTO corp_persondetail 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(shareno)">
+				shareno,
+			</if>
+			<if test="@Ognl@isNotEmpty(birthdate)">
+				Birthdate,
+			</if>
+			<if test="@Ognl@isNotEmpty(gender)">
+				Gender,
+			</if>
+			<if test="@Ognl@isNotEmpty(marryStatus)">
+				MarryStatus,
+			</if>
+			<if test="@Ognl@isNotEmpty(regAddress)">
+				RegAddress,
+			</if>
+			<if test="@Ognl@isNotEmpty(education)">
+				Education,
+			</if>
+			<if test="@Ognl@isNotEmpty(politicalState)">
+				PoliticalState,
+			</if>
+			<if test="@Ognl@isNotEmpty(title)">
+				Title,
+			</if>
+			<if test="@Ognl@isNotEmpty(jobResume)">
+				JobResume,
+			</if>
+			<if test="@Ognl@isNotEmpty(tel)">
+				Tel,
+			</if>
+			<if test="@Ognl@isNotEmpty(mobile)">
+				Mobile,
+			</if>
+			<if test="@Ognl@isNotEmpty(homeTel)">
+				HomeTel,
+			</if>
+			<if test="@Ognl@isNotEmpty(fax)">
+				Fax,
+			</if>
+			<if test="@Ognl@isNotEmpty(postal)">
+				Postal,
+			</if>
+			<if test="@Ognl@isNotEmpty(email)">
+				Email,
+			</if>
+			<if test="@Ognl@isNotEmpty(address)">
+				Address,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(shareno)">
+				#{shareno},
+			</if>
+			<if test="@Ognl@isNotEmpty(birthdate)">
+				#{birthdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(gender)">
+				#{gender},
+			</if>
+			<if test="@Ognl@isNotEmpty(marryStatus)">
+				#{marryStatus},
+			</if>
+			<if test="@Ognl@isNotEmpty(regAddress)">
+				#{regAddress},
+			</if>
+			<if test="@Ognl@isNotEmpty(education)">
+				#{education},
+			</if>
+			<if test="@Ognl@isNotEmpty(politicalState)">
+				#{politicalState},
+			</if>
+			<if test="@Ognl@isNotEmpty(title)">
+				#{title},
+			</if>
+			<if test="@Ognl@isNotEmpty(jobResume)">
+				#{jobResume},
+			</if>
+			<if test="@Ognl@isNotEmpty(tel)">
+				#{tel},
+			</if>
+			<if test="@Ognl@isNotEmpty(mobile)">
+				#{mobile},
+			</if>
+			<if test="@Ognl@isNotEmpty(homeTel)">
+				#{homeTel},
+			</if>
+			<if test="@Ognl@isNotEmpty(fax)">
+				#{fax},
+			</if>
+			<if test="@Ognl@isNotEmpty(postal)">
+				#{postal},
+			</if>
+			<if test="@Ognl@isNotEmpty(email)">
+				#{email},
+			</if>
+			<if test="@Ognl@isNotEmpty(address)">
+				#{address},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM corp_persondetail WHERE shareno = #{shareno}
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.shareholder.entity.CorpPersondetail">
+		SELECT <include refid="selectId" />
+		    FROM corp_persondetail 
+	        WHERE shareno = #{shareno}
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.shareholder.entity.CorpPersondetail">
+	    UPDATE corp_persondetail SET
+	        shareno = #{shareno} ,
+	        Birthdate = #{birthdate} ,
+	        Gender = #{gender} ,
+	        MarryStatus = #{marryStatus} ,
+	        RegAddress = #{regAddress} ,
+	        Education = #{education} ,
+	        PoliticalState = #{politicalState} ,
+	        Title = #{title} ,
+	        JobResume = #{jobResume} ,
+	        Tel = #{tel} ,
+	        Mobile = #{mobile} ,
+	        HomeTel = #{homeTel} ,
+	        Fax = #{fax} ,
+	        Postal = #{postal} ,
+	        Address = #{address} 
+        WHERE 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(shareno)">
+			shareno = #{shareno},
+		</if>
+		<if test="@Ognl@isNotEmpty(birthdate)">
+			Birthdate = #{birthdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(gender)">
+			Gender = #{gender},
+		</if>
+		<if test="@Ognl@isNotEmpty(marryStatus)">
+			MarryStatus = #{marryStatus},
+		</if>
+		<if test="@Ognl@isNotEmpty(regAddress)">
+			RegAddress = #{regAddress},
+		</if>
+		<if test="@Ognl@isNotEmpty(education)">
+			Education = #{education},
+		</if>
+		<if test="@Ognl@isNotEmpty(politicalState)">
+			PoliticalState = #{politicalState},
+		</if>
+		<if test="@Ognl@isNotEmpty(title)">
+			Title = #{title},
+		</if>
+		<if test="@Ognl@isNotEmpty(jobResume)">
+			JobResume = #{jobResume},
+		</if>
+		<if test="@Ognl@isNotEmpty(tel)">
+			Tel = #{tel},
+		</if>
+		<if test="@Ognl@isNotEmpty(mobile)">
+			Mobile = #{mobile},
+		</if>
+		<if test="@Ognl@isNotEmpty(homeTel)">
+			HomeTel = #{homeTel},
+		</if>
+		<if test="@Ognl@isNotEmpty(fax)">
+			Fax = #{fax},
+		</if>
+		<if test="@Ognl@isNotEmpty(postal)">
+			Postal = #{postal},
+		</if>
+		<if test="@Ognl@isNotEmpty(email)">
+			Email = #{email},
+		</if>
+		<if test="@Ognl@isNotEmpty(address)">
+			Address = #{address},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.shareholder.entity.CorpPersondetail">
+	    UPDATE corp_persondetail 
+		<include refid="updateset"/>
+        WHERE shareno = #{shareno}
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

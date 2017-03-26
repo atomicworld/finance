@@ -1,0 +1,649 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntEeRegDao">
+
+	<resultMap id="ClntEeReg" type="com.mf.client.entity.ClntEeReg">
+        <result property="clntno" column="CLNTNO"/>
+        <result property="reretp" column="RERETP"/>
+        <result property="rerecode" column="RERECODE"/>
+        <result property="reredt" column="REREDT"/>
+        <result property="licretdt" column="LICRETDT"/>
+        <result property="curtp" column="CURTP"/>
+        <result property="regamt" column="REGAMT"/>
+        <result property="regadd" column="REGADD"/>
+        <result property="orgbarcode" column="ORGBARCODE"/>
+        <result property="runrange" column="RUNRANGE"/>
+        <result property="prositu" column="PROSITU"/>
+        <result property="address" column="ADDRESS"/>
+        <result property="phone1" column="PHONE1"/>
+        <result property="phone2" column="PHONE2"/>
+        <result property="phone3" column="PHONE3"/>
+        <result property="fax" column="FAX"/>
+        <result property="webadd" column="WEBADD"/>
+        <result property="email" column="EMAIL"/>
+        <result property="linkman" column="LINKMAN"/>
+        <result property="linkmantel" column="LINKMANTEL"/>
+        <result property="loctaxno" column="LOCTAXNO"/>
+        <result property="gentaxno" column="GENTAXNO"/>
+        <result property="finrela" column="FINRELA"/>
+        <result property="shareno" column="SHARENO"/>
+        <result property="markplace" column="MARKPLACE"/>
+        <result property="fieldarea" column="FIELDAREA"/>
+        <result property="manafdprop" column="MANAFDPROP"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		CLNTNO,
+RERETP,
+RERECODE,
+REREDT,
+LICRETDT,
+CURTP,
+REGAMT,
+REGADD,
+ORGBARCODE,
+RUNRANGE,
+PROSITU,
+ADDRESS,
+PHONE1,
+PHONE2,
+PHONE3,
+FAX,
+WEBADD,
+EMAIL,
+LINKMAN,
+LINKMANTEL,
+LOCTAXNO,
+GENTAXNO,
+FINRELA,
+SHARENO,
+MARKPLACE,
+FIELDAREA,
+MANAFDPROP
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntEeReg">
+		select
+		<include refid="selectId" />
+		from clnt_ee_reg
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntEeReg" parameterType="com.mf.client.entity.ClntEeReg">
+		select
+		<include refid="selectId" />
+		from clnt_ee_reg
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntEeReg" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_ee_reg
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.reretp)">
+					AND RERETP like '%${t.reretp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rerecode)">
+					AND RERECODE like '%${t.rerecode}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.reredt)">
+					AND REREDT like '%${t.reredt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.licretdt)">
+					AND LICRETDT like '%${t.licretdt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.curtp)">
+					AND CURTP like '%${t.curtp}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.regamt)">
+					AND REGAMT = '${t.regamt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regadd)">
+					AND REGADD like '%${t.regadd}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.orgbarcode)">
+					AND ORGBARCODE like '%${t.orgbarcode}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.runrange)">
+					AND RUNRANGE like '%${t.runrange}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.prositu)">
+					AND PROSITU like '%${t.prositu}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.address)">
+					AND ADDRESS like '%${t.address}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.phone1)">
+					AND PHONE1 like '%${t.phone1}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.phone2)">
+					AND PHONE2 like '%${t.phone2}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.phone3)">
+					AND PHONE3 like '%${t.phone3}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.fax)">
+					AND FAX like '%${t.fax}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.webadd)">
+					AND WEBADD like '%${t.webadd}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.email)">
+					AND EMAIL like '%${t.email}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.linkman)">
+					AND LINKMAN like '%${t.linkman}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.linkmantel)">
+					AND LINKMANTEL like '%${t.linkmantel}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.loctaxno)">
+					AND LOCTAXNO like '%${t.loctaxno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.gentaxno)">
+					AND GENTAXNO like '%${t.gentaxno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.finrela)">
+					AND FINRELA like '%${t.finrela}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.shareno)">
+					AND SHARENO like '%${t.shareno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.markplace)">
+					AND MARKPLACE like '%${t.markplace}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.fieldarea)">
+					AND FIELDAREA = '${t.fieldarea}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.manafdprop)">
+					AND MANAFDPROP like '%${t.manafdprop}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(reretp)">
+					AND RERETP like '%${reretp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rerecode)">
+					AND RERECODE like '%${rerecode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(reredt)">
+					AND REREDT like '%${reredt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(licretdt)">
+					AND LICRETDT like '%${licretdt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(curtp)">
+					AND CURTP like '%${curtp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regamt)">
+					AND REGAMT = '${regamt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(regadd)">
+					AND REGADD like '%${regadd}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(orgbarcode)">
+					AND ORGBARCODE like '%${orgbarcode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(runrange)">
+					AND RUNRANGE like '%${runrange}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(prositu)">
+					AND PROSITU like '%${prositu}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(address)">
+					AND ADDRESS like '%${address}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(phone1)">
+					AND PHONE1 like '%${phone1}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(phone2)">
+					AND PHONE2 like '%${phone2}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(phone3)">
+					AND PHONE3 like '%${phone3}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(fax)">
+					AND FAX like '%${fax}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(webadd)">
+					AND WEBADD like '%${webadd}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(email)">
+					AND EMAIL like '%${email}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(linkman)">
+					AND LINKMAN like '%${linkman}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(linkmantel)">
+					AND LINKMANTEL like '%${linkmantel}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(loctaxno)">
+					AND LOCTAXNO like '%${loctaxno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(gentaxno)">
+					AND GENTAXNO like '%${gentaxno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(finrela)">
+					AND FINRELA like '%${finrela}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(shareno)">
+					AND SHARENO like '%${shareno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(markplace)">
+					AND MARKPLACE like '%${markplace}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(fieldarea)">
+					AND FIELDAREA = '${fieldarea}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(manafdprop)">
+					AND MANAFDPROP like '%${manafdprop}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntEeReg" resultType="int">
+		select count(0) from clnt_ee_reg
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntEeReg">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_ee_reg (
+        	RERETP ,
+        	RERECODE ,
+        	REREDT ,
+        	LICRETDT ,
+        	CURTP ,
+        	REGAMT ,
+        	REGADD ,
+        	ORGBARCODE ,
+        	RUNRANGE ,
+        	PROSITU ,
+        	ADDRESS ,
+        	PHONE1 ,
+        	PHONE2 ,
+        	PHONE3 ,
+        	FAX ,
+        	WEBADD ,
+        	EMAIL ,
+        	LINKMAN ,
+        	LINKMANTEL ,
+        	LOCTAXNO ,
+        	GENTAXNO ,
+        	FINRELA ,
+        	SHARENO ,
+        	MARKPLACE ,
+        	FIELDAREA ,
+        	MANAFDPROP 
+        ) VALUES (
+        	#{reretp} ,
+        	#{rerecode} ,
+        	#{reredt} ,
+        	#{licretdt} ,
+        	#{curtp} ,
+        	#{regamt} ,
+        	#{regadd} ,
+        	#{orgbarcode} ,
+        	#{runrange} ,
+        	#{prositu} ,
+        	#{address} ,
+        	#{phone1} ,
+        	#{phone2} ,
+        	#{phone3} ,
+        	#{fax} ,
+        	#{webadd} ,
+        	#{email} ,
+        	#{linkman} ,
+        	#{linkmantel} ,
+        	#{loctaxno} ,
+        	#{gentaxno} ,
+        	#{finrela} ,
+        	#{shareno} ,
+        	#{markplace} ,
+        	#{fieldarea} ,
+        	#{manafdprop} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntEeReg">
+		INSERT INTO clnt_ee_reg 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(reretp)">
+				RERETP,
+			</if>
+			<if test="@Ognl@isNotEmpty(rerecode)">
+				RERECODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(reredt)">
+				REREDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(licretdt)">
+				LICRETDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(curtp)">
+				CURTP,
+			</if>
+			<if test="@Ognl@isNotEmpty(regamt)">
+				REGAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(regadd)">
+				REGADD,
+			</if>
+			<if test="@Ognl@isNotEmpty(orgbarcode)">
+				ORGBARCODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(runrange)">
+				RUNRANGE,
+			</if>
+			<if test="@Ognl@isNotEmpty(prositu)">
+				PROSITU,
+			</if>
+			<if test="@Ognl@isNotEmpty(address)">
+				ADDRESS,
+			</if>
+			<if test="@Ognl@isNotEmpty(phone1)">
+				PHONE1,
+			</if>
+			<if test="@Ognl@isNotEmpty(phone2)">
+				PHONE2,
+			</if>
+			<if test="@Ognl@isNotEmpty(phone3)">
+				PHONE3,
+			</if>
+			<if test="@Ognl@isNotEmpty(fax)">
+				FAX,
+			</if>
+			<if test="@Ognl@isNotEmpty(webadd)">
+				WEBADD,
+			</if>
+			<if test="@Ognl@isNotEmpty(email)">
+				EMAIL,
+			</if>
+			<if test="@Ognl@isNotEmpty(linkman)">
+				LINKMAN,
+			</if>
+			<if test="@Ognl@isNotEmpty(linkmantel)">
+				LINKMANTEL,
+			</if>
+			<if test="@Ognl@isNotEmpty(loctaxno)">
+				LOCTAXNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(gentaxno)">
+				GENTAXNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(finrela)">
+				FINRELA,
+			</if>
+			<if test="@Ognl@isNotEmpty(shareno)">
+				SHARENO,
+			</if>
+			<if test="@Ognl@isNotEmpty(markplace)">
+				MARKPLACE,
+			</if>
+			<if test="@Ognl@isNotEmpty(fieldarea)">
+				FIELDAREA,
+			</if>
+			<if test="@Ognl@isNotEmpty(manafdprop)">
+				MANAFDPROP,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(reretp)">
+				#{reretp},
+			</if>
+			<if test="@Ognl@isNotEmpty(rerecode)">
+				#{rerecode},
+			</if>
+			<if test="@Ognl@isNotEmpty(reredt)">
+				#{reredt},
+			</if>
+			<if test="@Ognl@isNotEmpty(licretdt)">
+				#{licretdt},
+			</if>
+			<if test="@Ognl@isNotEmpty(curtp)">
+				#{curtp},
+			</if>
+			<if test="@Ognl@isNotEmpty(regamt)">
+				#{regamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(regadd)">
+				#{regadd},
+			</if>
+			<if test="@Ognl@isNotEmpty(orgbarcode)">
+				#{orgbarcode},
+			</if>
+			<if test="@Ognl@isNotEmpty(runrange)">
+				#{runrange},
+			</if>
+			<if test="@Ognl@isNotEmpty(prositu)">
+				#{prositu},
+			</if>
+			<if test="@Ognl@isNotEmpty(address)">
+				#{address},
+			</if>
+			<if test="@Ognl@isNotEmpty(phone1)">
+				#{phone1},
+			</if>
+			<if test="@Ognl@isNotEmpty(phone2)">
+				#{phone2},
+			</if>
+			<if test="@Ognl@isNotEmpty(phone3)">
+				#{phone3},
+			</if>
+			<if test="@Ognl@isNotEmpty(fax)">
+				#{fax},
+			</if>
+			<if test="@Ognl@isNotEmpty(webadd)">
+				#{webadd},
+			</if>
+			<if test="@Ognl@isNotEmpty(email)">
+				#{email},
+			</if>
+			<if test="@Ognl@isNotEmpty(linkman)">
+				#{linkman},
+			</if>
+			<if test="@Ognl@isNotEmpty(linkmantel)">
+				#{linkmantel},
+			</if>
+			<if test="@Ognl@isNotEmpty(loctaxno)">
+				#{loctaxno},
+			</if>
+			<if test="@Ognl@isNotEmpty(gentaxno)">
+				#{gentaxno},
+			</if>
+			<if test="@Ognl@isNotEmpty(finrela)">
+				#{finrela},
+			</if>
+			<if test="@Ognl@isNotEmpty(shareno)">
+				#{shareno},
+			</if>
+			<if test="@Ognl@isNotEmpty(markplace)">
+				#{markplace},
+			</if>
+			<if test="@Ognl@isNotEmpty(fieldarea)">
+				#{fieldarea},
+			</if>
+			<if test="@Ognl@isNotEmpty(manafdprop)">
+				#{manafdprop},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM clnt_ee_reg WHERE
+        CLNTNO = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntEeReg">
+		SELECT <include refid="selectId" />
+		    FROM clnt_ee_reg 
+	        WHERE 
+        CLNTNO = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntEeReg">
+	    UPDATE clnt_ee_reg SET
+	        RERETP = #{reretp} ,
+	        RERECODE = #{rerecode} ,
+	        REREDT = #{reredt} ,
+	        LICRETDT = #{licretdt} ,
+	        CURTP = #{curtp} ,
+	        REGAMT = #{regamt} ,
+	        REGADD = #{regadd} ,
+	        ORGBARCODE = #{orgbarcode} ,
+	        RUNRANGE = #{runrange} ,
+	        PROSITU = #{prositu} ,
+	        ADDRESS = #{address} ,
+	        PHONE1 = #{phone1} ,
+	        PHONE2 = #{phone2} ,
+	        PHONE3 = #{phone3} ,
+	        FAX = #{fax} ,
+	        WEBADD = #{webadd} ,
+	        EMAIL = #{email} ,
+	        LINKMAN = #{linkman} ,
+	        LINKMANTEL = #{linkmantel} ,
+	        LOCTAXNO = #{loctaxno} ,
+	        GENTAXNO = #{gentaxno} ,
+	        FINRELA = #{finrela} ,
+	        SHARENO = #{shareno} ,
+	        MARKPLACE = #{markplace} ,
+	        FIELDAREA = #{fieldarea} ,
+	        MANAFDPROP = #{manafdprop} 
+        WHERE 
+	        CLNTNO = #{clntno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(reretp)">
+			RERETP = #{reretp},
+		</if>
+		<if test="@Ognl@isNotEmpty(rerecode)">
+			RERECODE = #{rerecode},
+		</if>
+		<if test="@Ognl@isNotEmpty(reredt)">
+			REREDT = #{reredt},
+		</if>
+		<if test="@Ognl@isNotEmpty(licretdt)">
+			LICRETDT = #{licretdt},
+		</if>
+		<if test="@Ognl@isNotEmpty(curtp)">
+			CURTP = #{curtp},
+		</if>
+		<if test="@Ognl@isNotEmpty(regamt)">
+			REGAMT = #{regamt},
+		</if>
+		<if test="@Ognl@isNotEmpty(regadd)">
+			REGADD = #{regadd},
+		</if>
+		<if test="@Ognl@isNotEmpty(orgbarcode)">
+			ORGBARCODE = #{orgbarcode},
+		</if>
+		<if test="@Ognl@isNotEmpty(runrange)">
+			RUNRANGE = #{runrange},
+		</if>
+		<if test="@Ognl@isNotEmpty(prositu)">
+			PROSITU = #{prositu},
+		</if>
+		<if test="@Ognl@isNotEmpty(address)">
+			ADDRESS = #{address},
+		</if>
+		<if test="@Ognl@isNotEmpty(phone1)">
+			PHONE1 = #{phone1},
+		</if>
+		<if test="@Ognl@isNotEmpty(phone2)">
+			PHONE2 = #{phone2},
+		</if>
+		<if test="@Ognl@isNotEmpty(phone3)">
+			PHONE3 = #{phone3},
+		</if>
+		<if test="@Ognl@isNotEmpty(fax)">
+			FAX = #{fax},
+		</if>
+		<if test="@Ognl@isNotEmpty(webadd)">
+			WEBADD = #{webadd},
+		</if>
+		<if test="@Ognl@isNotEmpty(email)">
+			EMAIL = #{email},
+		</if>
+		<if test="@Ognl@isNotEmpty(linkman)">
+			LINKMAN = #{linkman},
+		</if>
+		<if test="@Ognl@isNotEmpty(linkmantel)">
+			LINKMANTEL = #{linkmantel},
+		</if>
+		<if test="@Ognl@isNotEmpty(loctaxno)">
+			LOCTAXNO = #{loctaxno},
+		</if>
+		<if test="@Ognl@isNotEmpty(gentaxno)">
+			GENTAXNO = #{gentaxno},
+		</if>
+		<if test="@Ognl@isNotEmpty(finrela)">
+			FINRELA = #{finrela},
+		</if>
+		<if test="@Ognl@isNotEmpty(shareno)">
+			SHARENO = #{shareno},
+		</if>
+		<if test="@Ognl@isNotEmpty(markplace)">
+			MARKPLACE = #{markplace},
+		</if>
+		<if test="@Ognl@isNotEmpty(fieldarea)">
+			FIELDAREA = #{fieldarea},
+		</if>
+		<if test="@Ognl@isNotEmpty(manafdprop)">
+			MANAFDPROP = #{manafdprop},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntEeReg">
+	    UPDATE clnt_ee_reg 
+		<include refid="updateset"/>
+        WHERE 
+	        CLNTNO = #{clntno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

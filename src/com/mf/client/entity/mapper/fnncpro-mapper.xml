@@ -1,0 +1,567 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.FnncProDao">
+
+	<resultMap id="FnncPro" type="com.mf.client.entity.Fixedassets">
+       <result property="fixassetid" column="FIXASSETID"/>
+        <result property="orgcode" column="ORGCODE"/>
+        <result property="assetstype" column="ASSETSTYPE"/>
+        <result property="statisyear" column="STATISYEAR"/>
+        <result property="assetsold" column="ASSETSOLD"/>
+        <result property="assetcurrent" column="ASSETCURRENT"/>
+        <result property="assettotal" column="ASSETTOTAL"/>
+        <result property="assetlimityear" column="ASSETLIMITYEAR"/>
+        <result property="leaveamount" column="LEAVEAMOUNT"/>
+        <result property="purchasedate" column="PURCHASEDATE"/>
+        <result property="area" column="AREA"/>
+        <result property="location" column="LOCATION"/>
+        <result property="remark" column="REMARK"/>
+        <result property="deleteflag" column="DELETEFLAG"/>
+        <result property="rptstatus" column="RPTSTATUS"/>
+        <result property="rptbatch" column="RPTBATCH"/>
+        <result property="rptdate" column="RPTDATE"/>
+        <result property="processstatus" column="PROCESSSTATUS"/>
+        <result property="createby" column="CREATEBY"/>
+        <result property="createdate" column="CREATEDATE"/>
+        <result property="updateby" column="UPDATEBY"/>
+        <result property="updatedate" column="UPDATEDATE"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		FIXASSETID,
+ORGCODE,
+ASSETSTYPE,
+STATISYEAR,
+ASSETSOLD,
+ASSETCURRENT,
+ASSETTOTAL,
+ASSETLIMITYEAR,
+LEAVEAMOUNT,
+date(PURCHASEDATE) as PURCHASEDATE ,
+AREA,
+LOCATION,
+REMARK,
+DELETEFLAG,
+RPTSTATUS,
+RPTBATCH,
+RPTDATE,
+PROCESSSTATUS,
+CREATEBY,
+CREATEDATE,
+UPDATEBY,
+UPDATEDATE
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.Fixedassets">
+		select
+		<include refid="selectId" />
+		from fixedassets
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.Fixedassets" parameterType="com.mf.client.entity.Fixedassets">
+		select
+		<include refid="selectId" />
+		from fixedassets
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.Fixedassets" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fixedassets
+		<include refid="querywhere"/>
+		
+		order by STATISYEAR desc
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      
+				 DELETEFLAG=0 				
+			   <if test="@Ognl@isNotEmpty(t.orgcode)">
+					AND ORGCODE like '%${t.orgcode}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.assetstype)">
+					AND ASSETSTYPE like '%${t.assetstype}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.statisyear)">
+					AND STATISYEAR = '${t.statisyear}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.assetsold)">
+					AND ASSETSOLD = '${t.assetsold}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.assetcurrent)">
+					AND ASSETCURRENT = '${t.assetcurrent}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.assettotal)">
+					AND ASSETTOTAL = '${t.assettotal}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.assetlimityear)">
+					AND ASSETLIMITYEAR = '${t.assetlimityear}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.leaveamount)">
+					AND LEAVEAMOUNT = '${t.leaveamount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.purchasedateBegin)">
+					AND PURCHASEDATE >= #{t.purchasedateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.purchasedateEnd)">
+					AND PURCHASEDATE &lt;= #{t.purchasedateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.area)">
+					AND AREA = '${t.area}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.location)">
+					AND LOCATION like '%${t.location}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.deleteflag)">
+					AND DELETEFLAG = '${t.deleteflag}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rptstatus)">
+					AND RPTSTATUS = '${t.rptstatus}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rptbatch)">
+					AND RPTBATCH like '%${t.rptbatch}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rptdateBegin)">
+					AND RPTDATE >= #{t.rptdateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rptdateEnd)">
+					AND RPTDATE &lt;= #{t.rptdateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.processstatus)">
+					AND PROCESSSTATUS = '${t.processstatus}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.createby)">
+					AND CREATEBY like '%${t.createby}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.createdateBegin)">
+					AND CREATEDATE >= #{t.createdateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.createdateEnd)">
+					AND CREATEDATE &lt;= #{t.createdateEnd}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.updateby)">
+					AND UPDATEBY like '%${t.updateby}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.updatedateBegin)">
+					AND UPDATEDATE >= #{t.updatedateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.updatedateEnd)">
+					AND UPDATEDATE &lt;= #{t.updatedateEnd}
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	   
+		       <if test="@Ognl@isNotEmpty(orgcode)">
+					AND ORGCODE like '%${orgcode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(assetstype)">
+					AND ASSETSTYPE like '%${assetstype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(statisyear)">
+					AND STATISYEAR = '${statisyear}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(assetsold)">
+					AND ASSETSOLD = '${assetsold}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(assetcurrent)">
+					AND ASSETCURRENT = '${assetcurrent}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(assettotal)">
+					AND ASSETTOTAL = '${assettotal}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(assetlimityear)">
+					AND ASSETLIMITYEAR = '${assetlimityear}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(leaveamount)">
+					AND LEAVEAMOUNT = '${leaveamount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(purchasedateBegin)">
+					AND PURCHASEDATE >= #{purchasedateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(purchasedateEnd)">
+					AND PURCHASEDATE &lt;= #{purchasedateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(area)">
+					AND AREA = '${area}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(location)">
+					AND LOCATION like '%${location}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(deleteflag)">
+					AND DELETEFLAG = '${deleteflag}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rptstatus)">
+					AND RPTSTATUS = '${rptstatus}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rptbatch)">
+					AND RPTBATCH like '%${rptbatch}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rptdateBegin)">
+					AND RPTDATE >= #{rptdateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(rptdateEnd)">
+					AND RPTDATE &lt;= #{rptdateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(processstatus)">
+					AND PROCESSSTATUS = '${processstatus}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(createby)">
+					AND CREATEBY like '%${createby}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(createdateBegin)">
+					AND CREATEDATE >= #{createdateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(createdateEnd)">
+					AND CREATEDATE &lt;= #{createdateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(updateby)">
+					AND UPDATEBY like '%${updateby}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(updatedateBegin)">
+					AND UPDATEDATE >= #{updatedateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(updatedateEnd)">
+					AND UPDATEDATE &lt;= #{updatedateEnd}
+			   </if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.Fixedassets" resultType="int">
+		select count(0) from fixedassets
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.Fixedassets">
+		INSERT INTO fixedassets (
+        	ORGCODE ,
+        	ASSETSTYPE ,
+        	STATISYEAR ,
+        	ASSETSOLD ,
+        	ASSETCURRENT ,
+        	ASSETTOTAL ,
+        	ASSETLIMITYEAR ,
+        	LEAVEAMOUNT ,
+        	PURCHASEDATE ,
+        	AREA ,
+        	LOCATION ,
+        	REMARK ,
+        	DELETEFLAG ,
+        	RPTSTATUS ,
+        	RPTBATCH ,
+        	RPTDATE ,
+        	PROCESSSTATUS ,
+        	CREATEBY ,
+        	CREATEDATE ,
+        	UPDATEBY ,
+        	UPDATEDATE 
+        ) VALUES (
+        	#{orgcode} ,
+        	#{assetstype} ,
+        	#{statisyear} ,
+        	#{assetsold} ,
+        	#{assetcurrent} ,
+        	#{assettotal} ,
+        	#{assetlimityear} ,
+        	#{leaveamount} ,
+        	#{purchasedate} ,
+        	#{area} ,
+        	#{location} ,
+        	#{remark} ,
+        	#{deleteflag} ,
+        	#{rptstatus} ,
+        	#{rptbatch} ,
+        	#{rptdate} ,
+        	#{processstatus} ,
+        	#{createby} ,
+        	#{createdate} ,
+        	#{updateby} ,
+        	#{updatedate} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.Fixedassets">
+		INSERT INTO fixedassets 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+	<if test="@Ognl@isNotEmpty(fixassetid)">
+				fixassetid,
+			</if>
+			<if test="@Ognl@isNotEmpty(orgcode)">
+				ORGCODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(assetstype)">
+				ASSETSTYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(statisyear)">
+				STATISYEAR,
+			</if>
+			<if test="@Ognl@isNotEmpty(assetsold)">
+				ASSETSOLD,
+			</if>
+			<if test="@Ognl@isNotEmpty(assetcurrent)">
+				ASSETCURRENT,
+			</if>
+			<if test="@Ognl@isNotEmpty(assettotal)">
+				ASSETTOTAL,
+			</if>
+			<if test="@Ognl@isNotEmpty(assetlimityear)">
+				ASSETLIMITYEAR,
+			</if>
+			<if test="@Ognl@isNotEmpty(leaveamount)">
+				LEAVEAMOUNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(purchasedate)">
+				PURCHASEDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(area)">
+				AREA,
+			</if>
+			<if test="@Ognl@isNotEmpty(location)">
+				LOCATION,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+			<if test="@Ognl@isNotEmpty(deleteflag)">
+				DELETEFLAG,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptstatus)">
+				RPTSTATUS,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptbatch)">
+				RPTBATCH,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptdate)">
+				RPTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(processstatus)">
+				PROCESSSTATUS,
+			</if>
+			<if test="@Ognl@isNotEmpty(createby)">
+				CREATEBY,
+			</if>
+			<if test="@Ognl@isNotEmpty(createdate)">
+				CREATEDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(updateby)">
+				UPDATEBY,
+			</if>
+			<if test="@Ognl@isNotEmpty(updatedate)">
+				UPDATEDATE,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(fixassetid)">
+				#{fixassetid},
+			</if>
+			<if test="@Ognl@isNotEmpty(orgcode)">
+				#{orgcode},
+			</if>
+			<if test="@Ognl@isNotEmpty(assetstype)">
+				#{assetstype},
+			</if>
+			<if test="@Ognl@isNotEmpty(statisyear)">
+				#{statisyear},
+			</if>
+			<if test="@Ognl@isNotEmpty(assetsold)">
+				#{assetsold},
+			</if>
+			<if test="@Ognl@isNotEmpty(assetcurrent)">
+				#{assetcurrent},
+			</if>
+			<if test="@Ognl@isNotEmpty(assettotal)">
+				#{assettotal},
+			</if>
+			<if test="@Ognl@isNotEmpty(assetlimityear)">
+				#{assetlimityear},
+			</if>
+			<if test="@Ognl@isNotEmpty(leaveamount)">
+				#{leaveamount},
+			</if>
+			<if test="@Ognl@isNotEmpty(purchasedate)">
+				#{purchasedate},
+			</if>
+			<if test="@Ognl@isNotEmpty(area)">
+				#{area},
+			</if>
+			<if test="@Ognl@isNotEmpty(location)">
+				#{location},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@Ognl@isNotEmpty(deleteflag)">
+				#{deleteflag},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptstatus)">
+				#{rptstatus},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptbatch)">
+				#{rptbatch},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptdate)">
+				#{rptdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(processstatus)">
+				#{processstatus},
+			</if>
+			<if test="@Ognl@isNotEmpty(createby)">
+				#{createby},
+			</if>
+			<if test="@Ognl@isNotEmpty(createdate)">
+				#{createdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(updateby)">
+				#{updateby},
+			</if>
+			<if test="@Ognl@isNotEmpty(updatedate)">
+				#{updatedate},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="int">
+		update fixedassets set DELETEFLAG=1  WHERE
+        FIXASSETID = #{id} 
+	</delete>
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.Fixedassets">
+		SELECT <include refid="selectId" />
+		    FROM fixedassets 
+	        WHERE 
+        FIXASSETID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	   <update id="update" parameterType="com.mf.client.entity.Fixedassets">
+	    UPDATE fixedassets SET
+	        ORGCODE = #{orgcode} ,
+	        ASSETSTYPE = #{assetstype} ,
+	        STATISYEAR = #{statisyear} ,
+	        ASSETSOLD = #{assetsold} ,
+	        ASSETCURRENT = #{assetcurrent} ,
+	        ASSETTOTAL = #{assettotal} ,
+	        ASSETLIMITYEAR = #{assetlimityear} ,
+	        LEAVEAMOUNT = #{leaveamount} ,
+	        PURCHASEDATE = #{purchasedate} ,
+	        AREA = #{area} ,
+	        LOCATION = #{location} ,
+	        REMARK = #{remark} ,
+	        DELETEFLAG = #{deleteflag} ,
+	        RPTSTATUS = #{rptstatus} ,
+	        RPTBATCH = #{rptbatch} ,
+	        RPTDATE = #{rptdate} ,
+	        PROCESSSTATUS = #{processstatus} ,
+	        CREATEBY = #{createby} ,
+	        CREATEDATE = #{createdate} ,
+	        UPDATEBY = #{updateby} ,
+	        UPDATEDATE = #{updatedate} 
+        WHERE 
+	        FIXASSETID = #{fixassetid} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(orgcode)">
+			ORGCODE = #{orgcode},
+		</if>
+		<if test="@Ognl@isNotEmpty(assetstype)">
+			ASSETSTYPE = #{assetstype},
+		</if>
+		<if test="@Ognl@isNotEmpty(statisyear)">
+			STATISYEAR = #{statisyear},
+		</if>
+		<if test="@Ognl@isNotEmpty(assetsold)">
+			ASSETSOLD = #{assetsold},
+		</if>
+		<if test="@Ognl@isNotEmpty(assetcurrent)">
+			ASSETCURRENT = #{assetcurrent},
+		</if>
+		<if test="@Ognl@isNotEmpty(assettotal)">
+			ASSETTOTAL = #{assettotal},
+		</if>
+		<if test="@Ognl@isNotEmpty(assetlimityear)">
+			ASSETLIMITYEAR = #{assetlimityear},
+		</if>
+		<if test="@Ognl@isNotEmpty(leaveamount)">
+			LEAVEAMOUNT = #{leaveamount},
+		</if>
+		<if test="@Ognl@isNotEmpty(purchasedate)">
+			PURCHASEDATE = #{purchasedate},
+		</if>
+		<if test="@Ognl@isNotEmpty(area)">
+			AREA = #{area},
+		</if>
+		<if test="@Ognl@isNotEmpty(location)">
+			LOCATION = #{location},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(deleteflag)">
+			DELETEFLAG = #{deleteflag},
+		</if>
+		<if test="@Ognl@isNotEmpty(rptstatus)">
+			RPTSTATUS = #{rptstatus},
+		</if>
+		<if test="@Ognl@isNotEmpty(rptbatch)">
+			RPTBATCH = #{rptbatch},
+		</if>
+		<if test="@Ognl@isNotEmpty(rptdate)">
+			RPTDATE = #{rptdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(processstatus)">
+			PROCESSSTATUS = #{processstatus},
+		</if>
+		<if test="@Ognl@isNotEmpty(createby)">
+			CREATEBY = #{createby},
+		</if>
+		<if test="@Ognl@isNotEmpty(createdate)">
+			CREATEDATE = #{createdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(updateby)">
+			UPDATEBY = #{updateby},
+		</if>
+		<if test="@Ognl@isNotEmpty(updatedate)">
+			UPDATEDATE = #{updatedate},
+		</if>
+    </set>
+	</sql>
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.Fixedassets">
+	    UPDATE fixedassets 
+		<include refid="updateset"/>
+        WHERE 
+	        FIXASSETID = #{fixassetid} 
+	</update>
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

@@ -1,0 +1,367 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.mf.org.dao.EmployeeDao">
+
+
+     <!-- 员工编号
+		员工姓名
+		所属部门
+		职位级别
+		入职时间
+		员工状态 -->
+	<sql id="selectItems">
+		emplyno,
+		emplynm, dptno, lvl, indate, state,
+		pos,
+		degree,
+		cllg,
+		majors,
+		ttl,
+		probation,
+		outdate,
+		remark,
+		idnum,
+		sex,
+		birthday,
+	    reserved,
+	    marstate,
+	    birthplace,
+	    polstate,
+	    postype,
+	    reqfile,
+	    workyear,
+	    reward,
+	    punish,
+	    finexperienceflg,
+	    resume,
+	    tel,
+	    mobile,
+	    hometel,
+	    fax,
+	    zip_code,
+	    email,
+	    address,
+	    subposist
+	    
+  	</sql>
+    
+	<select id="query" parameterType="Employee" resultType="Employee">
+		select
+		   <include refid="selectItems" />
+	       , (SELECT dptName FROM dptmnt d WHERE d.DPTNO = a.DPTNO limit 1) as dptName
+  		from EMPLOYEE a
+  		<include refid="querywhere"/>
+	</select>
+	
+	<select id="queryAll" parameterType="Employee" resultType="Employee">
+		select
+		   t.emplyno,
+	       t.emplynm,
+	       t.dptno,
+	       t.lvl,
+	       t.indate,
+	       t.state,
+	       t.pos,
+	       t.degree,
+	       t.cllg,
+	       t.majors,
+	       t.ttl,
+	       t.probation,
+	       t.outdate,
+	       t.remark,
+	       t.idnum,
+	       t.sex,
+	       t.birthday,
+	       t.reserved,
+	       t.marstate,
+	       t.birthplace,
+	       t.polstate,
+	       t.postype,
+	       t.reqfile,
+	       t.workyear,
+	       t.reward,
+	       t.punish,
+	       t.finexperienceflg,
+	       t.resume,
+	       t.tel,
+	       t.mobile,
+	       t.hometel,
+	       t.fax,
+	       t.zip_code,
+	       t.email,
+	       t.address,
+	       t.subposist
+	       (SELECT dptName FROM dptmnt d WHERE d.DPTNO = t.DPTNO limit 1) as dptName
+  		from EMPLOYEE t WHERE 1=1 
+  		<if test="state!=null and state!='' ">
+		    AND t.state=#{state}
+		</if>
+  		<include refid="querywhere"/>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	
+			   <if test="@Ognl@isNotEmpty(t.state)">
+			   	    AND state = '${t.state}'
+			   </if>      				
+			   <if test="@Ognl@isNotEmpty(t.emplynm)">
+					AND emplynm like '%${t.emplynm}%'
+			   </if> 
+			   <if test="@Ognl@isNotEmpty(t.ttl)">
+					AND ttl like '%${t.ttl}%'
+			   </if>    
+		</where>
+	</sql>
+	
+	<!-- 总记录数 -->
+	<select id="count" parameterType="Employee" resultType="int">
+		select count(0) from EMPLOYEE
+	</select>
+	
+	<select id="countOp" parameterType="String" resultType="int">
+		select count(0) from operator where EMPLYNO=#{emplyno}
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="add" parameterType="Employee">
+		INSERT INTO EMPLOYEE (
+		    EMPLYNO,
+			EMPLYNM,
+			IDNUM,
+			DPTNO,
+			LVL,
+			INDATE,
+			STATE,
+			POS,
+	        DEGREE,
+	        CLLG,
+	        MAJORS,
+	        TTL,
+	        PROBATION,
+	        SEX,
+	        BIRTHDAY,
+			remark,
+			marstate,
+	        birthplace,
+	        polstate,
+	        postype,
+	        reqfile,
+	        workyear,
+	        resume,
+	        reward,
+	        punish,
+	        finexperienceflg,
+	        tel,
+	        mobile,
+	        hometel,
+	        fax,
+	        zip_code,
+	        email,
+	        address,
+	        subposist
+	
+         ) VALUES (
+            (select maxId from  (SELECT (IFNULL(MAX(EMPLYNO),#{dptno}*10)+1) as maxId FROM employee where dptno=#{dptno}) as t),
+			#{emplynm,jdbcType=VARCHAR},
+			#{idnum,jdbcType=VARCHAR},
+			#{dptno,jdbcType=VARCHAR},
+			#{lvl,jdbcType=VARCHAR},
+			#{indate,jdbcType=VARCHAR},
+			#{state},
+			#{pos},
+			#{degree},
+			#{cllg},
+			#{majors},
+			#{ttl},
+			#{probation},
+			#{sex},
+			#{birthday},
+			#{remark},
+			#{marstate},#{birthplace},#{polstate},#{postype},#{reqfile},#{workyear},#{resume},#{reward},#{punish},
+			#{finexperienceflg},#{tel},#{mobile},#{hometel},#{fax},#{zip_code},#{email},#{address},#{subposist}
+        )
+	</insert>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="String">
+	    DELETE FROM EMPLOYEE 
+	    WHERE EMPLYNO=#{emplyno}
+	</delete>
+	
+	<select id="getById" parameterType="String" resultType="Employee">
+	    select
+		   t.emplyno,
+	       t.emplynm,
+	       t.dptno,
+	       t.lvl,
+	       t.indate,
+	       t.state,
+	       t.pos,
+	       t.degree,
+	       t.cllg,
+	       t.majors,
+	       t.ttl,
+	       t.probation,
+	       t.outdate,
+	       t.remark,
+	       t.idnum,
+	       t.sex,
+	       t.birthday,
+	       t.reserved,
+	       t.marstate,
+	       t.birthplace,
+	       t.polstate,
+	       t.postype,
+	       t.reqfile,
+	       t.workyear,
+	       t.reward,
+	       t.punish,
+	       t.finexperienceflg,
+	       t.resume,
+	       t.tel,
+	       t.mobile,
+	       t.hometel,
+	       t.fax,
+	       t.zip_code,
+	       t.email,
+	       t.address,
+	       t.subposist,
+	       (SELECT dptName FROM dptmnt d WHERE d.DPTNO = t.DPTNO limit 1) as dptName
+  		from EMPLOYEE t
+		where  t.EMPLYNO=#{emplyno}
+	</select>
+	
+	<select id="getEmployeesByDeptId" resultType="Employee"  parameterType="String">
+		select
+		<include refid="selectItems" />
+		from EMPLOYEE T
+		WHERE T.dptno =#{dptno}
+		and t.STATE IS NOT NULL AND t.STATE=1
+	</select>
+	
+	 <select id="getOpEmployeesByDeptId" resultType="Employee"  parameterType="String">
+		select
+		<include refid="selectItems" />
+		from EMPLOYEE T
+		WHERE T.dptno =#{dptno}
+		and t.STATE IS NOT NULL AND t.STATE=1
+		and not EXISTS (select 1 from operator op where op.EMPLYNO=T.EMPLYNO)
+	</select>
+	
+	<select id="getCstmgrEmpByDeptId" resultType="Employee"  parameterType="String">
+		select
+		<include refid="selectItems" />
+		from EMPLOYEE T
+		WHERE T.dptno =#{dptno}
+		and t.STATE IS NOT NULL AND t.STATE=1
+		and not EXISTS (select 1 from cstmrmngr cstm where cstm.EMPLYNO=T.EMPLYNO)
+	</select>
+	
+	<!-- 获取所有信息 -->
+	<select id="getEmployees" resultType="Employee">
+		select
+		<include refid="selectItems" />
+		from EMPLOYEE T
+	</select>
+	
+	<update id="modify" parameterType="Employee">
+		update EMPLOYEE 
+		<set>
+		emplynm=#{emplynm},
+		dptno=#{dptno},
+		pos=#{pos},
+		lvl=#{lvl},
+		degree=#{degree},
+		cllg=#{cllg},
+		majors=#{majors},
+		ttl=#{ttl},
+		indate=#{indate},
+		probation=#{probation},
+		outdate=#{outdate},		
+		remark=#{remark},
+		idnum=#{idnum},
+		sex=#{sex},
+		birthday=#{birthday},
+		reserved=#{reserved},
+		state=#{state},		
+		marstate=#{marstate},
+		birthplace=#{birthplace},
+		<if test="@Ognl@isNotEmpty(polstate)">
+			polstate=#{polstate},
+		</if>   
+		
+		postype=#{postype},
+		reqfile=#{reqfile},
+		workyear=#{workyear},
+		reward=#{reward},
+		punish=#{punish},
+		finexperienceflg=#{finexperienceflg},
+		resume=#{resume},
+		tel=#{tel},
+		mobile=#{mobile},
+		hometel=#{hometel},
+		fax=#{fax},
+		zip_code=#{zip_code},
+		email=#{email},
+		address=#{address},
+		subposist=#{subposist}
+		</set>
+		WHERE EMPLYNO=#{emplyno}
+	</update>
+	
+
+	<update id="chgEmployeeStatus" parameterType="Employee">
+		update EMPLOYEE 
+		<set>
+	        state=#{state}
+		</set>
+		WHERE EMPLYNO=#{emplyno}
+	</update>
+
+	<select id="countEmployee" parameterType="String" resultType="int">
+		select count(0) from employee where IDNUM=#{idnum}
+	</select>
+		
+	<select id="findAll" parameterType="Employee" resultType="Employee">
+		SELECT
+	   		<include refid="selectItems" />
+	   	FROM EMPLOYEE
+  			<include refid="querywhere2"/>
+	</select>
+	<sql id="querywhere2">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	
+			   <if test="@Ognl@isNotEmpty(t.dptno)">
+			   	    AND dptno = '${t.dptno}'
+			   </if>      				
+			   <if test="@Ognl@isNotEmpty(t.emplynm)">
+					AND emplynm like '%${t.emplynm}%'
+			   </if>    
+		</where>
+	</sql>
+
+	<select id="showsubposistlist" parameterType="Employee" resultType="Employee">
+		select
+		   <include refid="selectItems" />
+	       , (SELECT dptName FROM dptmnt d WHERE d.DPTNO = a.DPTNO limit 1) as dptName
+  		from EMPLOYEE a
+  		<include refid="querywhere3"/>
+	</select>
+	<sql id="querywhere3">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	
+				subposist is not null and subposist != ''
+			   <if test="@Ognl@isNotEmpty(t.dptno)">
+			   	    AND dptno = '${t.dptno}'
+			   </if>      				
+			   <if test="@Ognl@isNotEmpty(t.emplynm)">
+					AND emplynm like '%${t.emplynm}%'
+			   </if>    
+		</where>
+	</sql>
+</mapper>
+

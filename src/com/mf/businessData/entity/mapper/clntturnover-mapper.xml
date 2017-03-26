@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.businessData.dao.ClntturnoverDao">
+
+	<resultMap id="Clntturnover" type="com.mf.businessData.entity.Clntturnover">
+        <result property="recordid" column="RECORDID"/>
+        <result property="outopno" column="OUTOPNO"/>
+        <result property="rcvopno" column="RCVOPNO"/>
+        <result property="remark" column="remark"/>
+        <result property="turnovrdate" column="TURNOVRDATE"/>
+        <result property="outname" column="OUTNAME"/>
+        <result property="rcvname" column="RCVNAME"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		RECORDID,
+OUTOPNO,
+RCVOPNO,
+remark,
+TURNOVRDATE,
+OUTNAME,
+RCVNAME
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.businessData.entity.Clntturnover">
+		select
+		<include refid="selectId" />
+		from clntturnover
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.businessData.entity.Clntturnover" parameterType="com.mf.businessData.entity.Clntturnover">
+		select
+		<include refid="selectId" />
+		from clntturnover
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.businessData.entity.Clntturnover" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clntturnover
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.outopno)">
+					AND OUTOPNO like '%${t.outopno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rcvopno)">
+					AND RCVOPNO like '%${t.rcvopno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND remark like '%${t.remark}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.turnovrdate)">
+					AND TURNOVRDATE like '%${t.turnovrdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.outname)">
+					AND OUTNAME like '%${t.outname}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rcvname)">
+					AND RCVNAME like '%${t.rcvname}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(outopno)">
+					AND OUTOPNO like '%${outopno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rcvopno)">
+					AND RCVOPNO like '%${rcvopno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND remark like '%${remark}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(turnovrdate)">
+					AND TURNOVRDATE like '%${turnovrdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(outname)">
+					AND OUTNAME like '%${outname}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rcvname)">
+					AND RCVNAME like '%${rcvname}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.businessData.entity.Clntturnover" resultType="int">
+		select count(0) from clntturnover
+		<include refid="querywhere1"/>
+	</select>
+	
+	
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.businessData.entity.Clntturnover">
+		INSERT INTO clntturnover 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(recordid)">
+				RECORDID,
+			</if>
+			<if test="@Ognl@isNotEmpty(outopno)">
+				OUTOPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(rcvopno)">
+				RCVOPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				remark,
+			</if>
+			<if test="@Ognl@isNotEmpty(turnovrdate)">
+				TURNOVRDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(outname)">
+				OUTNAME,
+			</if>
+			<if test="@Ognl@isNotEmpty(rcvname)">
+				RCVNAME,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+   			<if test="@Ognl@isNotEmpty(recordid)">
+				#{recordid},
+			</if>
+			
+			<if test="@Ognl@isNotEmpty(outopno)">
+				#{outopno},
+			</if>
+			<if test="@Ognl@isNotEmpty(rcvopno)">
+				#{rcvopno},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@Ognl@isNotEmpty(turnovrdate)">
+				#{turnovrdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(outname)">
+				#{outname},
+			</if>
+			<if test="@Ognl@isNotEmpty(rcvname)">
+				#{rcvname},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM clntturnover WHERE
+        RECORDID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.businessData.entity.Clntturnover">
+		SELECT <include refid="selectId" />
+		    FROM clntturnover 
+	        WHERE 
+        RECORDID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.businessData.entity.Clntturnover">
+	    UPDATE clntturnover SET
+	        OUTOPNO = #{outopno} ,
+	        RCVOPNO = #{rcvopno} ,
+	        remark = #{remark} ,
+	        TURNOVRDATE = #{turnovrdate} ,
+	        OUTNAME = #{outname} ,
+	        RCVNAME = #{rcvname} 
+        WHERE 
+	        RECORDID = #{recordid} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(outopno)">
+			OUTOPNO = #{outopno},
+		</if>
+		<if test="@Ognl@isNotEmpty(rcvopno)">
+			RCVOPNO = #{rcvopno},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			remark = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(turnovrdate)">
+			TURNOVRDATE = #{turnovrdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(outname)">
+			OUTNAME = #{outname},
+		</if>
+		<if test="@Ognl@isNotEmpty(rcvname)">
+			RCVNAME = #{rcvname},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.businessData.entity.Clntturnover">
+	    UPDATE clntturnover 
+		<include refid="updateset"/>
+        WHERE 
+	        RECORDID = #{recordid} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 命名空间全限定类名，interface xxxDao调用此id方法名 -->
+<mapper namespace="com.mf.sys.dao.SysLogDao">
+
+	<!-- 获取所有字段 -->
+	<sql id="getAllFields">
+		id,optype,opobject,optable,optime,oporg,opperson
+	</sql>
+	
+	<select id="query" resultType="com.mf.sys.entity.SysLog" >
+		select 
+			<include refid="getAllFields"/>
+		from sys_log
+		<if test="@Ognl@isEmpty(t.sort) and @Ognl@isEmpty(t.direction)">
+		ORDER BY optime DESC
+		</if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+		
+	</select>
+	
+	<select id="querySdate" parameterType="String" resultType="com.mf.sys.entity.SysLog" >
+		select 
+			<include refid="getAllFields"/>
+		from sys_log
+		where optime &gt;= #{sdate}
+		<if test="@Ognl@isEmpty(t.sort) and @Ognl@isEmpty(t.direction)">
+		ORDER BY optime DESC
+		</if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<select id="queryEdate" parameterType="String" resultType="com.mf.sys.entity.SysLog" >
+		select 
+			<include refid="getAllFields"/>
+		from sys_log
+		where optime &lt;= #{edate}
+		<if test="@Ognl@isEmpty(t.sort) and @Ognl@isEmpty(t.direction)">
+		ORDER BY optime DESC
+		</if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<select id="queryDate" resultType="com.mf.sys.entity.SysLog" >
+		select 
+			<include refid="getAllFields"/>
+		from sys_log
+		where optime &gt;= #{sdate} 
+		      and optime &lt;= #{edate}
+		ORDER BY optime DESC
+	</select>
+	
+	<select id="count" parameterType="com.mf.sys.entity.SysLog" resultType="int">
+		select count(0) from sys_log
+	</select>
+	
+	<!-- 新增字典类型 -->
+	<insert id="add" parameterType="com.mf.sys.entity.SysLog">
+		INSERT INTO sys_log (
+		    optype,
+		    opobject,
+		    optable,
+		    optime,
+		    oporg,
+		    opperson
+         ) VALUES (
+			#{optype},
+			#{opobject},
+			#{optable},
+			sysdate(),
+			#{oporg},
+			#{opperson}
+        )
+	</insert>
+	
+	
+</mapper>

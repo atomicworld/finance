@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.bsnsmng.dao.BsnsApplyDtlDao">
+
+	<resultMap id="BsnsApplydtl" type="com.mf.bsnsmng.entity.BsnsApplydtl">
+        <result property="rcrdid" column="RCRDID"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="clntnm" column="CLNTNM"/>
+        <result property="applyno" column="APPLYNO"/>
+        <result property="srlno" column="SRLNO"/>
+        <result property="kndno" column="KNDNO"/>
+        <result property="lntmdy" column="LNTMDY"/>
+        <result property="grtway" column="GRTWAY"/>
+        <result property="applyamnt" column="APPLYAMNT"/>
+        <result property="regopno" column="REGOPNO"/>
+        <result property="regopnm" column="REGOPNM"/>
+        <result property="depno" column="DEPNO"/>
+        <result property="subdate" column="SUBDATE"/>
+        <result property="curstep" column="CURSTEP"/>
+        <result property="apprvstt" column="APPRVSTT"/>
+        <result property="apprvtyp" column="APPRVTYP"/>
+        <result property="apprvprcssno" column="APPRVPRCSSNO"/>
+        <result property="apprvprcss" column="APPRVPRCSS"/>
+        <result property="remark" column="REMARK"/>
+        <result property="trmyr" column="TRMYR"/>
+        <result property="trmmnth" column="TRMMNTH"/>
+        <result property="trmday" column="TRMDAY"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		RCRDID,
+ CLNTNO,
+ CLNTNM,
+ APPLYNO,
+ SRLNO,
+ KNDNO,
+ LNTMDY,
+ GRTWAY,
+ APPLYAMNT,
+ REGOPNO,
+ REGOPNM,
+ DEPNO,
+ SUBDATE,
+ CURSTEP,
+ APPRVSTT,
+ APPRVTYP,
+ APPRVPRCSSNO,
+ APPRVPRCSS,
+ REMARK,
+ TRMYR,
+ TRMMNTH,
+ TRMDAY
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.bsnsmng.entity.BsnsApplydtl">
+		select
+		<include refid="selectId" />
+		from bsns_applydtl
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.bsnsmng.entity.BsnsApplydtl" parameterType="com.mf.bsnsmng.entity.BsnsApplydtl">
+		select
+		<include refid="selectId" />
+		from bsns_applydtl
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.bsnsmng.entity.BsnsApplydtl" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_applydtl
+		   where CURSTEP in (${t.apprvprcss}) 
+		    <if test="t.apprvstt==0">
+				and	apprvstt in(0,1,98)
+			</if>
+			<if test="t.apprvstt!=0">
+				and	apprvstt = 9
+			</if>
+			<if test="@Ognl@isNotEmpty(t.clntnm)">
+					AND CLNTNM like '%${t.clntnm}%'
+			</if><!-- 添加查询功能chenze -->
+		       order by RCRDID desc
+		
+	</select>
+	
+	<select id="query1" resultType="com.mf.bsnsmng.entity.BsnsApplydtl" parameterType="java.util.HashMap">
+		select
+			 a.rcrdid,
+			 a.clntno,
+			 a.clntnm,
+			 a.applyno,
+			 a.srlno,
+			 a.kndno,
+			 a.lntmdy,
+			 a.grtway,
+			 a.applyamnt,
+			 a.regopno,
+			 a.regopnm,
+			 a.depno,
+			 a.subdate,
+			 a.curstep,
+			 a.apprvstt,
+			 case when b.cntrctedflg =1 then  6 else b.cntrctstt end as apprvprcss,
+			 a.apprvtyp,
+			 a.apprvprcssno,
+			 b.cntrctno as remark,
+			 a.trmyr,
+			 a.trmmnth,
+			 a.trmday
+		from bsns_applydtl a left join bsns_cntrct b on a.applyno=b.applyno
+		where apprvstt =#{t.apprvstt} and a.regopno = #{t.regopno}
+		<if test="@Ognl@isNotEmpty(t.clntnm)">
+					and a.clntnm like '%${t.clntnm}%'
+			</if>
+		order by rcrdid desc
+		    
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntnm)">
+					AND CLNTNM like '%${t.clntnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.applyno)">
+					AND APPLYNO like '%${t.applyno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.srlno)">
+					AND SRLNO like '%${t.srlno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.kndno)">
+					AND KNDNO like '%${t.kndno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.lntmdy)">
+					AND LNTMDY like '%${t.lntmdy}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.grtway)">
+					AND GRTWAY like '%${t.grtway}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.applyamnt)">
+					AND APPLYAMNT = '${t.applyamnt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regopno)">
+					AND REGOPNO like '%${t.regopno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regopnm)">
+					AND REGOPNM like '%${t.regopnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.depno)">
+					AND DEPNO like '%${t.depno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.subdate)">
+					AND SUBDATE like '%${t.subdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.curstep)">
+					AND CURSTEP like '%${t.curstep}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.apprvstt)">
+					AND APPRVSTT like '%${t.apprvstt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.apprvtyp)">
+					AND APPRVTYP like '%${t.apprvtyp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.apprvprcssno)">
+					AND APPRVPRCSSNO like '%${t.apprvprcssno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.apprvprcss)">
+					AND APPRVPRCSS like '%${t.apprvprcss}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.trmyr)">
+					AND TRMYR = '${t.trmyr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.trmmnth)">
+					AND TRMMNTH = '${t.trmmnth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.trmday)">
+					AND TRMDAY = '${t.trmday}'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntnm)">
+					AND CLNTNM like '%${clntnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(applyno)">
+					AND APPLYNO like '%${applyno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(srlno)">
+					AND SRLNO like '%${srlno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(kndno)">
+					AND KNDNO like '%${kndno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(lntmdy)">
+					AND LNTMDY like '%${lntmdy}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(grtway)">
+					AND GRTWAY like '%${grtway}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(applyamnt)">
+					AND APPLYAMNT = '${applyamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(regopno)">
+					AND REGOPNO like '%${regopno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regopnm)">
+					AND REGOPNM like '%${regopnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(depno)">
+					AND DEPNO like '%${depno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(subdate)">
+					AND SUBDATE like '%${subdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(curstep)">
+					AND CURSTEP like '%${curstep}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(apprvstt)">
+					AND APPRVSTT like '%${apprvstt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(apprvtyp)">
+					AND APPRVTYP like '%${apprvtyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(apprvprcssno)">
+					AND APPRVPRCSSNO like '%${apprvprcssno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(apprvprcss)">
+					AND APPRVPRCSS like '%${apprvprcss}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(trmyr)">
+					AND TRMYR = '${trmyr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(trmmnth)">
+					AND TRMMNTH = '${trmmnth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(trmday)">
+					AND TRMDAY = '${trmday}'
+			   </if>
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.bsnsmng.entity.BsnsApplydtl" resultType="int">
+		select count(0) from bsns_applydtl
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.bsnsmng.entity.BsnsApplydtl">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO bsns_applydtl (
+        	CLNTNO ,
+        	CLNTNM ,
+        	APPLYNO ,
+        	SRLNO ,
+        	KNDNO ,
+        	LNTMDY ,
+        	GRTWAY ,
+        	APPLYAMNT ,
+        	REGOPNO ,
+        	REGOPNM ,
+        	DEPNO ,
+        	SUBDATE ,
+        	CURSTEP ,
+        	APPRVSTT ,
+        	APPRVTYP ,
+        	APPRVPRCSSNO ,
+        	APPRVPRCSS ,
+        	REMARK ,
+        	TRMYR ,
+        	TRMMNTH ,
+        	TRMDAY 
+        ) VALUES (
+        	#{clntno} ,
+        	#{clntnm} ,
+        	#{applyno} ,
+        	#{srlno} ,
+        	#{kndno} ,
+        	#{lntmdy} ,
+        	#{grtway} ,
+        	#{applyamnt} ,
+        	#{regopno} ,
+        	#{regopnm} ,
+        	#{depno} ,
+        	#{subdate} ,
+        	#{curstep} ,
+        	#{apprvstt} ,
+        	#{apprvtyp} ,
+        	#{apprvprcssno} ,
+        	#{apprvprcss} ,
+        	#{remark} ,
+        	#{trmyr} ,
+        	#{trmmnth} ,
+        	#{trmday} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.bsnsmng.entity.BsnsApplydtl">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO bsns_applydtl 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				CLNTNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				APPLYNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(srlno)">
+				SRLNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(kndno)">
+				KNDNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(lntmdy)">
+				LNTMDY,
+			</if>
+			<if test="@Ognl@isNotEmpty(grtway)">
+				GRTWAY,
+			</if>
+			<if test="@Ognl@isNotEmpty(applyamnt)">
+				APPLYAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				REGOPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(regopnm)">
+				REGOPNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(depno)">
+				DEPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(subdate)">
+				SUBDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(curstep)">
+				CURSTEP,
+			</if>
+			<if test="@Ognl@isNotEmpty(apprvstt)">
+				APPRVSTT,
+			</if>
+			<if test="@Ognl@isNotEmpty(apprvtyp)">
+				APPRVTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(apprvprcssno)">
+				APPRVPRCSSNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(apprvprcss)">
+				APPRVPRCSS,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+			<if test="@Ognl@isNotEmpty(trmyr)">
+				TRMYR,
+			</if>
+			<if test="@Ognl@isNotEmpty(trmmnth)">
+				TRMMNTH,
+			</if>
+			<if test="@Ognl@isNotEmpty(trmday)">
+				TRMDAY,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				#{clntnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				#{applyno},
+			</if>
+			<if test="@Ognl@isNotEmpty(srlno)">
+				#{srlno},
+			</if>
+			<if test="@Ognl@isNotEmpty(kndno)">
+				#{kndno},
+			</if>
+			<if test="@Ognl@isNotEmpty(lntmdy)">
+				#{lntmdy},
+			</if>
+			<if test="@Ognl@isNotEmpty(grtway)">
+				#{grtway},
+			</if>
+			<if test="@Ognl@isNotEmpty(applyamnt)">
+				#{applyamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				#{regopno},
+			</if>
+			<if test="@Ognl@isNotEmpty(regopnm)">
+				#{regopnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(depno)">
+				#{depno},
+			</if>
+			<if test="@Ognl@isNotEmpty(subdate)">
+				#{subdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(curstep)">
+				#{curstep},
+			</if>
+			<if test="@Ognl@isNotEmpty(apprvstt)">
+				#{apprvstt},
+			</if>
+			<if test="@Ognl@isNotEmpty(apprvtyp)">
+				#{apprvtyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(apprvprcssno)">
+				#{apprvprcssno},
+			</if>
+			<if test="@Ognl@isNotEmpty(apprvprcss)">
+				#{apprvprcss},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@Ognl@isNotEmpty(trmyr)">
+				#{trmyr},
+			</if>
+			<if test="@Ognl@isNotEmpty(trmmnth)">
+				#{trmmnth},
+			</if>
+			<if test="@Ognl@isNotEmpty(trmday)">
+				#{trmday},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM bsns_applydtl WHERE
+        RCRDID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.bsnsmng.entity.BsnsApplydtl">
+		SELECT <include refid="selectId" />
+		    FROM bsns_applydtl 
+	        WHERE 
+        RCRDID = #{id} 
+	</select>
+	
+		<!-- 根据主键查实体 -->
+	<select id="getByApplyno" parameterType="String" resultType="com.mf.bsnsmng.entity.BsnsApplydtl">
+		SELECT <include refid="selectId" />
+		    FROM bsns_applydtl 
+	        WHERE 
+        applyno = '${_parameter}' 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.bsnsmng.entity.BsnsApplydtl">
+	    UPDATE bsns_applydtl SET
+	        CLNTNO = #{clntno} ,
+	        CLNTNM = #{clntnm} ,
+	        APPLYNO = #{applyno} ,
+	        SRLNO = #{srlno} ,
+	        KNDNO = #{kndno} ,
+	        LNTMDY = #{lntmdy} ,
+	        GRTWAY = #{grtway} ,
+	        APPLYAMNT = #{applyamnt} ,
+	        REGOPNO = #{regopno} ,
+	        REGOPNM = #{regopnm} ,
+	        DEPNO = #{depno} ,
+	        SUBDATE = #{subdate} ,
+	        CURSTEP = #{curstep} ,
+	        APPRVSTT = #{apprvstt} ,
+	        APPRVTYP = #{apprvtyp} ,
+	        APPRVPRCSSNO = #{apprvprcssno} ,
+	        APPRVPRCSS = #{apprvprcss} ,
+	        REMARK = #{remark} ,
+	        TRMYR = #{trmyr} ,
+	        TRMMNTH = #{trmmnth} ,
+	        TRMDAY = #{trmday} 
+        WHERE 
+	        RCRDID = #{rcrdid} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntnm)">
+			CLNTNM = #{clntnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(applyno)">
+			APPLYNO = #{applyno},
+		</if>
+		<if test="@Ognl@isNotEmpty(srlno)">
+			SRLNO = #{srlno},
+		</if>
+		<if test="@Ognl@isNotEmpty(kndno)">
+			KNDNO = #{kndno},
+		</if>
+		<if test="@Ognl@isNotEmpty(lntmdy)">
+			LNTMDY = #{lntmdy},
+		</if>
+		<if test="@Ognl@isNotEmpty(grtway)">
+			GRTWAY = #{grtway},
+		</if>
+		<if test="@Ognl@isNotEmpty(applyamnt)">
+			APPLYAMNT = #{applyamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(regopno)">
+			REGOPNO = #{regopno},
+		</if>
+		<if test="@Ognl@isNotEmpty(regopnm)">
+			REGOPNM = #{regopnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(depno)">
+			DEPNO = #{depno},
+		</if>
+		<if test="@Ognl@isNotEmpty(subdate)">
+			SUBDATE = #{subdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(curstep)">
+			CURSTEP = #{curstep},
+		</if>
+		<if test="@Ognl@isNotEmpty(apprvstt)">
+			APPRVSTT = #{apprvstt},
+		</if>
+		<if test="@Ognl@isNotEmpty(apprvtyp)">
+			APPRVTYP = #{apprvtyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(apprvprcssno)">
+			APPRVPRCSSNO = #{apprvprcssno},
+		</if>
+		<if test="@Ognl@isNotEmpty(apprvprcss)">
+			APPRVPRCSS = #{apprvprcss},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(trmyr)">
+			TRMYR = #{trmyr},
+		</if>
+		<if test="@Ognl@isNotEmpty(trmmnth)">
+			TRMMNTH = #{trmmnth},
+		</if>
+		<if test="@Ognl@isNotEmpty(trmday)">
+			TRMDAY = #{trmday},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.bsnsmng.entity.BsnsApplydtl">
+	    UPDATE bsns_applydtl 
+		<include refid="updateset"/>
+        WHERE 
+	        applyno = #{applyno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+	<select id="queryCancel" resultType="com.mf.bsnsmng.entity.BsnsApplydtl" parameterType="com.mf.bsnsmng.entity.BsnsApplydtl">
+		select rcrdid,clntnm,applyno,b.kndnm as kndno,applyamnt,apprvstt from bsns_applydtl a left join bsnskind b on a.kndno=b.kndno
+		where apprvtyp='0'and apprvstt not in ('9','97') 
+		<if test="@Ognl@isNotEmpty(t.clntnm)">
+			AND CLNTNM like '%${t.clntnm}%'
+		</if>
+	</select>
+	<!-- 删 -->
+	<!-- <delete id="delApplyNo" parameterType="String">
+		delete from bsns_applydtl where
+        rcrdid = #{rcrdid} 
+	</delete> -->
+	<update id="modifyByRcrdid" parameterType="com.mf.bsnsmng.entity.BsnsApplydtl">
+	    UPDATE bsns_applydtl 
+		<include refid="updateset"/>
+        WHERE 
+	        rcrdid = #{rcrdid}  
+	</update>
+	<!-- 删 -->
+	<insert id="copyLog" parameterType="String">
+		insert bsns_applydtl_log select * from bsns_applydtl where rcrdid = #{rcrdid} 
+	</insert>	
+	
+	<!-- 查找所有 驳回重审的、还有否决的 -->
+	<select id="queryUndone" resultType="com.mf.bsnsmng.entity.BsnsApplydtl" parameterType="com.mf.bsnsmng.entity.BsnsApplydtl">
+		SELECT 
+		<include refid="selectId" />
+		FROM bsns_applydtl 
+		WHERE apprvtyp='0' and apprvstt in ('98','97') 
+		<if test="@Ognl@isNotEmpty(t.regopno)">
+			AND REGOPNO like '%${t.regopno}%'
+		</if>
+	</select>
+	
+</mapper>
+

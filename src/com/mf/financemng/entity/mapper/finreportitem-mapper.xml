@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FinreportitemDao">
+
+	<resultMap id="Finreportitem" type="com.mf.financemng.entity.Finreportitem">
+        <result property="itemid" column="ITEMID"/>
+        <result property="rpttype" column="RPTTYPE"/>
+        <result property="itemcode" column="ITEMCODE"/>
+        <result property="itemname" column="ITEMNAME"/>
+        <result property="pitemcode" column="PITEMCODE"/>
+        <result property="itemlevel" column="ITEMLEVEL"/>
+        <result property="issumitem" column="ISSUMITEM"/>
+        <result property="itemcalnote" column="ITEMCALNOTE"/>
+        <result property="status" column="STATUS"/>
+        <result property="position" column="Position"/>
+        <result property="relateitem" column="RELATEITEM"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ITEMID,
+RPTTYPE,
+ITEMCODE,
+ITEMNAME,
+PITEMCODE,
+ITEMLEVEL,
+ISSUMITEM,
+ITEMCALNOTE,
+STATUS,
+Position,
+RELATEITEM
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.Finreportitem">
+		select
+		<include refid="selectId" />
+		from finreportitem
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.Finreportitem" parameterType="com.mf.financemng.entity.Finreportitem">
+		select
+		<include refid="selectId" />
+		from finreportitem
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.financemng.entity.Finreportitem" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from finreportitem
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.rpttype)">
+					AND RPTTYPE like '%${t.rpttype}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.itemcode)">
+					AND ITEMCODE like '%${t.itemcode}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.itemname)">
+					AND ITEMNAME like '%${t.itemname}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.pitemcode)">
+					AND PITEMCODE like '%${t.pitemcode}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.itemlevel)">
+					AND ITEMLEVEL = '${t.itemlevel}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.issumitem)">
+					AND ISSUMITEM = '${t.issumitem}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.itemcalnote)">
+					AND ITEMCALNOTE like '%${t.itemcalnote}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.status)">
+					AND STATUS = '${t.status}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.position)">
+					AND Position like '%${t.position}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.relateitem)">
+					AND RELATEITEM like '%${t.relateitem}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(rpttype)">
+					AND RPTTYPE like '%${rpttype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(itemcode)">
+					AND ITEMCODE like '%${itemcode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(itemname)">
+					AND ITEMNAME like '%${itemname}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(pitemcode)">
+					AND PITEMCODE like '%${pitemcode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(itemlevel)">
+					AND ITEMLEVEL = '${itemlevel}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(issumitem)">
+					AND ISSUMITEM = '${issumitem}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(itemcalnote)">
+					AND ITEMCALNOTE like '%${itemcalnote}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(status)">
+					AND STATUS = '${status}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(position)">
+					AND Position like '%${position}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(relateitem)">
+					AND RELATEITEM like '%${relateitem}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.Finreportitem" resultType="int">
+		select count(0) from finreportitem
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.financemng.entity.Finreportitem">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO finreportitem (
+        	RPTTYPE ,
+        	ITEMCODE ,
+        	ITEMNAME ,
+        	PITEMCODE ,
+        	ITEMLEVEL ,
+        	ISSUMITEM ,
+        	ITEMCALNOTE ,
+        	STATUS ,
+        	Position ,
+        	RELATEITEM 
+        ) VALUES (
+        	#{rpttype} ,
+        	#{itemcode} ,
+        	#{itemname} ,
+        	#{pitemcode} ,
+        	#{itemlevel} ,
+        	#{issumitem} ,
+        	#{itemcalnote} ,
+        	#{status} ,
+        	#{position} ,
+        	#{relateitem} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.Finreportitem">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO finreportitem 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(rpttype)">
+				RPTTYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(itemcode)">
+				ITEMCODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(itemname)">
+				ITEMNAME,
+			</if>
+			<if test="@Ognl@isNotEmpty(pitemcode)">
+				PITEMCODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(itemlevel)">
+				ITEMLEVEL,
+			</if>
+			<if test="@Ognl@isNotEmpty(issumitem)">
+				ISSUMITEM,
+			</if>
+			<if test="@Ognl@isNotEmpty(itemcalnote)">
+				ITEMCALNOTE,
+			</if>
+			<if test="@Ognl@isNotEmpty(status)">
+				STATUS,
+			</if>
+			<if test="@Ognl@isNotEmpty(position)">
+				Position,
+			</if>
+			<if test="@Ognl@isNotEmpty(relateitem)">
+				RELATEITEM,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(rpttype)">
+				#{rpttype},
+			</if>
+			<if test="@Ognl@isNotEmpty(itemcode)">
+				#{itemcode},
+			</if>
+			<if test="@Ognl@isNotEmpty(itemname)">
+				#{itemname},
+			</if>
+			<if test="@Ognl@isNotEmpty(pitemcode)">
+				#{pitemcode},
+			</if>
+			<if test="@Ognl@isNotEmpty(itemlevel)">
+				#{itemlevel},
+			</if>
+			<if test="@Ognl@isNotEmpty(issumitem)">
+				#{issumitem},
+			</if>
+			<if test="@Ognl@isNotEmpty(itemcalnote)">
+				#{itemcalnote},
+			</if>
+			<if test="@Ognl@isNotEmpty(status)">
+				#{status},
+			</if>
+			<if test="@Ognl@isNotEmpty(position)">
+				#{position},
+			</if>
+			<if test="@Ognl@isNotEmpty(relateitem)">
+				#{relateitem},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM finreportitem WHERE
+        ITEMID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.Finreportitem">
+		SELECT <include refid="selectId" />
+		    FROM finreportitem 
+	        WHERE 
+        ITEMID = #{id} 
+	</select>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getByPitemcode" parameterType="String" resultType="com.mf.financemng.entity.Finreportitem">
+	 SELECT <include refid="selectId" />
+		    FROM finreportitem 
+	        WHERE 
+        PITEMCODE = #{pitemcode}   
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.financemng.entity.Finreportitem">
+	    UPDATE finreportitem SET
+	        RPTTYPE = #{rpttype} ,
+	        ITEMCODE = #{itemcode} ,
+	        ITEMNAME = #{itemname} ,
+	        PITEMCODE = #{pitemcode} ,
+	        ITEMLEVEL = #{itemlevel} ,
+	        ISSUMITEM = #{issumitem} ,
+	        ITEMCALNOTE = #{itemcalnote} ,
+	        STATUS = #{status} ,
+	        Position = #{position} ,
+	        RELATEITEM = #{relateitem} 
+        WHERE 
+	        ITEMID = #{itemid} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(rpttype)">
+			RPTTYPE = #{rpttype},
+		</if>
+		<if test="@Ognl@isNotEmpty(itemcode)">
+			ITEMCODE = #{itemcode},
+		</if>
+		<if test="@Ognl@isNotEmpty(itemname)">
+			ITEMNAME = #{itemname},
+		</if>
+		<if test="@Ognl@isNotEmpty(pitemcode)">
+			PITEMCODE = #{pitemcode},
+		</if>
+		<if test="@Ognl@isNotEmpty(itemlevel)">
+			ITEMLEVEL = #{itemlevel},
+		</if>
+		<if test="@Ognl@isNotEmpty(issumitem)">
+			ISSUMITEM = #{issumitem},
+		</if>
+		<if test="@Ognl@isNotEmpty(itemcalnote)">
+			ITEMCALNOTE = #{itemcalnote},
+		</if>
+		<if test="@Ognl@isNotEmpty(status)">
+			STATUS = #{status},
+		</if>
+		<if test="@Ognl@isNotEmpty(position)">
+			Position = #{position},
+		</if>
+		<if test="@Ognl@isNotEmpty(relateitem)">
+			RELATEITEM = #{relateitem},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.financemng.entity.Finreportitem">
+	    UPDATE finreportitem 
+		<include refid="updateset"/>
+        WHERE 
+	        ITEMID = #{itemid} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

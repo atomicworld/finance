@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.flowmng.dao.FlowApprlcmmntsDao">
+
+	<resultMap id="FlowApprlcmmnts" type="com.mf.flowmng.entity.FlowApprlcmmnts">
+        <result property="applyno" column="APPLYNO"/>
+        <result property="srlno" column="SRLNO"/>
+        <result property="cmmntypeno" column="CMMNTYPENO"/>
+        <result property="appredamnt" column="APPREDAMNT"/>
+        <result property="appredrt" column="APPREDRT"/>
+        <result property="cmmntdes" column="CMMNTDES"/>
+        <result property="curstep" column="CURSTEP"/>
+        <result property="nextstep" column="NEXTSTEP"/>
+        <result property="apprstt" column="APPRSTT"/>
+        <result property="apprerno" column="APPRERNO"/>
+        <result property="apprernm" column="APPRERNM"/>
+        <result property="apprerdptno" column="APPRERDPTNO"/>
+        <result property="apprdt" column="APPRDT"/>
+        <result property="apprtm" column="APPRTM"/>
+        <result property="rtrnflg" column="RTRNFLG"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		APPLYNO,
+SRLNO,
+CMMNTYPENO,
+APPREDAMNT,
+APPREDRT,
+CMMNTDES,
+CURSTEP,
+NEXTSTEP,
+APPRSTT,
+APPRERNO,
+APPRERNM,
+APPRERDPTNO,
+APPRDT,
+APPRTM,
+RTRNFLG
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.flowmng.entity.FlowApprlcmmnts">
+		select
+		<include refid="selectId" />
+		from flow_apprlcmmnts
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.flowmng.entity.FlowApprlcmmnts" parameterType="com.mf.flowmng.entity.FlowApprlcmmnts">
+		select
+		<include refid="selectId" />
+		from flow_apprlcmmnts
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+
+		
+		<select id="query1" resultType="com.mf.flowmng.entity.FlowApprlcmmnts" parameterType="String">
+		select
+		<include refid="selectId" />
+		from flow_apprlcmmnts where applyno =#{applyno} 
+		    
+	</select>
+
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.cmmntypeno)">
+					AND CMMNTYPENO like '%${t.cmmntypeno}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.appredamnt)">
+					AND APPREDAMNT = '${t.appredamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.appredrt)">
+					AND APPREDRT = '${t.appredrt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cmmntdes)">
+					AND CMMNTDES like '%${t.cmmntdes}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.curstep)">
+					AND CURSTEP like '%${t.curstep}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.nextstep)">
+					AND NEXTSTEP like '%${t.nextstep}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.apprstt)">
+					AND APPRSTT like '%${t.apprstt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.apprerno)">
+					AND APPRERNO like '%${t.apprerno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.apprernm)">
+					AND APPRERNM like '%${t.apprernm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.apprerdptno)">
+					AND APPRERDPTNO like '%${t.apprerdptno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.apprdt)">
+					AND APPRDT like '%${t.apprdt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.apprtm)">
+					AND APPRTM like '%${t.apprtm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rtrnflg)">
+					AND RTRNFLG like '%${t.rtrnflg}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(cmmntypeno)">
+					AND CMMNTYPENO like '%${cmmntypeno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(appredamnt)">
+					AND APPREDAMNT = '${appredamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(appredrt)">
+					AND APPREDRT = '${appredrt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(cmmntdes)">
+					AND CMMNTDES like '%${cmmntdes}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(curstep)">
+					AND CURSTEP like '%${curstep}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(nextstep)">
+					AND NEXTSTEP like '%${nextstep}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(apprstt)">
+					AND APPRSTT like '%${apprstt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(apprerno)">
+					AND APPRERNO like '%${apprerno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(apprernm)">
+					AND APPRERNM like '%${apprernm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(apprerdptno)">
+					AND APPRERDPTNO like '%${apprerdptno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(apprdt)">
+					AND APPRDT like '%${apprdt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(apprtm)">
+					AND APPRTM like '%${apprtm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rtrnflg)">
+					AND RTRNFLG like '%${rtrnflg}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.flowmng.entity.FlowApprlcmmnts" resultType="int">
+		select count(0) from flow_apprlcmmnts
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.flowmng.entity.FlowApprlcmmnts">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO flow_apprlcmmnts (
+        	CMMNTYPENO ,
+        	APPREDAMNT ,
+        	APPREDRT ,
+        	CMMNTDES ,
+        	CURSTEP ,
+        	NEXTSTEP ,
+        	APPRSTT ,
+        	APPRERNO ,
+        	APPRERNM ,
+        	APPRERDPTNO ,
+        	APPRDT ,
+        	APPRTM ,
+        	RTRNFLG 
+        ) VALUES (
+        	#{cmmntypeno} ,
+        	#{appredamnt} ,
+        	#{appredrt} ,
+        	#{cmmntdes} ,
+        	#{curstep} ,
+        	#{nextstep} ,
+        	#{apprstt} ,
+        	#{apprerno} ,
+        	#{apprernm} ,
+        	#{apprerdptno} ,
+        	#{apprdt} ,
+        	#{apprtm} ,
+        	#{rtrnflg} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.flowmng.entity.FlowApprlcmmnts">
+	
+		INSERT INTO flow_apprlcmmnts 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+	        <if test="@Ognl@isNotEmpty(applyno)">
+				APPLYNO,
+			</if>
+			 <if test="@Ognl@isNotEmpty(srlno)">
+				SRLNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(cmmntypeno)">
+				CMMNTYPENO,
+			</if>
+			<if test="@Ognl@isNotEmpty(appredamnt)">
+				APPREDAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(appredrt)">
+				APPREDRT,
+			</if>
+			<if test="@Ognl@isNotEmpty(cmmntdes)">
+				CMMNTDES,
+			</if>
+			<if test="@Ognl@isNotEmpty(curstep)">
+				CURSTEP,
+			</if>
+			<if test="@Ognl@isNotEmpty(nextstep)">
+				NEXTSTEP,
+			</if>
+			<if test="@Ognl@isNotEmpty(apprstt)">
+				APPRSTT,
+			</if>
+			<if test="@Ognl@isNotEmpty(apprerno)">
+				APPRERNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(apprernm)">
+				APPRERNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(apprerdptno)">
+				APPRERDPTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(apprdt)">
+				APPRDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(apprtm)">
+				APPRTM,
+			</if>
+			<if test="@Ognl@isNotEmpty(rtrnflg)">
+				RTRNFLG,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    	    <if test="@Ognl@isNotEmpty(applyno)">
+				#{applyno},
+			</if>
+				<if test="@Ognl@isNotEmpty(srlno)">
+				#{srlno},
+			</if>
+			<if test="@Ognl@isNotEmpty(cmmntypeno)">
+				#{cmmntypeno},
+			</if>
+			<if test="@Ognl@isNotEmpty(appredamnt)">
+				#{appredamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(appredrt)">
+				#{appredrt},
+			</if>
+			<if test="@Ognl@isNotEmpty(cmmntdes)">
+				#{cmmntdes},
+			</if>
+			<if test="@Ognl@isNotEmpty(curstep)">
+				#{curstep},
+			</if>
+			<if test="@Ognl@isNotEmpty(nextstep)">
+				#{nextstep},
+			</if>
+			<if test="@Ognl@isNotEmpty(apprstt)">
+				#{apprstt},
+			</if>
+			<if test="@Ognl@isNotEmpty(apprerno)">
+				#{apprerno},
+			</if>
+			<if test="@Ognl@isNotEmpty(apprernm)">
+				#{apprernm},
+			</if>
+			<if test="@Ognl@isNotEmpty(apprerdptno)">
+				#{apprerdptno},
+			</if>
+			<if test="@Ognl@isNotEmpty(apprdt)">
+				#{apprdt},
+			</if>
+			<if test="@Ognl@isNotEmpty(apprtm)">
+				#{apprtm},
+			</if>
+			<if test="@Ognl@isNotEmpty(rtrnflg)">
+				#{rtrnflg},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM flow_apprlcmmnts WHERE
+        APPLYNO = #{id}  AND 
+        SRLNO = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.flowmng.entity.FlowApprlcmmnts">
+		SELECT <include refid="selectId" />
+		    FROM flow_apprlcmmnts 
+	        WHERE 
+        APPLYNO = #{id}  AND 
+        SRLNO = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.flowmng.entity.FlowApprlcmmnts">
+	    UPDATE flow_apprlcmmnts SET
+	        CMMNTYPENO = #{cmmntypeno} ,
+	        APPREDAMNT = #{appredamnt} ,
+	        APPREDRT = #{appredrt} ,
+	        CMMNTDES = #{cmmntdes} ,
+	        CURSTEP = #{curstep} ,
+	        NEXTSTEP = #{nextstep} ,
+	        APPRSTT = #{apprstt} ,
+	        APPRERNO = #{apprerno} ,
+	        APPRERNM = #{apprernm} ,
+	        APPRERDPTNO = #{apprerdptno} ,
+	        APPRDT = #{apprdt} ,
+	        APPRTM = #{apprtm} ,
+	        RTRNFLG = #{rtrnflg} 
+        WHERE 
+	        APPLYNO = #{applyno}  AND 
+	        SRLNO = #{srlno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(cmmntypeno)">
+			CMMNTYPENO = #{cmmntypeno},
+		</if>
+		<if test="@Ognl@isNotEmpty(appredamnt)">
+			APPREDAMNT = #{appredamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(appredrt)">
+			APPREDRT = #{appredrt},
+		</if>
+		<if test="@Ognl@isNotEmpty(cmmntdes)">
+			CMMNTDES = #{cmmntdes},
+		</if>
+		<if test="@Ognl@isNotEmpty(curstep)">
+			CURSTEP = #{curstep},
+		</if>
+		<if test="@Ognl@isNotEmpty(nextstep)">
+			NEXTSTEP = #{nextstep},
+		</if>
+		<if test="@Ognl@isNotEmpty(apprstt)">
+			APPRSTT = #{apprstt},
+		</if>
+		<if test="@Ognl@isNotEmpty(apprerno)">
+			APPRERNO = #{apprerno},
+		</if>
+		<if test="@Ognl@isNotEmpty(apprernm)">
+			APPRERNM = #{apprernm},
+		</if>
+		<if test="@Ognl@isNotEmpty(apprerdptno)">
+			APPRERDPTNO = #{apprerdptno},
+		</if>
+		<if test="@Ognl@isNotEmpty(apprdt)">
+			APPRDT = #{apprdt},
+		</if>
+		<if test="@Ognl@isNotEmpty(apprtm)">
+			APPRTM = #{apprtm},
+		</if>
+		<if test="@Ognl@isNotEmpty(rtrnflg)">
+			RTRNFLG = #{rtrnflg},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.flowmng.entity.FlowApprlcmmnts">
+	    UPDATE flow_apprlcmmnts 
+		<include refid="updateset"/>
+        WHERE 
+	        APPLYNO = #{applyno}  AND 
+	        SRLNO = #{srlno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

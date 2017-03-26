@@ -1,0 +1,698 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntEeDao">
+
+	<resultMap id="ClntEe" type="com.mf.client.entity.ClntEe">
+        <result property="clntno" column="CLNTNO"/>
+        <result property="clntnameonce" column="CLNTNAMEONCE"/>
+        <result property="clntnameeng" column="CLNTNAMEENG"/>
+        <result property="clntcategory" column="CLNTCATEGORY"/>
+        <result property="lncardno" column="LNCARDNO"/>
+        <result property="deptcode" column="DEPTCODE"/>
+        <result property="finacode" column="FINACODE"/>
+        <result property="bussdate" column="BUSSDATE"/>
+        <result property="bnation" column="BNATION"/>
+        <result property="bprop" column="BPROP"/>
+        <result property="bprop2" column="BPROP2"/>
+        <result property="bcharac" column="BCHARAC"/>
+        <result property="clntarea" column="CLNTAREA"/>
+        <result property="zip" column="ZIP"/>
+        <result property="induclass" column="INDUCLASS"/>
+        <result property="establish" column="ESTABLISH"/>
+        <result property="empnum" column="EMPNUM"/>
+        <result property="grpcustfg" column="GRPCUSTFG"/>
+        <result property="fortdrtfg" column="FORTDRTFG"/>
+        <result property="mktcorfg" column="MKTCORFG"/>
+        <result property="lastmoddate" column="LASTMODDATE"/>
+        <result property="grademodel" column="GRADEMODEL"/>
+        <result property="stat" column="STAT"/>
+        <result property="changedate" column="CHANGEDATE"/>
+        <result property="msgno" column="MSGNO"/>
+        <result property="batchno" column="BATCHNO"/>
+        <result property="valityflag" column="VALITYFLAG"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		CLNTNO,
+CLNTNAMEONCE,
+CLNTNAMEENG,
+CLNTCATEGORY,
+LNCARDNO,
+DEPTCODE,
+FINACODE,
+BUSSDATE,
+BNATION,
+BPROP,
+BPROP2,
+BCHARAC,
+CLNTAREA,
+ZIP,
+INDUCLASS,
+ESTABLISH,
+EMPNUM,
+GRPCUSTFG,
+FORTDRTFG,
+MKTCORFG,
+LASTMODDATE,
+GRADEMODEL,
+STAT,
+CHANGEDATE,
+MSGNO,
+BATCHNO,
+VALITYFLAG,
+bankcode
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntEe">
+		select
+		<include refid="selectId" />
+		from clnt_ee
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntEe" parameterType="com.mf.client.entity.ClntEe">
+		select
+		<include refid="selectId" />
+		from clnt_ee
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntEe" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_ee
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntnameonce)">
+					AND CLNTNAMEONCE like '%${t.clntnameonce}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntnameeng)">
+					AND CLNTNAMEENG like '%${t.clntnameeng}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntcategory)">
+					AND CLNTCATEGORY like '%${t.clntcategory}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.lncardno)">
+					AND LNCARDNO like '%${t.lncardno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.deptcode)">
+					AND DEPTCODE like '%${t.deptcode}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.finacode)">
+					AND FINACODE like '%${t.finacode}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bussdate)">
+					AND BUSSDATE like '%${t.bussdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bnation)">
+					AND BNATION like '%${t.bnation}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bprop)">
+					AND BPROP like '%${t.bprop}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bprop2)">
+					AND BPROP2 like '%${t.bprop2}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bcharac)">
+					AND BCHARAC like '%${t.bcharac}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntarea)">
+					AND CLNTAREA like '%${t.clntarea}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.zip)">
+					AND ZIP like '%${t.zip}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.induclass)">
+					AND INDUCLASS like '%${t.induclass}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.establish)">
+					AND ESTABLISH like '%${t.establish}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.empnum)">
+					AND EMPNUM = '${t.empnum}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.grpcustfg)">
+					AND GRPCUSTFG like '%${t.grpcustfg}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.fortdrtfg)">
+					AND FORTDRTFG like '%${t.fortdrtfg}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.mktcorfg)">
+					AND MKTCORFG like '%${t.mktcorfg}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.lastmoddate)">
+					AND LASTMODDATE like '%${t.lastmoddate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.grademodel)">
+					AND GRADEMODEL like '%${t.grademodel}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.stat)">
+					AND STAT like '%${t.stat}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.changedate)">
+					AND CHANGEDATE like '%${t.changedate}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.msgno)">
+					AND MSGNO = '${t.msgno}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.batchno)">
+					AND BATCHNO = '${t.batchno}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.valityflag)">
+					AND VALITYFLAG like '%${t.valityflag}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntnameonce)">
+					AND CLNTNAMEONCE like '%${clntnameonce}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntnameeng)">
+					AND CLNTNAMEENG like '%${clntnameeng}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntcategory)">
+					AND CLNTCATEGORY like '%${clntcategory}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(lncardno)">
+					AND LNCARDNO like '%${lncardno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(deptcode)">
+					AND DEPTCODE like '%${deptcode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(finacode)">
+					AND FINACODE like '%${finacode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bussdate)">
+					AND BUSSDATE like '%${bussdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bnation)">
+					AND BNATION like '%${bnation}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bprop)">
+					AND BPROP like '%${bprop}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bprop2)">
+					AND BPROP2 like '%${bprop2}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bcharac)">
+					AND BCHARAC like '%${bcharac}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntarea)">
+					AND CLNTAREA like '%${clntarea}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(zip)">
+					AND ZIP like '%${zip}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(induclass)">
+					AND INDUCLASS like '%${induclass}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(establish)">
+					AND ESTABLISH like '%${establish}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(empnum)">
+					AND EMPNUM = '${empnum}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(grpcustfg)">
+					AND GRPCUSTFG like '%${grpcustfg}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(fortdrtfg)">
+					AND FORTDRTFG like '%${fortdrtfg}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(mktcorfg)">
+					AND MKTCORFG like '%${mktcorfg}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(lastmoddate)">
+					AND LASTMODDATE like '%${lastmoddate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(grademodel)">
+					AND GRADEMODEL like '%${grademodel}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(stat)">
+					AND STAT like '%${stat}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(changedate)">
+					AND CHANGEDATE like '%${changedate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(msgno)">
+					AND MSGNO = '${msgno}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(batchno)">
+					AND BATCHNO = '${batchno}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(valityflag)">
+					AND VALITYFLAG like '%${valityflag}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntEe" resultType="int">
+		select count(0) from clnt_ee
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntEe">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_ee (
+        	CLNTNAMEONCE ,
+        	CLNTNAMEENG ,
+        	CLNTCATEGORY ,
+        	LNCARDNO ,
+        	DEPTCODE ,
+        	FINACODE ,
+        	BUSSDATE ,
+        	BNATION ,
+        	BPROP ,
+        	BPROP2 ,
+        	BCHARAC ,
+        	CLNTAREA ,
+        	ZIP ,
+        	INDUCLASS ,
+        	ESTABLISH ,
+        	EMPNUM ,
+        	GRPCUSTFG ,
+        	FORTDRTFG ,
+        	MKTCORFG ,
+        	LASTMODDATE ,
+        	GRADEMODEL ,
+        	STAT ,
+        	CHANGEDATE ,
+        	MSGNO ,
+        	BATCHNO ,
+        	VALITYFLAG 
+        ) VALUES (
+        	#{clntnameonce} ,
+        	#{clntnameeng} ,
+        	#{clntcategory} ,
+        	#{lncardno} ,
+        	#{deptcode} ,
+        	#{finacode} ,
+        	#{bussdate} ,
+        	#{bnation} ,
+        	#{bprop} ,
+        	#{bprop2} ,
+        	#{bcharac} ,
+        	#{clntarea} ,
+        	#{zip} ,
+        	#{induclass} ,
+        	#{establish} ,
+        	#{empnum} ,
+        	#{grpcustfg} ,
+        	#{fortdrtfg} ,
+        	#{mktcorfg} ,
+        	#{lastmoddate} ,
+        	#{grademodel} ,
+        	#{stat} ,
+        	#{changedate} ,
+        	#{msgno} ,
+        	#{batchno} ,
+        	#{valityflag} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntEe">
+		INSERT INTO clnt_ee 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnameonce)">
+				CLNTNAMEONCE,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnameeng)">
+				CLNTNAMEENG,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntcategory)">
+				CLNTCATEGORY,
+			</if>
+			<if test="@Ognl@isNotEmpty(lncardno)">
+				LNCARDNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(deptcode)">
+				DEPTCODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(finacode)">
+				FINACODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(bussdate)">
+				BUSSDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(bnation)">
+				BNATION,
+			</if>
+			<if test="@Ognl@isNotEmpty(bprop)">
+				BPROP,
+			</if>
+			<if test="@Ognl@isNotEmpty(bprop2)">
+				BPROP2,
+			</if>
+			<if test="@Ognl@isNotEmpty(bcharac)">
+				BCHARAC,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntarea)">
+				CLNTAREA,
+			</if>
+			<if test="@Ognl@isNotEmpty(zip)">
+				ZIP,
+			</if>
+			<if test="@Ognl@isNotEmpty(induclass)">
+				INDUCLASS,
+			</if>
+			<if test="@Ognl@isNotEmpty(establish)">
+				ESTABLISH,
+			</if>
+			<if test="@Ognl@isNotEmpty(empnum)">
+				EMPNUM,
+			</if>
+			<if test="@Ognl@isNotEmpty(grpcustfg)">
+				GRPCUSTFG,
+			</if>
+			<if test="@Ognl@isNotEmpty(fortdrtfg)">
+				FORTDRTFG,
+			</if>
+			<if test="@Ognl@isNotEmpty(mktcorfg)">
+				MKTCORFG,
+			</if>
+			<if test="@Ognl@isNotEmpty(lastmoddate)">
+				LASTMODDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(grademodel)">
+				GRADEMODEL,
+			</if>
+			<if test="@Ognl@isNotEmpty(stat)">
+				STAT,
+			</if>
+			<if test="@Ognl@isNotEmpty(changedate)">
+				CHANGEDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(msgno)">
+				MSGNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(batchno)">
+				BATCHNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(valityflag)">
+				VALITYFLAG,
+			</if>
+			<if test="@Ognl@isNotEmpty(bankcode)">
+				BANKCODE,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnameonce)">
+				#{clntnameonce},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnameeng)">
+				#{clntnameeng},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntcategory)">
+				#{clntcategory},
+			</if>
+			<if test="@Ognl@isNotEmpty(lncardno)">
+				#{lncardno},
+			</if>
+			<if test="@Ognl@isNotEmpty(deptcode)">
+				#{deptcode},
+			</if>
+			<if test="@Ognl@isNotEmpty(finacode)">
+				#{finacode},
+			</if>
+			<if test="@Ognl@isNotEmpty(bussdate)">
+				#{bussdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(bnation)">
+				#{bnation},
+			</if>
+			<if test="@Ognl@isNotEmpty(bprop)">
+				#{bprop},
+			</if>
+			<if test="@Ognl@isNotEmpty(bprop2)">
+				#{bprop2},
+			</if>
+			<if test="@Ognl@isNotEmpty(bcharac)">
+				#{bcharac},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntarea)">
+				#{clntarea},
+			</if>
+			<if test="@Ognl@isNotEmpty(zip)">
+				#{zip},
+			</if>
+			<if test="@Ognl@isNotEmpty(induclass)">
+				#{induclass},
+			</if>
+			<if test="@Ognl@isNotEmpty(establish)">
+				#{establish},
+			</if>
+			<if test="@Ognl@isNotEmpty(empnum)">
+				#{empnum},
+			</if>
+			<if test="@Ognl@isNotEmpty(grpcustfg)">
+				#{grpcustfg},
+			</if>
+			<if test="@Ognl@isNotEmpty(fortdrtfg)">
+				#{fortdrtfg},
+			</if>
+			<if test="@Ognl@isNotEmpty(mktcorfg)">
+				#{mktcorfg},
+			</if>
+			<if test="@Ognl@isNotEmpty(lastmoddate)">
+				#{lastmoddate},
+			</if>
+			<if test="@Ognl@isNotEmpty(grademodel)">
+				#{grademodel},
+			</if>
+			<if test="@Ognl@isNotEmpty(stat)">
+				#{stat},
+			</if>
+			<if test="@Ognl@isNotEmpty(changedate)">
+				#{changedate},
+			</if>
+			<if test="@Ognl@isNotEmpty(msgno)">
+				#{msgno},
+			</if>
+			<if test="@Ognl@isNotEmpty(batchno)">
+				#{batchno},
+			</if>
+			<if test="@Ognl@isNotEmpty(valityflag)">
+				#{valityflag},
+			</if>
+			<if test="@Ognl@isNotEmpty(bankcode)">
+				#{bankcode},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM clnt_ee WHERE
+        CLNTNO = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntEe">
+		SELECT <include refid="selectId" />
+		    FROM clnt_ee 
+	        WHERE 
+        CLNTNO = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntEe">
+	    UPDATE clnt_ee SET
+	        CLNTNAMEONCE = #{clntnameonce} ,
+	        CLNTNAMEENG = #{clntnameeng} ,
+	        CLNTCATEGORY = #{clntcategory} ,
+	        LNCARDNO = #{lncardno} ,
+	        DEPTCODE = #{deptcode} ,
+	        FINACODE = #{finacode} ,
+	        BUSSDATE = #{bussdate} ,
+	        BNATION = #{bnation} ,
+	        BPROP = #{bprop} ,
+	        BPROP2 = #{bprop2} ,
+	        BCHARAC = #{bcharac} ,
+	        CLNTAREA = #{clntarea} ,
+	        ZIP = #{zip} ,
+	        INDUCLASS = #{induclass} ,
+	        ESTABLISH = #{establish} ,
+	        EMPNUM = #{empnum} ,
+	        GRPCUSTFG = #{grpcustfg} ,
+	        FORTDRTFG = #{fortdrtfg} ,
+	        MKTCORFG = #{mktcorfg} ,
+	        LASTMODDATE = #{lastmoddate} ,
+	        GRADEMODEL = #{grademodel} ,
+	        STAT = #{stat} ,
+	        CHANGEDATE = #{changedate} ,
+	        MSGNO = #{msgno} ,
+	        BATCHNO = #{batchno} ,
+	        VALITYFLAG = #{valityflag} ,
+	        bankcode = #{bankcode} 
+        WHERE 
+	        CLNTNO = #{clntno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntnameonce)">
+			CLNTNAMEONCE = #{clntnameonce},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntnameeng)">
+			CLNTNAMEENG = #{clntnameeng},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntcategory)">
+			CLNTCATEGORY = #{clntcategory},
+		</if>
+		<if test="@Ognl@isNotEmpty(lncardno)">
+			LNCARDNO = #{lncardno},
+		</if>
+		<if test="@Ognl@isNotEmpty(deptcode)">
+			DEPTCODE = #{deptcode},
+		</if>
+		<if test="@Ognl@isNotEmpty(finacode)">
+			FINACODE = #{finacode},
+		</if>
+		<if test="@Ognl@isNotEmpty(bussdate)">
+			BUSSDATE = #{bussdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(bnation)">
+			BNATION = #{bnation},
+		</if>
+		<if test="@Ognl@isNotEmpty(bprop)">
+			BPROP = #{bprop},
+		</if>
+		<if test="@Ognl@isNotEmpty(bprop2)">
+			BPROP2 = #{bprop2},
+		</if>
+		<if test="@Ognl@isNotEmpty(bcharac)">
+			BCHARAC = #{bcharac},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntarea)">
+			CLNTAREA = #{clntarea},
+		</if>
+		<if test="@Ognl@isNotEmpty(zip)">
+			ZIP = #{zip},
+		</if>
+		<if test="@Ognl@isNotEmpty(induclass)">
+			INDUCLASS = #{induclass},
+		</if>
+		<if test="@Ognl@isNotEmpty(establish)">
+			ESTABLISH = #{establish},
+		</if>
+		<if test="@Ognl@isNotEmpty(empnum)">
+			EMPNUM = #{empnum},
+		</if>
+		<if test="@Ognl@isNotEmpty(grpcustfg)">
+			GRPCUSTFG = #{grpcustfg},
+		</if>
+		<if test="@Ognl@isNotEmpty(fortdrtfg)">
+			FORTDRTFG = #{fortdrtfg},
+		</if>
+		<if test="@Ognl@isNotEmpty(mktcorfg)">
+			MKTCORFG = #{mktcorfg},
+		</if>
+		<if test="@Ognl@isNotEmpty(lastmoddate)">
+			LASTMODDATE = #{lastmoddate},
+		</if>
+		<if test="@Ognl@isNotEmpty(grademodel)">
+			GRADEMODEL = #{grademodel},
+		</if>
+		<if test="@Ognl@isNotEmpty(stat)">
+			STAT = #{stat},
+		</if>
+		<if test="@Ognl@isNotEmpty(changedate)">
+			CHANGEDATE = #{changedate},
+		</if>
+		<if test="@Ognl@isNotEmpty(msgno)">
+			MSGNO = #{msgno},
+		</if>
+		<if test="@Ognl@isNotEmpty(batchno)">
+			BATCHNO = #{batchno},
+		</if>
+		<if test="@Ognl@isNotEmpty(valityflag)">
+			VALITYFLAG = #{valityflag},
+		</if>
+		<if test="@Ognl@isNotEmpty(bankcode)">
+			BANKCODE = #{bankcode},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntEe">
+	    UPDATE clnt_ee 
+		<include refid="updateset"/>
+        WHERE 
+	        CLNTNO = #{clntno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+	<select id="FindByid" parameterType="String" resultType="com.mf.client.entity.ClntEe">
+		select  
+		a.clntnameonce,
+		a.clntnameeng,
+		a.lncardno,
+		a.deptcode,
+		a.finacode,
+		a.bussdate,
+		a.zip,
+		a.establish,
+		a.empnum,
+		a.clntarea,
+		a.induclass,
+		b.sd_key as clntcategory,
+		c.sd_key as bnation,
+		d.sd_key as bprop,
+		e.sd_key as bcharac,
+		f.sd_key as grpcustfg,
+		g.sd_key as fortdrtfg,
+		h.sd_key as mktcorfg,
+		j.sd_key as grademodel
+		from clnt_ee a 
+		left join sys_dictionary b on a.clntcategory=b.sd_value 
+		left join sys_dictionary c on a.bnation=c.sd_value 
+		left join sys_dictionary d on a.bprop=d.sd_value 
+		left join sys_dictionary e on a.bcharac=e.sd_value 
+		left join sys_dictionary f on a.grpcustfg=f.sd_value 
+		left join sys_dictionary g on a.fortdrtfg=g.sd_value 
+		left join sys_dictionary h on a.mktcorfg=h.sd_value 
+		left join sys_dictionary j on a.grademodel=j.sd_value
+		where 
+		b.code=1101 and c.code=1127 
+		and d.code=1102 and e.code=1104 
+		and f.code=1000 and g.code=1000
+		and h.code=1000 and j.code=1109
+		and a.clntno = #{clntno} 
+</select>
+	
+</mapper>
+

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.mf.org.dao.CustManagerDao">
+
+	<sql id="selectItems">
+		EMPLYNO,
+		EMPLYNM,
+		DPTNO,
+		RCRDID,
+		MNGRLVL,
+		SNGLTOP,
+		TEL,
+		SDATE,
+		EDATE,
+		REMARK,
+		ISUSED,
+		TTLTOP,
+		CRTNO,
+		CRTDPTNO,
+		CRTDATE,
+		UPDTDATE ,                     
+		BSNSKND ,                         
+		RESERVED
+  	</sql>
+    
+	<select id="query" resultType="CustManager">
+		select
+		<include refid="selectItems" />
+		, (SELECT dptName FROM dptmnt d WHERE d.DPTNO = c.DPTNO limit 1) as dptName
+		from CSTMRMNGR c
+		<include refid="querywhere"/>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	     				
+			   <if test="@Ognl@isNotEmpty(t.emplynm)">
+					AND emplynm like '%${t.emplynm}%'
+			   </if>    
+		</where>
+	</sql>
+	
+	<select id="queryAll" resultType="CustManager">
+		select
+		<include refid="selectItems" />
+		from CSTMRMNGR
+	</select>
+	
+	<!-- 总记录数 -->
+	<select id="count" parameterType="CustManager" resultType="int">
+		select count(1) from CSTMRMNGR
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="add" parameterType="Dept">
+		INSERT INTO CSTMRMNGR (
+		    RCRDID,
+			DPTNO,
+			EMPLYNO,
+			EMPLYNM,
+			MNGRLVL,
+			SNGLTOP,
+			TEL,
+			SDATE,
+			EDATE,
+			REMARK,
+			ISUSED,
+			TTLTOP,
+			BSNSKND,
+			CRTDATE
+         ) VALUES (
+            (select maxNo from  (SELECT (IFNULL(MAX(RCRDID),0)+1) as maxNo FROM CSTMRMNGR) as t),
+			#{dptno},
+			#{emplyno},
+			#{emplynm},
+			#{mngrlvl},
+			#{sngltop},
+			#{tel},
+			#{sdate},
+			#{edate},
+			#{remark},
+			#{isused},
+			#{ttltop},
+			#{bsnsknd},
+			SYSDATE()
+        )
+	</insert>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="String">
+	    DELETE FROM CSTMRMNGR 
+	    WHERE RCRDID=#{rcrdid}
+	</delete>
+	
+	<update id="changeStatus" parameterType="CustManager">
+	    update CSTMRMNGR  t 
+	    <set>
+	          isused=#{isused}
+	    </set>
+	    where RCRDID=#{rcrdid}
+	</update>
+	
+	
+	
+	<select id="getById" parameterType="String" resultType="CustManager">
+	    select
+		<include refid="selectItems" />
+		from CSTMRMNGR
+		where  RCRDID=#{rcrdid}
+	</select>
+	
+	<!-- 全表更新 -->
+	<update id="modify" parameterType="CustManager">
+		update CSTMRMNGR 
+		set 
+		emplyno=#{emplyno},
+		emplynm=#{emplynm},
+		dptno=#{dptno},
+		mngrlvl=#{mngrlvl},
+		sngltop=#{sngltop},
+		tel=#{tel},
+		sdate=#{sdate},
+		edate=#{edate},
+		remark=#{remark},
+		isused=#{isused},
+		ttltop=#{ttltop},
+		crtdptno=#{crtdptno},
+		crtdate=SYSDATE(),
+		UPDTDATE=#{updtdate}
+		WHERE rcrdid=#{rcrdid}
+	</update>
+</mapper>
+

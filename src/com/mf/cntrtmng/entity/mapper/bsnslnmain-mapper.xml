@@ -1,0 +1,585 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.cntrtmng.dao.BsnsLnmainDao">
+
+	<resultMap id="BsnsLnmain" type="com.mf.cntrtmng.entity.BsnsLnmain">
+        <result property="bsnsno" column="BSNSNO"/>
+        <result property="bsnsid" column="BSNSID"/>
+        <result property="depno" column="DEPNO"/>
+        <result property="lnblnc" column="LNBLNC"/>
+        <result property="crrntamnt" column="CRRNTAMNT"/>
+        <result property="intstsdate" column="INTSTSDATE"/>
+        <result property="intstedate" column="INTSTEDATE"/>
+        <result property="updtdate" column="UPDTDATE"/>
+        <result property="accntstt" column="ACCNTSTT"/>
+        <result property="fvclsstt" column="FVCLSSTT"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="clntnm" column="CLNTNM"/>
+        <result property="cntrctno" column="CNTRCTNO"/>
+        <result property="lntmdy" column="LNTMDY"/>
+        <result property="curblldate" column="CURBLLDATE"/>
+        <result property="nxtblldate" column="NXTBLLDATE"/>
+        <result property="bsnsflg" column="BSNSFLG"/>
+        <result property="isfixrepay" column="ISFIXREPAY"/>
+        <result property="bnkno" column="BNKNO"/>
+        <result property="outyp" column="OUTYP"/>
+        <result property="fixdate" column="FIXDATE"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		BSNSNO,
+BSNSID,
+DEPNO,
+LNBLNC,
+CRRNTAMNT,
+INTSTSDATE,
+INTSTEDATE,
+UPDTDATE,
+ACCNTSTT,
+FVCLSSTT,
+CLNTNO,
+CLNTNM,
+CNTRCTNO,
+LNTMDY,
+CURBLLDATE,
+NXTBLLDATE,
+BSNSFLG,
+ISFIXREPAY,
+BNKNO,
+OUTYP,
+FIXDATE
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.cntrtmng.entity.BsnsLnmain">
+		select
+		<include refid="selectId" />
+		from bsns_lnmain
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.cntrtmng.entity.BsnsLnmain" parameterType="com.mf.cntrtmng.entity.BsnsLnmain">
+		select
+		<include refid="selectId" />
+		from bsns_lnmain
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.cntrtmng.entity.BsnsLnmain" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_lnmain
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      	
+			   LNBLNC &gt; 0  			
+			   <if test="@Ognl@isNotEmpty(t.bsnsno)">
+					AND BSNSNO like '%${t.bsnsno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.depno)">
+					AND DEPNO like '%${t.depno}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.lnblnc)">
+					AND LNBLNC = '${t.lnblnc}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.crrntamnt)">
+					AND CRRNTAMNT = '${t.crrntamnt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.intstsdate)">
+					AND INTSTSDATE like '%${t.intstsdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.intstedate)">
+					AND INTSTEDATE like '%${t.intstedate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.updtdate)">
+					AND UPDTDATE like '%${t.updtdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.accntstt)">
+					AND ACCNTSTT like '%${t.accntstt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.fvclsstt)">
+					AND FVCLSSTT like '%${t.fvclsstt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntnm)">
+					AND CLNTNM like '%${t.clntnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cntrctno)">
+					AND CNTRCTNO like '%${t.cntrctno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.lntmdy)">
+					AND LNTMDY like '%${t.lntmdy}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.curblldate)">
+					AND CURBLLDATE like '%${t.curblldate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.nxtblldate)">
+					AND NXTBLLDATE like '%${t.nxtblldate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bsnsflg)">
+					AND BSNSFLG like '%${t.bsnsflg}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.isfixrepay)">
+					AND ISFIXREPAY like '%${t.isfixrepay}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bnkno)">
+					AND BNKNO like '%${t.bnkno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.outyp)">
+					AND OUTYP like '%${t.outyp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.fixdate)">
+					AND FIXDATE like '%${t.fixdate}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+	<select id="queryextend" resultType="com.mf.cntrtmng.entity.BsnsLnmain" parameterType="java.util.HashMap">
+		select
+		a.BSNSNO,
+a.BSNSID,
+a.DEPNO,
+a.LNBLNC,
+a.CRRNTAMNT,
+a.INTSTSDATE,
+a.INTSTEDATE,
+a.UPDTDATE,
+a.ACCNTSTT,
+a.FVCLSSTT,
+a.CLNTNO,
+a.CLNTNM,
+a.CNTRCTNO,
+a.LNTMDY,
+a.CURBLLDATE,
+a.NXTBLLDATE,
+a.BSNSFLG,
+a.ISFIXREPAY,
+a.BNKNO,
+a.OUTYP,
+a.FIXDATE
+		from bsns_lnmain a , bsns_lnout b 
+		<include refid="querywhereextend"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhereextend">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      	
+			   a.LNBLNC &gt; 0 
+			   and a.BSNSNO = b.OUTNO and b.OUTSTT = 3			
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND a.CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntnm)">
+					AND a.CLNTNM like '%${t.clntnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cntrctno)">
+					AND a.CNTRCTNO like '%${t.cntrctno}%'
+			   </if>
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(bsnsno)">
+					AND BSNSNO like '%${bsnsno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(depno)">
+					AND DEPNO like '%${depno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(lnblnc)">
+					AND LNBLNC = '${lnblnc}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(crrntamnt)">
+					AND CRRNTAMNT = '${crrntamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(intstsdate)">
+					AND INTSTSDATE like '%${intstsdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(intstedate)">
+					AND INTSTEDATE like '%${intstedate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(updtdate)">
+					AND UPDTDATE like '%${updtdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(accntstt)">
+					AND ACCNTSTT like '%${accntstt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(fvclsstt)">
+					AND FVCLSSTT like '%${fvclsstt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntnm)">
+					AND CLNTNM like '%${clntnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cntrctno)">
+					AND CNTRCTNO like '%${cntrctno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(lntmdy)">
+					AND LNTMDY like '%${lntmdy}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(curblldate)">
+					AND CURBLLDATE like '%${curblldate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(nxtblldate)">
+					AND NXTBLLDATE like '%${nxtblldate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bsnsflg)">
+					AND BSNSFLG like '%${bsnsflg}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(isfixrepay)">
+					AND ISFIXREPAY like '%${isfixrepay}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bnkno)">
+					AND BNKNO like '%${bnkno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(outyp)">
+					AND OUTYP like '%${outyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(fixdate)">
+					AND FIXDATE like '%${fixdate}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.cntrtmng.entity.BsnsLnmain" resultType="int">
+		select count(0) from bsns_lnmain
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.cntrtmng.entity.BsnsLnmain">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO bsns_lnmain (
+        	BSNSNO ,
+        	DEPNO ,
+        	LNBLNC ,
+        	CRRNTAMNT ,
+        	INTSTSDATE ,
+        	INTSTEDATE ,
+        	UPDTDATE ,
+        	ACCNTSTT ,
+        	FVCLSSTT ,
+        	CLNTNO ,
+        	CLNTNM ,
+        	CNTRCTNO ,
+        	LNTMDY ,
+        	CURBLLDATE ,
+        	NXTBLLDATE ,
+        	BSNSFLG ,
+        	ISFIXREPAY ,
+        	BNKNO ,
+        	OUTYP ,
+        	FIXDATE 
+        ) VALUES (
+        	#{bsnsno} ,
+        	#{depno} ,
+        	#{lnblnc} ,
+        	#{crrntamnt} ,
+        	#{intstsdate} ,
+        	#{intstedate} ,
+        	#{updtdate} ,
+        	#{accntstt} ,
+        	#{fvclsstt} ,
+        	#{clntno} ,
+        	#{clntnm} ,
+        	#{cntrctno} ,
+        	#{lntmdy} ,
+        	#{curblldate} ,
+        	#{nxtblldate} ,
+        	#{bsnsflg} ,
+        	#{isfixrepay} ,
+        	#{bnkno} ,
+        	#{outyp} ,
+        	#{fixdate} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.cntrtmng.entity.BsnsLnmain">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO bsns_lnmain 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(bsnsno)">
+				BSNSNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(depno)">
+				DEPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(lnblnc)">
+				LNBLNC,
+			</if>
+			<if test="@Ognl@isNotEmpty(crrntamnt)">
+				CRRNTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(intstsdate)">
+				INTSTSDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(intstedate)">
+				INTSTEDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				UPDTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(accntstt)">
+				ACCNTSTT,
+			</if>
+			<if test="@Ognl@isNotEmpty(fvclsstt)">
+				FVCLSSTT,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				CLNTNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				CNTRCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(lntmdy)">
+				LNTMDY,
+			</if>
+			<if test="@Ognl@isNotEmpty(curblldate)">
+				CURBLLDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(nxtblldate)">
+				NXTBLLDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsflg)">
+				BSNSFLG,
+			</if>
+			<if test="@Ognl@isNotEmpty(isfixrepay)">
+				ISFIXREPAY,
+			</if>
+			<if test="@Ognl@isNotEmpty(bnkno)">
+				BNKNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(outyp)">
+				OUTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(fixdate)">
+				FIXDATE,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(bsnsno)">
+				#{bsnsno},
+			</if>
+			<if test="@Ognl@isNotEmpty(depno)">
+				#{depno},
+			</if>
+			<if test="@Ognl@isNotEmpty(lnblnc)">
+				#{lnblnc},
+			</if>
+			<if test="@Ognl@isNotEmpty(crrntamnt)">
+				#{crrntamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(intstsdate)">
+				#{intstsdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(intstedate)">
+				#{intstedate},
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				#{updtdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(accntstt)">
+				#{accntstt},
+			</if>
+			<if test="@Ognl@isNotEmpty(fvclsstt)">
+				#{fvclsstt},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				#{clntnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				#{cntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(lntmdy)">
+				#{lntmdy},
+			</if>
+			<if test="@Ognl@isNotEmpty(curblldate)">
+				#{curblldate},
+			</if>
+			<if test="@Ognl@isNotEmpty(nxtblldate)">
+				#{nxtblldate},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsflg)">
+				#{bsnsflg},
+			</if>
+			<if test="@Ognl@isNotEmpty(isfixrepay)">
+				#{isfixrepay},
+			</if>
+			<if test="@Ognl@isNotEmpty(bnkno)">
+				#{bnkno},
+			</if>
+			<if test="@Ognl@isNotEmpty(outyp)">
+				#{outyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(fixdate)">
+				#{fixdate},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM bsns_lnmain WHERE
+        BSNSID = #{id} 
+	</delete>
+	<!-- wyy根据借据号删除 -->
+		<delete id="deleteDueno" parameterType="String">
+		DELETE FROM bsns_lnmain WHERE
+        BSNSNO = #{bsnsno} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsLnmain">
+		SELECT <include refid="selectId" />
+		    FROM bsns_lnmain 
+	        WHERE 
+        BSNSID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.cntrtmng.entity.BsnsLnmain">
+	    UPDATE bsns_lnmain SET
+	        BSNSNO = #{bsnsno} ,
+	        DEPNO = #{depno} ,
+	        LNBLNC = #{lnblnc} ,
+	        CRRNTAMNT = #{crrntamnt} ,
+	        INTSTSDATE = #{intstsdate} ,
+	        INTSTEDATE = #{intstedate} ,
+	        UPDTDATE = #{updtdate} ,
+	        ACCNTSTT = #{accntstt} ,
+	        FVCLSSTT = #{fvclsstt} ,
+	        CLNTNO = #{clntno} ,
+	        CLNTNM = #{clntnm} ,
+	        CNTRCTNO = #{cntrctno} ,
+	        LNTMDY = #{lntmdy} ,
+	        CURBLLDATE = #{curblldate} ,
+	        NXTBLLDATE = #{nxtblldate} ,
+	        BSNSFLG = #{bsnsflg} ,
+	        ISFIXREPAY = #{isfixrepay} ,
+	        BNKNO = #{bnkno} ,
+	        OUTYP = #{outyp} ,
+	        FIXDATE = #{fixdate} 
+        WHERE 
+	        BSNSID = #{bsnsid} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(bsnsno)">
+			BSNSNO = #{bsnsno},
+		</if>
+		<if test="@Ognl@isNotEmpty(depno)">
+			DEPNO = #{depno},
+		</if>
+		<if test="@Ognl@isNotEmpty(lnblnc)">
+			LNBLNC = #{lnblnc},
+		</if>
+		<if test="@Ognl@isNotEmpty(crrntamnt)">
+			CRRNTAMNT = #{crrntamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(intstsdate)">
+			INTSTSDATE = #{intstsdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(intstedate)">
+			INTSTEDATE = #{intstedate},
+		</if>
+		<if test="@Ognl@isNotEmpty(updtdate)">
+			UPDTDATE = #{updtdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(accntstt)">
+			ACCNTSTT = #{accntstt},
+		</if>
+		<if test="@Ognl@isNotEmpty(fvclsstt)">
+			FVCLSSTT = #{fvclsstt},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntnm)">
+			CLNTNM = #{clntnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctno)">
+			CNTRCTNO = #{cntrctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(lntmdy)">
+			LNTMDY = #{lntmdy},
+		</if>
+		<if test="@Ognl@isNotEmpty(curblldate)">
+			CURBLLDATE = #{curblldate},
+		</if>
+		<if test="@Ognl@isNotEmpty(nxtblldate)">
+			NXTBLLDATE = #{nxtblldate},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnsflg)">
+			BSNSFLG = #{bsnsflg},
+		</if>
+		<if test="@Ognl@isNotEmpty(isfixrepay)">
+			ISFIXREPAY = #{isfixrepay},
+		</if>
+		<if test="@Ognl@isNotEmpty(bnkno)">
+			BNKNO = #{bnkno},
+		</if>
+		<if test="@Ognl@isNotEmpty(outyp)">
+			OUTYP = #{outyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(fixdate)">
+			FIXDATE = #{fixdate},
+		</if>
+    </set>
+	</sql>
+	
+	<update id="modify" parameterType="com.mf.cntrtmng.entity.BsnsLnmain">
+	    UPDATE bsns_lnmain 
+		<include refid="updateset"/>
+        WHERE 
+	        BSNSID = #{bsnsid} 
+	</update>
+	
+	<select id="findByBsnsno" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsLnmain">
+		SELECT <include refid="selectId" />
+		FROM bsns_lnmain 
+		WHERE BSNSNO = #{bsnsno}    
+	</select>
+	<select id="cougtCntrctno" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsLnmain">
+		 select sum(crrntamnt) as crrntamnt from bsns_lnmain where cntrctno=#{cntrctno} and LNBLNC &lt;=0
+	</select>
+	
+</mapper>
+

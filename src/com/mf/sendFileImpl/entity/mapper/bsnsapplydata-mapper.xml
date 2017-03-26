@@ -1,0 +1,1240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.sendFileImpl.dao.BsnsApplyDataDao">
+
+	<resultMap id="BsnsApplyData" type="com.mf.sendFileImpl.entity.BsnsApplyData">
+        <result property="id" column="id"/>
+        <result property="conCode" column="ConCode"/>
+        <result property="conAmount" column="ConAmount"/>
+        <result property="conSignDate" column="ConSignDate"/>
+        <result property="conStartDate" column="ConStartDate"/>
+        <result property="conYearRate" column="ConYearRate"/>
+        <result property="conStatus" column="ConStatus"/>
+        <result property="conDelayYearRate" column="ConDelayYearRate"/>
+        <result property="loanCode" column="LoanCode"/>
+        <result property="loanClass" column="LoanClass"/>
+        <result property="conType" column="ConType"/>
+        <result property="custClass" column="CustClass"/>
+        <result property="custName" column="CustName"/>
+        <result property="custDocType" column="CustDocType"/>
+        <result property="custIdno" column="CustIDNo"/>
+        <result property="custScale" column="CustScale"/>
+        <result property="loanDate" column="LoanDate"/>
+        <result property="sendDate" column="SendDate"/>
+        <result property="endDate" column="EndDate"/>
+        <result property="expireDate" column="ExpireDate"/>
+        <result property="yearRate" column="YearRate"/>
+        <result property="delayMonRate" column="DelayMonRate"/>
+        <result property="amount" column="Amount"/>
+        <result property="solutionWay" column="SolutionWay"/>
+        <result property="loanerType" column="LoanerType"/>
+        <result property="loanUsage" column="LoanUsage"/>
+        <result property="loanTrade" column="LoanTrade"/>
+        <result property="loanArea" column="LoanArea"/>
+        <result property="repaymentWay" column="RepaymentWay"/>
+        <result property="returnMode" column="ReturnMode"/>
+        <result property="danbaoMode" column="DanbaoMode"/>
+        <result property="rateProp" column="RateProp"/>
+        <result property="wtName" column="WtName"/>
+        <result property="wtDocType" column="WtDocType"/>
+        <result property="wtDocNo" column="WtDocNo"/>
+        <result property="wtChargerName" column="WtChargerName"/>
+        <result property="wtTel" column="WtTel"/>
+        <result property="wtAddr" column="WtAddr"/>
+        <result property="wtPostal" column="WtPostal"/>
+        <result property="wtBank" column="WtBank"/>
+        <result property="wtBankAcc" column="WtBankAcc"/>
+        <result property="stTel" column="StTel"/>
+        <result property="wtClass" column="WtClass"/>
+        <result property="chargeFees" column="ChargeFees"/>
+        <result property="stAddr" column="StAddr"/>
+        <result property="stPostal" column="StPostal"/>
+        <result property="status" column="Status"/>
+        <result property="returnDate" column="ReturnDate"/>
+        <result property="rbeginDate" column="RBeginDate"/>
+        <result property="rendDate" column="REndDate"/>
+        <result property="delayFee" column="DelayFee"/>
+        <result property="delayInterest" column="DelayInterest"/>
+        <result property="returnInterest" column="ReturnInterest"/>
+        <result property="returnAmt" column="ReturnAmt"/>
+        <result property="isDelay" column="IsDelay"/>
+        <result property="isTch" column="IsTCH"/>
+        <result property="flag" column="Flag"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		id,
+ConCode,
+ConAmount,
+ConSignDate,
+ConStartDate,
+ConYearRate,
+ConStatus,
+ConDelayYearRate,
+LoanCode,
+LoanClass,
+ConType,
+CustClass,
+CustName,
+CustDocType,
+CustIDNo,
+CustScale,
+LoanDate,
+SendDate,
+EndDate,
+ExpireDate,
+YearRate,
+DelayMonRate,
+Amount,
+SolutionWay,
+LoanerType,
+LoanUsage,
+LoanTrade,
+LoanArea,
+RepaymentWay,
+ReturnMode,
+DanbaoMode,
+RateProp,
+WtName,
+WtDocType,
+WtDocNo,
+WtChargerName,
+WtTel,
+WtAddr,
+WtPostal,
+WtBank,
+WtBankAcc,
+StTel,
+WtClass,
+ChargeFees,
+StAddr,
+StPostal,
+Status,
+ReturnDate,
+RBeginDate,
+REndDate,
+DelayFee,
+DelayInterest,
+ReturnInterest,
+ReturnAmt,
+IsDelay,
+IsTCH,
+Flag
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.sendFileImpl.entity.BsnsApplyData">
+		select
+		<include refid="selectId" />
+		from bsns_apply_data
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.sendFileImpl.entity.BsnsApplyData" parameterType="com.mf.sendFileImpl.entity.BsnsApplyData">
+		select
+		<include refid="selectId" />
+		from bsns_apply_data
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query1" resultType="com.mf.sendFileImpl.entity.BsnsApplyData" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_apply_data
+		where flag=1
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.conCode)">
+					AND ConCode like '%${t.conCode}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.conAmount)">
+					AND ConAmount = '${t.conAmount}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.conSignDate)">
+					AND ConSignDate like '%${t.conSignDate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.conStartDate)">
+					AND ConStartDate like '%${t.conStartDate}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.conYearRate)">
+					AND ConYearRate = '${t.conYearRate}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.conStatus)">
+					AND ConStatus = '${t.conStatus}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.conDelayYearRate)">
+					AND ConDelayYearRate = '${t.conDelayYearRate}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.loanCode)">
+					AND LoanCode like '%${t.loanCode}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.loanClass)">
+					AND LoanClass = '${t.loanClass}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.conType)">
+					AND ConType = '${t.conType}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.custClass)">
+					AND CustClass = '${t.custClass}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.custName)">
+					AND CustName like '%${t.custName}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.custDocType)">
+					AND CustDocType = '${t.custDocType}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.custIdno)">
+					AND CustIDNo like '%${t.custIdno}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.custScale)">
+					AND CustScale = '${t.custScale}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.loanDate)">
+					AND LoanDate like '%${t.loanDate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.sendDate)">
+					AND SendDate like '%${t.sendDate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.endDate)">
+					AND EndDate like '%${t.endDate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.expireDate)">
+					AND ExpireDate like '%${t.expireDate}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.yearRate)">
+					AND YearRate = '${t.yearRate}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.delayMonRate)">
+					AND DelayMonRate = '${t.delayMonRate}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.amount)">
+					AND Amount = '${t.amount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.solutionWay)">
+					AND SolutionWay = '${t.solutionWay}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.loanerType)">
+					AND LoanerType = '${t.loanerType}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.loanUsage)">
+					AND LoanUsage = '${t.loanUsage}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.loanTrade)">
+					AND LoanTrade = ${t.loanTrade}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.loanArea)">
+					AND LoanArea = '${t.loanArea}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.repaymentWay)">
+					AND RepaymentWay = '${t.repaymentWay}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.returnMode)">
+					AND ReturnMode = '${t.returnMode}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.danbaoMode)">
+					AND DanbaoMode = '${t.danbaoMode}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rateProp)">
+					AND RateProp = '${t.rateProp}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.wtName)">
+					AND WtName like '%${t.wtName}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.wtDocType)">
+					AND WtDocType like '%${t.wtDocType}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.wtDocNo)">
+					AND WtDocNo like '%${t.wtDocNo}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.wtChargerName)">
+					AND WtChargerName like '%${t.wtChargerName}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.wtTel)">
+					AND WtTel like '%${t.wtTel}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.wtAddr)">
+					AND WtAddr like '%${t.wtAddr}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.wtPostal)">
+					AND WtPostal like '%${t.wtPostal}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.wtBank)">
+					AND WtBank like '%${t.wtBank}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.wtBankAcc)">
+					AND WtBankAcc like '%${t.wtBankAcc}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.stTel)">
+					AND StTel like '%${t.stTel}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.wtClass)">
+					AND WtClass = '${t.wtClass}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.chargeFees)">
+					AND ChargeFees = '${t.chargeFees}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.stAddr)">
+					AND StAddr like '%${t.stAddr}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.stPostal)">
+					AND StPostal like '%${t.stPostal}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.status)">
+					AND Status = '${t.status}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.returnDate)">
+					AND ReturnDate like '%${t.returnDate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rbeginDate)">
+					AND RBeginDate like '%${t.rbeginDate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rendDate)">
+					AND REndDate like '%${t.rendDate}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.delayFee)">
+					AND DelayFee = '${t.delayFee}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.delayInterest)">
+					AND DelayInterest = '${t.delayInterest}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.returnInterest)">
+					AND ReturnInterest = '${t.returnInterest}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.returnAmt)">
+					AND ReturnAmt = '${t.returnAmt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.isDelay)">
+					AND IsDelay = '${t.isDelay}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.isTch)">
+					AND IsTCH = '${t.isTch}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.flag)">
+					AND Flag = '${t.flag}'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(conCode)">
+					AND ConCode like '%${conCode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(conAmount)">
+					AND ConAmount = '${conAmount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(conSignDate)">
+					AND ConSignDate like '%${conSignDate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(conStartDate)">
+					AND ConStartDate like '%${conStartDate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(conYearRate)">
+					AND ConYearRate = '${conYearRate}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(conStatus)">
+					AND ConStatus = '${conStatus}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(conDelayYearRate)">
+					AND ConDelayYearRate = '${conDelayYearRate}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(loanCode)">
+					AND LoanCode like '%${loanCode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(loanClass)">
+					AND LoanClass = '${loanClass}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(conType)">
+					AND ConType = '${conType}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(custClass)">
+					AND CustClass = '${custClass}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(custName)">
+					AND CustName like '%${custName}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(custDocType)">
+					AND CustDocType = '${custDocType}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(custIdno)">
+					AND CustIDNo like '%${custIdno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(custScale)">
+					AND CustScale = '${custScale}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(loanDate)">
+					AND LoanDate like '%${loanDate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(sendDate)">
+					AND SendDate like '%${sendDate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(endDate)">
+					AND EndDate like '%${endDate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(expireDate)">
+					AND ExpireDate like '%${expireDate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(yearRate)">
+					AND YearRate = '${yearRate}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(delayMonRate)">
+					AND DelayMonRate = '${delayMonRate}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(amount)">
+					AND Amount = '${amount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(solutionWay)">
+					AND SolutionWay = '${solutionWay}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(loanerType)">
+					AND LoanerType = '${loanerType}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(loanUsage)">
+					AND LoanUsage = '${loanUsage}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(loanTrade)">
+					AND LoanTrade = ${loanTrade}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(loanArea)">
+					AND LoanArea = '${loanArea}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(repaymentWay)">
+					AND RepaymentWay = '${repaymentWay}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(returnMode)">
+					AND ReturnMode = '${returnMode}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(danbaoMode)">
+					AND DanbaoMode = '${danbaoMode}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rateProp)">
+					AND RateProp = '${rateProp}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(wtName)">
+					AND WtName like '%${wtName}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(wtDocType)">
+					AND WtDocType like '%${wtDocType}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(wtDocNo)">
+					AND WtDocNo like '%${wtDocNo}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(wtChargerName)">
+					AND WtChargerName like '%${wtChargerName}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(wtTel)">
+					AND WtTel like '%${wtTel}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(wtAddr)">
+					AND WtAddr like '%${wtAddr}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(wtPostal)">
+					AND WtPostal like '%${wtPostal}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(wtBank)">
+					AND WtBank like '%${wtBank}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(wtBankAcc)">
+					AND WtBankAcc like '%${wtBankAcc}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(stTel)">
+					AND StTel like '%${stTel}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(wtClass)">
+					AND WtClass = '${wtClass}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(chargeFees)">
+					AND ChargeFees = '${chargeFees}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(stAddr)">
+					AND StAddr like '%${stAddr}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(stPostal)">
+					AND StPostal like '%${stPostal}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(status)">
+					AND Status = '${status}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(returnDate)">
+					AND ReturnDate like '%${returnDate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rbeginDate)">
+					AND RBeginDate like '%${rbeginDate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rendDate)">
+					AND REndDate like '%${rendDate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(delayFee)">
+					AND DelayFee = '${delayFee}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(delayInterest)">
+					AND DelayInterest = '${delayInterest}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(returnInterest)">
+					AND ReturnInterest = '${returnInterest}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(returnAmt)">
+					AND ReturnAmt = '${returnAmt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(isDelay)">
+					AND IsDelay = '${isDelay}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(isTch)">
+					AND IsTCH = '${isTch}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(flag)">
+					AND Flag = '${flag}'
+			   </if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.sendFileImpl.entity.BsnsApplyData" resultType="int">
+		select count(0) from bsns_apply_data
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.sendFileImpl.entity.BsnsApplyData">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO bsns_apply_data (
+        	ConCode ,
+        	ConAmount ,
+        	ConSignDate ,
+        	ConStartDate ,
+        	ConYearRate ,
+        	ConStatus ,
+        	ConDelayYearRate ,
+        	LoanCode ,
+        	LoanClass ,
+        	ConType ,
+        	CustClass ,
+        	CustName ,
+        	CustDocType ,
+        	CustIDNo ,
+        	CustScale ,
+        	LoanDate ,
+        	SendDate ,
+        	EndDate ,
+        	ExpireDate ,
+        	YearRate ,
+        	DelayMonRate ,
+        	Amount ,
+        	SolutionWay ,
+        	LoanerType ,
+        	LoanUsage ,
+        	LoanTrade ,
+        	LoanArea ,
+        	RepaymentWay ,
+        	ReturnMode ,
+        	DanbaoMode ,
+        	RateProp ,
+        	WtName ,
+        	WtDocType ,
+        	WtDocNo ,
+        	WtChargerName ,
+        	WtTel ,
+        	WtAddr ,
+        	WtPostal ,
+        	WtBank ,
+        	WtBankAcc ,
+        	StTel ,
+        	WtClass ,
+        	ChargeFees ,
+        	StAddr ,
+        	StPostal ,
+        	Status ,
+        	ReturnDate ,
+        	RBeginDate ,
+        	REndDate ,
+        	DelayFee ,
+        	DelayInterest ,
+        	ReturnInterest ,
+        	ReturnAmt ,
+        	IsDelay ,
+        	IsTCH ,
+        	Flag 
+        ) VALUES (
+        	#{conCode} ,
+        	#{conAmount} ,
+        	#{conSignDate} ,
+        	#{conStartDate} ,
+        	#{conYearRate} ,
+        	#{conStatus} ,
+        	#{conDelayYearRate} ,
+        	#{loanCode} ,
+        	#{loanClass} ,
+        	#{conType} ,
+        	#{custClass} ,
+        	#{custName} ,
+        	#{custDocType} ,
+        	#{custIdno} ,
+        	#{custScale} ,
+        	#{loanDate} ,
+        	#{sendDate} ,
+        	#{endDate} ,
+        	#{expireDate} ,
+        	#{yearRate} ,
+        	#{delayMonRate} ,
+        	#{amount} ,
+        	#{solutionWay} ,
+        	#{loanerType} ,
+        	#{loanUsage} ,
+        	#{loanTrade} ,
+        	#{loanArea} ,
+        	#{repaymentWay} ,
+        	#{returnMode} ,
+        	#{danbaoMode} ,
+        	#{rateProp} ,
+        	#{wtName} ,
+        	#{wtDocType} ,
+        	#{wtDocNo} ,
+        	#{wtChargerName} ,
+        	#{wtTel} ,
+        	#{wtAddr} ,
+        	#{wtPostal} ,
+        	#{wtBank} ,
+        	#{wtBankAcc} ,
+        	#{stTel} ,
+        	#{wtClass} ,
+        	#{chargeFees} ,
+        	#{stAddr} ,
+        	#{stPostal} ,
+        	#{status} ,
+        	#{returnDate} ,
+        	#{rbeginDate} ,
+        	#{rendDate} ,
+        	#{delayFee} ,
+        	#{delayInterest} ,
+        	#{returnInterest} ,
+        	#{returnAmt} ,
+        	#{isDelay} ,
+        	#{isTch} ,
+        	#{flag} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.sendFileImpl.entity.BsnsApplyData">
+		INSERT INTO bsns_apply_data 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(conCode)">
+				ConCode,
+			</if>
+			<if test="@Ognl@isNotEmpty(conAmount)">
+				ConAmount,
+			</if>
+			<if test="@Ognl@isNotEmpty(conSignDate)">
+				ConSignDate,
+			</if>
+			<if test="@Ognl@isNotEmpty(conStartDate)">
+				ConStartDate,
+			</if>
+			<if test="@Ognl@isNotEmpty(conYearRate)">
+				ConYearRate,
+			</if>
+			<if test="@Ognl@isNotEmpty(conStatus)">
+				ConStatus,
+			</if>
+			<if test="@Ognl@isNotEmpty(conDelayYearRate)">
+				ConDelayYearRate,
+			</if>
+			<if test="@Ognl@isNotEmpty(loanCode)">
+				LoanCode,
+			</if>
+			<if test="@Ognl@isNotEmpty(loanClass)">
+				LoanClass,
+			</if>
+			<if test="@Ognl@isNotEmpty(conType)">
+				ConType,
+			</if>
+			<if test="@Ognl@isNotEmpty(custClass)">
+				CustClass,
+			</if>
+			<if test="@Ognl@isNotEmpty(custName)">
+				CustName,
+			</if>
+			<if test="@Ognl@isNotEmpty(custDocType)">
+				CustDocType,
+			</if>
+			<if test="@Ognl@isNotEmpty(custIdno)">
+				CustIDNo,
+			</if>
+			<if test="@Ognl@isNotEmpty(custScale)">
+				CustScale,
+			</if>
+			<if test="@Ognl@isNotEmpty(loanDate)">
+				LoanDate,
+			</if>
+			<if test="@Ognl@isNotEmpty(sendDate)">
+				SendDate,
+			</if>
+			<if test="@Ognl@isNotEmpty(endDate)">
+				EndDate,
+			</if>
+			<if test="@Ognl@isNotEmpty(expireDate)">
+				ExpireDate,
+			</if>
+			<if test="@Ognl@isNotEmpty(yearRate)">
+				YearRate,
+			</if>
+			<if test="@Ognl@isNotEmpty(delayMonRate)">
+				DelayMonRate,
+			</if>
+			<if test="@Ognl@isNotEmpty(amount)">
+				Amount,
+			</if>
+			<if test="@Ognl@isNotEmpty(solutionWay)">
+				SolutionWay,
+			</if>
+			<if test="@Ognl@isNotEmpty(loanerType)">
+				LoanerType,
+			</if>
+			<if test="@Ognl@isNotEmpty(loanUsage)">
+				LoanUsage,
+			</if>
+			<if test="@Ognl@isNotEmpty(loanTrade)">
+				LoanTrade,
+			</if>
+			<if test="@Ognl@isNotEmpty(loanArea)">
+				LoanArea,
+			</if>
+			<if test="@Ognl@isNotEmpty(repaymentWay)">
+				RepaymentWay,
+			</if>
+			<if test="@Ognl@isNotEmpty(returnMode)">
+				ReturnMode,
+			</if>
+			<if test="@Ognl@isNotEmpty(danbaoMode)">
+				DanbaoMode,
+			</if>
+			<if test="@Ognl@isNotEmpty(rateProp)">
+				RateProp,
+			</if>
+			<if test="@Ognl@isNotEmpty(wtName)">
+				WtName,
+			</if>
+			<if test="@Ognl@isNotEmpty(wtDocType)">
+				WtDocType,
+			</if>
+			<if test="@Ognl@isNotEmpty(wtDocNo)">
+				WtDocNo,
+			</if>
+			<if test="@Ognl@isNotEmpty(wtChargerName)">
+				WtChargerName,
+			</if>
+			<if test="@Ognl@isNotEmpty(wtTel)">
+				WtTel,
+			</if>
+			<if test="@Ognl@isNotEmpty(wtAddr)">
+				WtAddr,
+			</if>
+			<if test="@Ognl@isNotEmpty(wtPostal)">
+				WtPostal,
+			</if>
+			<if test="@Ognl@isNotEmpty(wtBank)">
+				WtBank,
+			</if>
+			<if test="@Ognl@isNotEmpty(wtBankAcc)">
+				WtBankAcc,
+			</if>
+			<if test="@Ognl@isNotEmpty(stTel)">
+				StTel,
+			</if>
+			<if test="@Ognl@isNotEmpty(wtClass)">
+				WtClass,
+			</if>
+			<if test="@Ognl@isNotEmpty(chargeFees)">
+				ChargeFees,
+			</if>
+			<if test="@Ognl@isNotEmpty(stAddr)">
+				StAddr,
+			</if>
+			<if test="@Ognl@isNotEmpty(stPostal)">
+				StPostal,
+			</if>
+			<if test="@Ognl@isNotEmpty(status)">
+				Status,
+			</if>
+			<if test="@Ognl@isNotEmpty(returnDate)">
+				ReturnDate,
+			</if>
+			<if test="@Ognl@isNotEmpty(rbeginDate)">
+				RBeginDate,
+			</if>
+			<if test="@Ognl@isNotEmpty(rendDate)">
+				REndDate,
+			</if>
+			<if test="@Ognl@isNotEmpty(delayFee)">
+				DelayFee,
+			</if>
+			<if test="@Ognl@isNotEmpty(delayInterest)">
+				DelayInterest,
+			</if>
+			<if test="@Ognl@isNotEmpty(returnInterest)">
+				ReturnInterest,
+			</if>
+			<if test="@Ognl@isNotEmpty(returnAmt)">
+				ReturnAmt,
+			</if>
+			<if test="@Ognl@isNotEmpty(isDelay)">
+				IsDelay,
+			</if>
+			<if test="@Ognl@isNotEmpty(isTch)">
+				IsTCH,
+			</if>
+			<if test="@Ognl@isNotEmpty(flag)">
+				Flag,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(conCode)">
+				#{conCode},
+			</if>
+			<if test="@Ognl@isNotEmpty(conAmount)">
+				#{conAmount},
+			</if>
+			<if test="@Ognl@isNotEmpty(conSignDate)">
+				#{conSignDate},
+			</if>
+			<if test="@Ognl@isNotEmpty(conStartDate)">
+				#{conStartDate},
+			</if>
+			<if test="@Ognl@isNotEmpty(conYearRate)">
+				#{conYearRate},
+			</if>
+			<if test="@Ognl@isNotEmpty(conStatus)">
+				#{conStatus},
+			</if>
+			<if test="@Ognl@isNotEmpty(conDelayYearRate)">
+				#{conDelayYearRate},
+			</if>
+			<if test="@Ognl@isNotEmpty(loanCode)">
+				#{loanCode},
+			</if>
+			<if test="@Ognl@isNotEmpty(loanClass)">
+				#{loanClass},
+			</if>
+			<if test="@Ognl@isNotEmpty(conType)">
+				#{conType},
+			</if>
+			<if test="@Ognl@isNotEmpty(custClass)">
+				#{custClass},
+			</if>
+			<if test="@Ognl@isNotEmpty(custName)">
+				#{custName},
+			</if>
+			<if test="@Ognl@isNotEmpty(custDocType)">
+				#{custDocType},
+			</if>
+			<if test="@Ognl@isNotEmpty(custIdno)">
+				#{custIdno},
+			</if>
+			<if test="@Ognl@isNotEmpty(custScale)">
+				#{custScale},
+			</if>
+			<if test="@Ognl@isNotEmpty(loanDate)">
+				#{loanDate},
+			</if>
+			<if test="@Ognl@isNotEmpty(sendDate)">
+				#{sendDate},
+			</if>
+			<if test="@Ognl@isNotEmpty(endDate)">
+				#{endDate},
+			</if>
+			<if test="@Ognl@isNotEmpty(expireDate)">
+				#{expireDate},
+			</if>
+			<if test="@Ognl@isNotEmpty(yearRate)">
+				#{yearRate},
+			</if>
+			<if test="@Ognl@isNotEmpty(delayMonRate)">
+				#{delayMonRate},
+			</if>
+			<if test="@Ognl@isNotEmpty(amount)">
+				#{amount},
+			</if>
+			<if test="@Ognl@isNotEmpty(solutionWay)">
+				#{solutionWay},
+			</if>
+			<if test="@Ognl@isNotEmpty(loanerType)">
+				#{loanerType},
+			</if>
+			<if test="@Ognl@isNotEmpty(loanUsage)">
+				#{loanUsage},
+			</if>
+			<if test="@Ognl@isNotEmpty(loanTrade)">
+				#{loanTrade},
+			</if>
+			<if test="@Ognl@isNotEmpty(loanArea)">
+				#{loanArea},
+			</if>
+			<if test="@Ognl@isNotEmpty(repaymentWay)">
+				#{repaymentWay},
+			</if>
+			<if test="@Ognl@isNotEmpty(returnMode)">
+				#{returnMode},
+			</if>
+			<if test="@Ognl@isNotEmpty(danbaoMode)">
+				#{danbaoMode},
+			</if>
+			<if test="@Ognl@isNotEmpty(rateProp)">
+				#{rateProp},
+			</if>
+			<if test="@Ognl@isNotEmpty(wtName)">
+				#{wtName},
+			</if>
+			<if test="@Ognl@isNotEmpty(wtDocType)">
+				#{wtDocType},
+			</if>
+			<if test="@Ognl@isNotEmpty(wtDocNo)">
+				#{wtDocNo},
+			</if>
+			<if test="@Ognl@isNotEmpty(wtChargerName)">
+				#{wtChargerName},
+			</if>
+			<if test="@Ognl@isNotEmpty(wtTel)">
+				#{wtTel},
+			</if>
+			<if test="@Ognl@isNotEmpty(wtAddr)">
+				#{wtAddr},
+			</if>
+			<if test="@Ognl@isNotEmpty(wtPostal)">
+				#{wtPostal},
+			</if>
+			<if test="@Ognl@isNotEmpty(wtBank)">
+				#{wtBank},
+			</if>
+			<if test="@Ognl@isNotEmpty(wtBankAcc)">
+				#{wtBankAcc},
+			</if>
+			<if test="@Ognl@isNotEmpty(stTel)">
+				#{stTel},
+			</if>
+			<if test="@Ognl@isNotEmpty(wtClass)">
+				#{wtClass},
+			</if>
+			<if test="@Ognl@isNotEmpty(chargeFees)">
+				#{chargeFees},
+			</if>
+			<if test="@Ognl@isNotEmpty(stAddr)">
+				#{stAddr},
+			</if>
+			<if test="@Ognl@isNotEmpty(stPostal)">
+				#{stPostal},
+			</if>
+			<if test="@Ognl@isNotEmpty(status)">
+				#{status},
+			</if>
+			<if test="@Ognl@isNotEmpty(returnDate)">
+				#{returnDate},
+			</if>
+			<if test="@Ognl@isNotEmpty(rbeginDate)">
+				#{rbeginDate},
+			</if>
+			<if test="@Ognl@isNotEmpty(rendDate)">
+				#{rendDate},
+			</if>
+			<if test="@Ognl@isNotEmpty(delayFee)">
+				#{delayFee},
+			</if>
+			<if test="@Ognl@isNotEmpty(delayInterest)">
+				#{delayInterest},
+			</if>
+			<if test="@Ognl@isNotEmpty(returnInterest)">
+				#{returnInterest},
+			</if>
+			<if test="@Ognl@isNotEmpty(returnAmt)">
+				#{returnAmt},
+			</if>
+			<if test="@Ognl@isNotEmpty(isDelay)">
+				#{isDelay},
+			</if>
+			<if test="@Ognl@isNotEmpty(isTch)">
+				#{isTch},
+			</if>
+			<if test="@Ognl@isNotEmpty(flag)">
+				#{flag},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM bsns_apply_data WHERE
+        id = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.sendFileImpl.entity.BsnsApplyData">
+		SELECT <include refid="selectId" />
+		    FROM bsns_apply_data 
+	        WHERE 
+        id = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.sendFileImpl.entity.BsnsApplyData">
+	    UPDATE bsns_apply_data SET
+	        ConCode = #{conCode} ,
+	        ConAmount = #{conAmount} ,
+	        ConSignDate = #{conSignDate} ,
+	        ConStartDate = #{conStartDate} ,
+	        ConYearRate = #{conYearRate} ,
+	        ConStatus = #{conStatus} ,
+	        ConDelayYearRate = #{conDelayYearRate} ,
+	        LoanCode = #{loanCode} ,
+	        LoanClass = #{loanClass} ,
+	        ConType = #{conType} ,
+	        CustClass = #{custClass} ,
+	        CustName = #{custName} ,
+	        CustDocType = #{custDocType} ,
+	        CustIDNo = #{custIdno} ,
+	        CustScale = #{custScale} ,
+	        LoanDate = #{loanDate} ,
+	        SendDate = #{sendDate} ,
+	        EndDate = #{endDate} ,
+	        ExpireDate = #{expireDate} ,
+	        YearRate = #{yearRate} ,
+	        DelayMonRate = #{delayMonRate} ,
+	        Amount = #{amount} ,
+	        SolutionWay = #{solutionWay} ,
+	        LoanerType = #{loanerType} ,
+	        LoanUsage = #{loanUsage} ,
+	        LoanTrade = #{loanTrade} ,
+	        LoanArea = #{loanArea} ,
+	        RepaymentWay = #{repaymentWay} ,
+	        ReturnMode = #{returnMode} ,
+	        DanbaoMode = #{danbaoMode} ,
+	        RateProp = #{rateProp} ,
+	        WtName = #{wtName} ,
+	        WtDocType = #{wtDocType} ,
+	        WtDocNo = #{wtDocNo} ,
+	        WtChargerName = #{wtChargerName} ,
+	        WtTel = #{wtTel} ,
+	        WtAddr = #{wtAddr} ,
+	        WtPostal = #{wtPostal} ,
+	        WtBank = #{wtBank} ,
+	        WtBankAcc = #{wtBankAcc} ,
+	        StTel = #{stTel} ,
+	        WtClass = #{wtClass} ,
+	        ChargeFees = #{chargeFees} ,
+	        StAddr = #{stAddr} ,
+	        StPostal = #{stPostal} ,
+	        Status = #{status} ,
+	        ReturnDate = #{returnDate} ,
+	        RBeginDate = #{rbeginDate} ,
+	        REndDate = #{rendDate} ,
+	        DelayFee = #{delayFee} ,
+	        DelayInterest = #{delayInterest} ,
+	        ReturnInterest = #{returnInterest} ,
+	        ReturnAmt = #{returnAmt} ,
+	        IsDelay = #{isDelay} ,
+	        IsTCH = #{isTch} ,
+	        Flag = #{flag} 
+        WHERE 
+	        id = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(conCode)">
+			ConCode = #{conCode},
+		</if>
+		<if test="@Ognl@isNotEmpty(conAmount)">
+			ConAmount = #{conAmount},
+		</if>
+		<if test="@Ognl@isNotEmpty(conSignDate)">
+			ConSignDate = #{conSignDate},
+		</if>
+		<if test="@Ognl@isNotEmpty(conStartDate)">
+			ConStartDate = #{conStartDate},
+		</if>
+		<if test="@Ognl@isNotEmpty(conYearRate)">
+			ConYearRate = #{conYearRate},
+		</if>
+		<if test="@Ognl@isNotEmpty(conStatus)">
+			ConStatus = #{conStatus},
+		</if>
+		<if test="@Ognl@isNotEmpty(conDelayYearRate)">
+			ConDelayYearRate = #{conDelayYearRate},
+		</if>
+		<if test="@Ognl@isNotEmpty(loanCode)">
+			LoanCode = #{loanCode},
+		</if>
+		<if test="@Ognl@isNotEmpty(loanClass)">
+			LoanClass = #{loanClass},
+		</if>
+		<if test="@Ognl@isNotEmpty(conType)">
+			ConType = #{conType},
+		</if>
+		<if test="@Ognl@isNotEmpty(custClass)">
+			CustClass = #{custClass},
+		</if>
+		<if test="@Ognl@isNotEmpty(custName)">
+			CustName = #{custName},
+		</if>
+		<if test="@Ognl@isNotEmpty(custDocType)">
+			CustDocType = #{custDocType},
+		</if>
+		<if test="@Ognl@isNotEmpty(custIdno)">
+			CustIDNo = #{custIdno},
+		</if>
+		<if test="@Ognl@isNotEmpty(custScale)">
+			CustScale = #{custScale},
+		</if>
+		<if test="@Ognl@isNotEmpty(loanDate)">
+			LoanDate = #{loanDate},
+		</if>
+		<if test="@Ognl@isNotEmpty(sendDate)">
+			SendDate = #{sendDate},
+		</if>
+		<if test="@Ognl@isNotEmpty(endDate)">
+			EndDate = #{endDate},
+		</if>
+		<if test="@Ognl@isNotEmpty(expireDate)">
+			ExpireDate = #{expireDate},
+		</if>
+		<if test="@Ognl@isNotEmpty(yearRate)">
+			YearRate = #{yearRate},
+		</if>
+		<if test="@Ognl@isNotEmpty(delayMonRate)">
+			DelayMonRate = #{delayMonRate},
+		</if>
+		<if test="@Ognl@isNotEmpty(amount)">
+			Amount = #{amount},
+		</if>
+		<if test="@Ognl@isNotEmpty(solutionWay)">
+			SolutionWay = #{solutionWay},
+		</if>
+		<if test="@Ognl@isNotEmpty(loanerType)">
+			LoanerType = #{loanerType},
+		</if>
+		<if test="@Ognl@isNotEmpty(loanUsage)">
+			LoanUsage = #{loanUsage},
+		</if>
+		<if test="@Ognl@isNotEmpty(loanTrade)">
+			LoanTrade = #{loanTrade},
+		</if>
+		<if test="@Ognl@isNotEmpty(loanArea)">
+			LoanArea = #{loanArea},
+		</if>
+		<if test="@Ognl@isNotEmpty(repaymentWay)">
+			RepaymentWay = #{repaymentWay},
+		</if>
+		<if test="@Ognl@isNotEmpty(returnMode)">
+			ReturnMode = #{returnMode},
+		</if>
+		<if test="@Ognl@isNotEmpty(danbaoMode)">
+			DanbaoMode = #{danbaoMode},
+		</if>
+		<if test="@Ognl@isNotEmpty(rateProp)">
+			RateProp = #{rateProp},
+		</if>
+		<if test="@Ognl@isNotEmpty(wtName)">
+			WtName = #{wtName},
+		</if>
+		<if test="@Ognl@isNotEmpty(wtDocType)">
+			WtDocType = #{wtDocType},
+		</if>
+		<if test="@Ognl@isNotEmpty(wtDocNo)">
+			WtDocNo = #{wtDocNo},
+		</if>
+		<if test="@Ognl@isNotEmpty(wtChargerName)">
+			WtChargerName = #{wtChargerName},
+		</if>
+		<if test="@Ognl@isNotEmpty(wtTel)">
+			WtTel = #{wtTel},
+		</if>
+		<if test="@Ognl@isNotEmpty(wtAddr)">
+			WtAddr = #{wtAddr},
+		</if>
+		<if test="@Ognl@isNotEmpty(wtPostal)">
+			WtPostal = #{wtPostal},
+		</if>
+		<if test="@Ognl@isNotEmpty(wtBank)">
+			WtBank = #{wtBank},
+		</if>
+		<if test="@Ognl@isNotEmpty(wtBankAcc)">
+			WtBankAcc = #{wtBankAcc},
+		</if>
+		<if test="@Ognl@isNotEmpty(stTel)">
+			StTel = #{stTel},
+		</if>
+		<if test="@Ognl@isNotEmpty(wtClass)">
+			WtClass = #{wtClass},
+		</if>
+		<if test="@Ognl@isNotEmpty(chargeFees)">
+			ChargeFees = #{chargeFees},
+		</if>
+		<if test="@Ognl@isNotEmpty(stAddr)">
+			StAddr = #{stAddr},
+		</if>
+		<if test="@Ognl@isNotEmpty(stPostal)">
+			StPostal = #{stPostal},
+		</if>
+		<if test="@Ognl@isNotEmpty(status)">
+			Status = #{status},
+		</if>
+		<if test="@Ognl@isNotEmpty(returnDate)">
+			ReturnDate = #{returnDate},
+		</if>
+		<if test="@Ognl@isNotEmpty(rbeginDate)">
+			RBeginDate = #{rbeginDate},
+		</if>
+		<if test="@Ognl@isNotEmpty(rendDate)">
+			REndDate = #{rendDate},
+		</if>
+		<if test="@Ognl@isNotEmpty(delayFee)">
+			DelayFee = #{delayFee},
+		</if>
+		<if test="@Ognl@isNotEmpty(delayInterest)">
+			DelayInterest = #{delayInterest},
+		</if>
+		<if test="@Ognl@isNotEmpty(returnInterest)">
+			ReturnInterest = #{returnInterest},
+		</if>
+		<if test="@Ognl@isNotEmpty(returnAmt)">
+			ReturnAmt = #{returnAmt},
+		</if>
+		<if test="@Ognl@isNotEmpty(isDelay)">
+			IsDelay = #{isDelay},
+		</if>
+		<if test="@Ognl@isNotEmpty(isTch)">
+			IsTCH = #{isTch},
+		</if>
+		<if test="@Ognl@isNotEmpty(flag)">
+			Flag = #{flag},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.sendFileImpl.entity.BsnsApplyData">
+	    UPDATE bsns_apply_data 
+		<include refid="updateset"/>
+        WHERE 
+	        id = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

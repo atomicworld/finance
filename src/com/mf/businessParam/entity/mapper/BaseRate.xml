@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.mf.businessParam.dao.BaseRateDao">
+
+	<sql id="selectItems">
+		CURRNCY,
+		RTNO,
+		SDATE,
+		EDATE,
+		MINMNTH,
+		MAXMNTH,
+		RTYP,
+		BASERT,
+		ISUSED,
+		MINEXE,
+		MAXEXE,
+		UPDTDATE,
+		REMARK,
+		MAXDAY,
+		MINDAY
+  	</sql>
+    
+	<select id="query" resultType="BaseRate">
+		select
+		<include refid="selectItems" />
+		from BASERATE
+	</select>
+	
+	<select id="getType" resultType="BaseRate">
+		select
+		<include refid="selectItems" />
+		from BASERATE where (minmnth+0) &lt;=(#{month}+0) and (#{month}+0)&lt;(maxmnth+0)
+	</select>
+	<select id="queryAll" resultType="BaseRate">
+		select
+		<include refid="selectItems" />
+		from BASERATE
+	</select>
+	
+	<!-- 总记录数 -->
+	<select id="count" parameterType="BaseRate" resultType="int">
+		select count(0) from BASERATE
+	</select>
+	
+	
+	<select id="getById" parameterType="String" resultType="BaseRate">
+	    select
+		<include refid="selectItems" />
+		from BASERATE
+		where  RTNO=#{RTNO}
+	</select>
+	
+	
+   <!-- 查询基准利率 -->		
+	<select id="getRateByRtno" parameterType="String" resultType="BaseRate">
+	    select
+		<include refid="selectItems" />
+		from BASERATE
+		where  RTNO=#{RTNO}
+	</select>
+	
+	<update id="modify" parameterType="BaseRate">
+		update BASERATE 
+		<set>
+		currncy=#{currncy},
+		minmnth=#{minmnth},
+		maxmnth=#{maxmnth},
+		rtyp=#{rtyp},
+		basert=#{basert},
+		isused=#{isused},
+		minexe=#{minexe},
+		maxexe=#{maxexe},
+		remark=#{remark},
+		maxday=#{maxday},
+		minday=#{minday},
+		UPDTDATE=date_format(sysdate(),'%Y-%m-%d')
+		</set>
+		WHERE rtno=#{rtno}
+	</update>
+</mapper>
+

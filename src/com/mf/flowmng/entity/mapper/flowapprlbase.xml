@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.flowmng.dao.FlowApprlBaseDao">
+
+	<resultMap id="FlowApprlBase" type="com.mf.flowmng.entity.FlowApprlBase">
+        <result property="flowno" column="FLOWNO"/>
+        <result property="apprltyp" column="APPRLTYP"/>
+        <result property="flownm" column="FLOWNM"/>
+        <result property="bsnsprdtno" column="BSNSPRDTNO"/>
+        <result property="bsnsminmnth" column="BSNSMINMNTH"/>
+        <result property="bsnsmaxmnth" column="BSNSMAXMNTH"/>
+        <result property="assrtyp" column="ASSRTYP"/>
+        <result property="minamnt" column="MINAMNT"/>
+        <result property="maxamnt" column="MAXAMNT"/>
+        <result property="cstmrtyp" column="CSTMRTYP"/>
+        <result property="mngdptno" column="MNGDPTNO"/>
+        <result property="crtdate" column="CRTDATE"/>
+        <result property="updtdate" column="UPDTDATE"/>
+        <result property="flowsteps" column="FLOWSTEPS"/>
+        <result property="bsnstyp" column="BSNSTYP"/>
+        <result property="bsnsminday" column="BSNSMINDAY"/>
+        <result property="bsnsmaxday" column="BSNSMAXDAY"/>
+        <result property="flowdsgninf" column="FLOWDSGNINF"/> 
+        <result property="num" column="num"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		FLOWNO,
+        APPRLTYP,
+        FLOWNM,
+        BSNSPRDTNO,
+        BSNSMINMNTH,
+        BSNSMAXMNTH,
+        ASSRTYP,
+        MINAMNT,
+        MAXAMNT,
+        CSTMRTYP,  
+        MNGDPTNO,
+        CRTDATE,
+        UPDTDATE,
+        FLOWSTEPS,
+        BSNSTYP,
+        BSNSMINDAY,
+        BSNSMAXDAY,
+        FLOWDSGNINF
+    </sql>
+    
+    <sql id="selectIdQuery">
+		f.FLOWNO,
+        f.APPRLTYP,
+        f.FLOWNM,
+        f.BSNSPRDTNO,
+        f.BSNSMINMNTH,
+        f.BSNSMAXMNTH,
+        f.ASSRTYP,
+        f.MINAMNT,
+        f.MAXAMNT,
+        f.CSTMRTYP,  
+        f.MNGDPTNO,
+        f.CRTDATE,
+        f.UPDTDATE,
+        f.FLOWSTEPS,
+        f.BSNSTYP,
+        f.BSNSMINDAY,
+        f.BSNSMAXDAY,
+        f.FLOWDSGNINF
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.flowmng.entity.FlowApprlBase">
+		select
+		<include refid="selectId" />
+		from flow_apprl_base
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.flowmng.entity.FlowApprlBase" parameterType="com.mf.flowmng.entity.FlowApprlBase">
+		select
+		<include refid="selectId" />
+		from flow_apprl_base
+		   
+	</select>
+
+	<select id="query" resultType="com.mf.flowmng.entity.FlowApprlBase" parameterType="java.util.HashMap">
+		select
+		<include refid="selectIdQuery" />,b.num
+		from flow_apprl_base f
+		LEFT JOIN
+		(
+		select count(a.APPRVPRCSSNO) num,a.APPRVPRCSSNO  from bsns_applydtl a
+		group by a.APPRVPRCSSNO
+		) b
+		on f.FLOWNO = b.APPRVPRCSSNO
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.apprltyp)">
+					AND f.APPRLTYP like '%${t.apprltyp}%'
+			   </if>
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(apprltyp)">
+					AND APPRLTYP like '%${apprltyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(flownm)">
+					AND FLOWNM like '%${flownm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bsnsprdtno)">
+					AND BSNSPRDTNO like '%${bsnsprdtno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bsnsminmnth)">
+					AND BSNSMINMNTH like '%${bsnsminmnth}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bsnsmaxmnth)">
+					AND BSNSMAXMNTH like '%${bsnsmaxmnth}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(assrtyp)">
+					AND ASSRTYP like '%${assrtyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(minamnt)">
+					AND MINAMNT = '${minamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(maxamnt)">
+					AND MAXAMNT = '${maxamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(cstmrtyp)">
+					AND CSTMRTYP like '%${cstmrtyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(mngdptno)">
+					AND MNGDPTNO like '%${mngdptno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(crtdate)">
+					AND CRTDATE like '%${crtdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(updtdate)">
+					AND UPDTDATE like '%${updtdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(flowsteps)">
+					AND FLOWSTEPS like '%${flowsteps}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bsnstyp)">
+					AND BSNSTYP like '%${bsnstyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bsnsminday)">
+					AND BSNSMINDAY like '%${bsnsminday}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bsnsmaxday)">
+					AND BSNSMAXDAY like '%${bsnsmaxday}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.flowmng.entity.FlowApprlBase" resultType="int">
+		select count(0) from flow_apprl_base
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.flowmng.entity.FlowApprlBase">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO flow_apprl_base (
+        	APPRLTYP ,
+        	FLOWNM ,
+        	BSNSPRDTNO ,
+        	BSNSMINMNTH ,
+        	BSNSMAXMNTH ,
+        	ASSRTYP ,
+        	MINAMNT ,
+        	MAXAMNT ,
+        	CSTMRTYP ,
+        	MNGDPTNO ,
+        	CRTDATE ,
+        	UPDTDATE ,
+        	FLOWSTEPS ,
+        	BSNSTYP ,
+        	BSNSMINDAY ,
+        	BSNSMAXDAY,
+        	FLOWDSGNINF
+        ) VALUES (
+        	#{apprltyp} ,
+        	#{flownm} ,
+        	#{bsnsprdtno} ,
+        	#{bsnsminmnth} ,
+        	#{bsnsmaxmnth} ,
+        	#{assrtyp} ,
+        	#{minamnt} ,
+        	#{maxamnt} ,
+        	#{cstmrtyp} ,
+        	#{mngdptno} ,
+        	#{crtdate} ,
+        	#{updtdate} ,
+        	#{flowsteps} ,
+        	#{bsnstyp} ,
+        	#{bsnsminday} ,
+        	#{bsnsmaxday} ,
+        	#{flowdsgninf}
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.flowmng.entity.FlowApprlBase">
+		INSERT INTO flow_apprl_base 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+	       <if test="@Ognl@isNotEmpty(flowno)">
+				FLOWNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(apprltyp)">
+				APPRLTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(flownm)">
+				FLOWNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsprdtno)">
+				BSNSPRDTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsminmnth)">
+				BSNSMINMNTH,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsmaxmnth)">
+				BSNSMAXMNTH,
+			</if>
+			<if test="@Ognl@isNotEmpty(assrtyp)">
+				ASSRTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(minamnt)">
+				MINAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(maxamnt)">
+				MAXAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(cstmrtyp)">
+				CSTMRTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(mngdptno)">
+				MNGDPTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(crtdate)">
+				CRTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				UPDTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(flowsteps)">
+				FLOWSTEPS,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnstyp)">
+				BSNSTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsminday)">
+				BSNSMINDAY,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsmaxday)">
+				BSNSMAXDAY,
+			</if>
+		    <if test="@Ognl@isNotEmpty(flowdsgninf)">
+			    FLOWDSGNINF,
+		    </if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+            <if test="@Ognl@isNotEmpty(flowno)">
+				#{flowno},
+			</if>
+			<if test="@Ognl@isNotEmpty(apprltyp)">
+				#{apprltyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(flownm)">
+				#{flownm},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsprdtno)">
+				#{bsnsprdtno},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsminmnth)">
+				#{bsnsminmnth},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsmaxmnth)">
+				#{bsnsmaxmnth},
+			</if>
+			<if test="@Ognl@isNotEmpty(assrtyp)">
+				#{assrtyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(minamnt)">
+				#{minamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(maxamnt)">
+				#{maxamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(cstmrtyp)">
+				#{cstmrtyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(mngdptno)">
+				#{mngdptno},
+			</if>
+			<if test="@Ognl@isNotEmpty(crtdate)">
+				#{crtdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				#{updtdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(flowsteps)">
+				#{flowsteps},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnstyp)">
+				#{bsnstyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsminday)">
+				#{bsnsminday},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsmaxday)">
+				#{bsnsmaxday},
+			</if>
+            <if test="@Ognl@isNotEmpty(flowdsgninf)">
+				#{flowdsgninf},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM flow_apprl_base WHERE
+        FLOWNO = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.flowmng.entity.FlowApprlBase">
+		SELECT <include refid="selectId" />
+		    FROM flow_apprl_base 
+	        WHERE 
+        FLOWNO = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.flowmng.entity.FlowApprlBase">
+	    UPDATE flow_apprl_base SET
+	        APPRLTYP = #{apprltyp} ,
+	        FLOWNM = #{flownm} ,
+	        BSNSPRDTNO = #{bsnsprdtno} ,
+	        BSNSMINMNTH = #{bsnsminmnth} ,
+	        BSNSMAXMNTH = #{bsnsmaxmnth} ,
+	        ASSRTYP = #{assrtyp} ,
+	        MINAMNT = #{minamnt} ,
+	        MAXAMNT = #{maxamnt} ,
+	        CSTMRTYP = #{cstmrtyp} ,
+	        MNGDPTNO = #{mngdptno} ,
+	        CRTDATE = #{crtdate} ,
+	        UPDTDATE = #{updtdate} ,
+	        FLOWSTEPS = #{flowsteps} ,
+	        BSNSTYP = #{bsnstyp} ,
+	        BSNSMINDAY = #{bsnsminday} ,
+	        BSNSMAXDAY = #{bsnsmaxday} ,
+	        FLOWDSGNINF= #{flowdsgninf}
+        WHERE 
+	        FLOWNO = #{flowno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(apprltyp)">
+			APPRLTYP = #{apprltyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(flownm)">
+			FLOWNM = #{flownm},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnsprdtno)">
+			BSNSPRDTNO = #{bsnsprdtno},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnsminmnth)">
+			BSNSMINMNTH = #{bsnsminmnth},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnsmaxmnth)">
+			BSNSMAXMNTH = #{bsnsmaxmnth},
+		</if>
+		<if test="@Ognl@isNotEmpty(assrtyp)">
+			ASSRTYP = #{assrtyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(minamnt)">
+			MINAMNT = #{minamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(maxamnt)">
+			MAXAMNT = #{maxamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(cstmrtyp)">
+			CSTMRTYP = #{cstmrtyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(mngdptno)">
+			MNGDPTNO = #{mngdptno},
+		</if>
+		<if test="@Ognl@isNotEmpty(crtdate)">
+			CRTDATE = #{crtdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(updtdate)">
+			UPDTDATE = #{updtdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(flowsteps)">
+			FLOWSTEPS = #{flowsteps},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnstyp)">
+			BSNSTYP = #{bsnstyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnsminday)">
+			BSNSMINDAY = #{bsnsminday},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnsmaxday)">
+			BSNSMAXDAY = #{bsnsmaxday},
+		</if>
+		<if test="@Ognl@isNotEmpty(flowdsgninf)">
+			FLOWDSGNINF = #{flowdsgninf},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.flowmng.entity.FlowApprlBase">
+	    UPDATE flow_apprl_base 
+		<include refid="updateset"/>
+        WHERE 
+	        FLOWNO = #{flowno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

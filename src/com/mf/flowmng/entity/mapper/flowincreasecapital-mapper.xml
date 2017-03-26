@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.flowmng.dao.FlowIncreaseCapitalDao">
+
+	<resultMap id="FlowIncreaseCapital" type="com.mf.flowmng.entity.FlowIncreaseCapital">
+        <result property="id" column="ID"/>
+        <result property="fileno" column="FILENO"/>
+        <result property="companynm" column="COMPANYNM"/>
+        <result property="beforeCapital" column="beforeCapital"/>
+        <result property="increaseAmount" column="increaseAmount"/>
+        <result property="afterAmount" column="afterAmount"/>
+        <result property="isapprove" column="isapprove"/>
+        <result property="signer" column="Signer"/>
+        <result property="signeDate" column="signeDate"/>
+        <result property="companyarea" column="Companyarea"/>
+        <result property="unit" column="unit"/>
+        <result property="fileposition" column="fileposition"/>
+        <result property="filecontent" column="filecontent"/>
+        <result property="remark" column="remark"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ID,
+FILENO,
+COMPANYNM,
+beforeCapital,
+increaseAmount,
+afterAmount,
+isapprove,
+Signer,
+signeDate,
+Companyarea,
+unit,
+fileposition,
+filecontent,
+remark
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.flowmng.entity.FlowIncreaseCapital">
+		select
+		<include refid="selectId" />
+		from flow_increase_capital
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.flowmng.entity.FlowIncreaseCapital" parameterType="com.mf.flowmng.entity.FlowIncreaseCapital">
+		select
+		<include refid="selectId" />
+		from flow_increase_capital
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.flowmng.entity.FlowIncreaseCapital" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from flow_increase_capital
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.fileno)">
+					AND FILENO like '%${t.fileno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.companynm)">
+					AND COMPANYNM like '%${t.companynm}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.beforeCapital)">
+					AND beforeCapital = '${t.beforeCapital}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.increaseAmount)">
+					AND increaseAmount = '${t.increaseAmount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.afterAmount)">
+					AND afterAmount = '${t.afterAmount}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.isapprove)">
+					AND isapprove like '%${t.isapprove}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.signer)">
+					AND Signer like '%${t.signer}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.signeDate)">
+					AND signeDate like '%${t.signeDate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.companyarea)">
+					AND Companyarea like '%${t.companyarea}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.unit)">
+					AND unit like '%${t.unit}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.fileposition)">
+					AND fileposition like '%${t.fileposition}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.filecontent)">
+					AND filecontent like '%${t.filecontent}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND remark like '%${t.remark}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(fileno)">
+					AND FILENO like '%${fileno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(companynm)">
+					AND COMPANYNM like '%${companynm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(beforeCapital)">
+					AND beforeCapital = '${beforeCapital}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(increaseAmount)">
+					AND increaseAmount = '${increaseAmount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(afterAmount)">
+					AND afterAmount = '${afterAmount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(isapprove)">
+					AND isapprove like '%${isapprove}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(signer)">
+					AND Signer like '%${signer}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(signeDate)">
+					AND signeDate like '%${signeDate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(companyarea)">
+					AND Companyarea like '%${companyarea}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(unit)">
+					AND unit like '%${unit}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(fileposition)">
+					AND fileposition like '%${fileposition}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(filecontent)">
+					AND filecontent like '%${filecontent}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND remark like '%${remark}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.flowmng.entity.FlowIncreaseCapital" resultType="int">
+		select count(0) from flow_increase_capital
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.flowmng.entity.FlowIncreaseCapital">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO flow_increase_capital (
+        	FILENO ,
+        	COMPANYNM ,
+        	beforeCapital ,
+        	increaseAmount ,
+        	afterAmount ,
+        	isapprove ,
+        	Signer ,
+        	signeDate ,
+        	Companyarea ,
+        	unit ,
+        	fileposition ,
+        	filecontent ,
+        	remark 
+        ) VALUES (
+        	#{fileno} ,
+        	#{companynm} ,
+        	#{beforeCapital} ,
+        	#{increaseAmount} ,
+        	#{afterAmount} ,
+        	#{isapprove} ,
+        	#{signer} ,
+        	#{signeDate} ,
+        	#{companyarea} ,
+        	#{unit} ,
+        	#{fileposition} ,
+        	#{filecontent} ,
+        	#{remark} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.flowmng.entity.FlowIncreaseCapital">
+		INSERT INTO flow_increase_capital 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(fileno)">
+				FILENO,
+			</if>
+			<if test="@Ognl@isNotEmpty(companynm)">
+				COMPANYNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(beforeCapital)">
+				beforeCapital,
+			</if>
+			<if test="@Ognl@isNotEmpty(increaseAmount)">
+				increaseAmount,
+			</if>
+			<if test="@Ognl@isNotEmpty(afterAmount)">
+				afterAmount,
+			</if>
+			<if test="@Ognl@isNotEmpty(isapprove)">
+				isapprove,
+			</if>
+			<if test="@Ognl@isNotEmpty(signer)">
+				Signer,
+			</if>
+			<if test="@Ognl@isNotEmpty(signeDate)">
+				signeDate,
+			</if>
+			<if test="@Ognl@isNotEmpty(companyarea)">
+				Companyarea,
+			</if>
+			<if test="@Ognl@isNotEmpty(unit)">
+				unit,
+			</if>
+			<if test="@Ognl@isNotEmpty(fileposition)">
+				fileposition,
+			</if>
+			<if test="@Ognl@isNotEmpty(filecontent)">
+				filecontent,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				remark,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(fileno)">
+				#{fileno},
+			</if>
+			<if test="@Ognl@isNotEmpty(companynm)">
+				#{companynm},
+			</if>
+			<if test="@Ognl@isNotEmpty(beforeCapital)">
+				#{beforeCapital},
+			</if>
+			<if test="@Ognl@isNotEmpty(increaseAmount)">
+				#{increaseAmount},
+			</if>
+			<if test="@Ognl@isNotEmpty(afterAmount)">
+				#{afterAmount},
+			</if>
+			<if test="@Ognl@isNotEmpty(isapprove)">
+				#{isapprove},
+			</if>
+			<if test="@Ognl@isNotEmpty(signer)">
+				#{signer},
+			</if>
+			<if test="@Ognl@isNotEmpty(signeDate)">
+				#{signeDate},
+			</if>
+			<if test="@Ognl@isNotEmpty(companyarea)">
+				#{companyarea},
+			</if>
+			<if test="@Ognl@isNotEmpty(unit)">
+				#{unit},
+			</if>
+			<if test="@Ognl@isNotEmpty(fileposition)">
+				#{fileposition},
+			</if>
+			<if test="@Ognl@isNotEmpty(filecontent)">
+				#{filecontent},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="int">
+		DELETE FROM flow_increase_capital WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.flowmng.entity.FlowIncreaseCapital">
+		SELECT <include refid="selectId" />
+		    FROM flow_increase_capital 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	<!-- 根据主键查实体 -->
+	<select id="getCapitalById" parameterType="int" resultType="com.mf.flowmng.entity.FlowIncreaseCapital">
+		SELECT <include refid="selectId" />
+		    FROM flow_increase_capital 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.flowmng.entity.FlowIncreaseCapital">
+	    UPDATE flow_increase_capital SET
+	        FILENO = #{fileno} ,
+	        COMPANYNM = #{companynm} ,
+	        beforeCapital = #{beforeCapital} ,
+	        increaseAmount = #{increaseAmount} ,
+	        afterAmount = #{afterAmount} ,
+	        isapprove = #{isapprove} ,
+	        Signer = #{signer} ,
+	        signeDate = #{signeDate} ,
+	        Companyarea = #{companyarea} ,
+	        unit = #{unit} ,
+	        fileposition = #{fileposition} ,
+	        filecontent = #{filecontent} ,
+	        remark = #{remark} 
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(fileno)">
+			FILENO = #{fileno},
+		</if>
+		<if test="@Ognl@isNotEmpty(companynm)">
+			COMPANYNM = #{companynm},
+		</if>
+		<if test="@Ognl@isNotEmpty(beforeCapital)">
+			beforeCapital = #{beforeCapital},
+		</if>
+		<if test="@Ognl@isNotEmpty(increaseAmount)">
+			increaseAmount = #{increaseAmount},
+		</if>
+		<if test="@Ognl@isNotEmpty(afterAmount)">
+			afterAmount = #{afterAmount},
+		</if>
+		<if test="@Ognl@isNotEmpty(isapprove)">
+			isapprove = #{isapprove},
+		</if>
+		<if test="@Ognl@isNotEmpty(signer)">
+			Signer = #{signer},
+		</if>
+		<if test="@Ognl@isNotEmpty(signeDate)">
+			signeDate = #{signeDate},
+		</if>
+		<if test="@Ognl@isNotEmpty(companyarea)">
+			Companyarea = #{companyarea},
+		</if>
+		<if test="@Ognl@isNotEmpty(unit)">
+			unit = #{unit},
+		</if>
+		<if test="@Ognl@isNotEmpty(fileposition)">
+			fileposition = #{fileposition},
+		</if>
+		<if test="@Ognl@isNotEmpty(filecontent)">
+			filecontent = #{filecontent},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			remark = #{remark},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.flowmng.entity.FlowIncreaseCapital">
+	    UPDATE flow_increase_capital 
+		<include refid="updateset"/>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

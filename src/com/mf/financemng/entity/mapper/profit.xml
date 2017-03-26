@@ -1,0 +1,399 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.ProfitDao">
+
+	<resultMap id="Profit" type="com.mf.financemng.entity.Profit">
+        <result property="profitid" column="PROFITID"/>
+        <result property="rptid" column="RPTID"/>
+        <result property="rptmonth" column="RPTMONTH"/>
+        <result property="itemcode" column="ITEMCODE"/>
+        <result property="orgcode" column="ORGCODE"/>
+        <result property="rpttype" column="RPTTYPE"/>
+        <result property="itemvalue" column="ITEMVALUE"/>
+        <result property="rptstatus" column="RPTSTATUS"/>
+        <result property="rptbatch" column="RPTBATCH"/>
+        <result property="rptdate" column="RPTDATE"/>
+        <result property="processstatus" column="PROCESSSTATUS"/>
+        <result property="deleteflag" column="DELETEFLAG"/>
+        <result property="validate" column="VALIDATE"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		PROFITID,
+RPTID,
+RPTMONTH,
+ITEMCODE,
+ORGCODE,
+RPTTYPE,
+ITEMVALUE,
+RPTSTATUS,
+RPTBATCH,
+RPTDATE,
+PROCESSSTATUS,
+DELETEFLAG,
+VALIDATE
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.Profit">
+		select
+		<include refid="selectId" />
+		from profit
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.Profit" parameterType="com.mf.financemng.entity.Profit">
+		select
+		<include refid="selectId" />
+		from profit
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.financemng.entity.Profit" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from profit
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<!-- 查询时间记录-->
+	<select id="query2" resultType="com.mf.financemng.entity.Profit" parameterType="java.util.HashMap">
+		select
+		itemcode,sum(itemvalue) as itemvalue
+		from profit where rptmonth &lt;= #{rptmonth} and rptmonth &gt;=#{rptmonthstart} 
+		and rptid not in (select rptid from finreport where auditstatus = 1)
+		group by itemcode
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.rptid)">
+					AND RPTID like '%${t.rptid}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rptmonth)">
+					AND RPTMONTH = '${t.rptmonth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.itemcode)">
+					AND ITEMCODE = '${t.itemcode}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.orgcode)">
+					AND ORGCODE like '%${t.orgcode}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rpttype)">
+					AND RPTTYPE like '%${t.rpttype}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.itemvalue)">
+					AND ITEMVALUE = '${t.itemvalue}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rptstatus)">
+					AND RPTSTATUS = '${t.rptstatus}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rptbatch)">
+					AND RPTBATCH like '%${t.rptbatch}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rptdateBegin)">
+					AND RPTDATE >= #{t.rptdateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rptdateEnd)">
+					AND RPTDATE &lt;= #{t.rptdateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.processstatus)">
+					AND PROCESSSTATUS = '${t.processstatus}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.deleteflag)">
+					AND DELETEFLAG = '${t.deleteflag}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.validate)">
+					AND VALIDATE = '${t.validate}'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(rptid)">
+					AND RPTID like '%${rptid}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rptmonth)">
+					AND RPTMONTH = '${rptmonth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(itemcode)">
+					AND ITEMCODE = '${itemcode}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(orgcode)">
+					AND ORGCODE like '%${orgcode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rpttype)">
+					AND RPTTYPE like '%${rpttype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(itemvalue)">
+					AND ITEMVALUE = '${itemvalue}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rptstatus)">
+					AND RPTSTATUS = '${rptstatus}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rptbatch)">
+					AND RPTBATCH like '%${rptbatch}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rptdateBegin)">
+					AND RPTDATE >= #{rptdateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(rptdateEnd)">
+					AND RPTDATE &lt;= #{rptdateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(processstatus)">
+					AND PROCESSSTATUS = '${processstatus}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(deleteflag)">
+					AND DELETEFLAG = '${deleteflag}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(validate)">
+					AND VALIDATE = '${validate}'
+			   </if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.Profit" resultType="int">
+		select count(0) from profit
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.financemng.entity.Profit">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO profit (
+        	RPTID ,
+        	RPTMONTH ,
+        	ITEMCODE ,
+        	ORGCODE ,
+        	RPTTYPE ,
+        	ITEMVALUE ,
+        	RPTSTATUS ,
+        	RPTBATCH ,
+        	RPTDATE ,
+        	PROCESSSTATUS ,
+        	DELETEFLAG ,
+        	VALIDATE 
+        ) VALUES (
+        	#{rptid} ,
+        	#{rptmonth} ,
+        	#{itemcode} ,
+        	#{orgcode} ,
+        	#{rpttype} ,
+        	#{itemvalue} ,
+        	#{rptstatus} ,
+        	#{rptbatch} ,
+        	#{rptdate} ,
+        	#{processstatus} ,
+        	#{deleteflag} ,
+        	#{validate} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.Profit">
+		INSERT INTO profit 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(profitid)">
+				PROFITID,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptid)">
+				RPTID,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptmonth)">
+				RPTMONTH,
+			</if>
+			<if test="@Ognl@isNotEmpty(itemcode)">
+				ITEMCODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(orgcode)">
+				ORGCODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(rpttype)">
+				RPTTYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(itemvalue)">
+				ITEMVALUE,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptstatus)">
+				RPTSTATUS,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptbatch)">
+				RPTBATCH,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptdate)">
+				RPTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(processstatus)">
+				PROCESSSTATUS,
+			</if>
+			<if test="@Ognl@isNotEmpty(deleteflag)">
+				DELETEFLAG,
+			</if>
+			<if test="@Ognl@isNotEmpty(validate)">
+				VALIDATE,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(profitid)">
+				#{profitid},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptid)">
+				#{rptid},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptmonth)">
+				#{rptmonth},
+			</if>
+			<if test="@Ognl@isNotEmpty(itemcode)">
+				#{itemcode},
+			</if>
+			<if test="@Ognl@isNotEmpty(orgcode)">
+				#{orgcode},
+			</if>
+			<if test="@Ognl@isNotEmpty(rpttype)">
+				#{rpttype},
+			</if>
+			<if test="@Ognl@isNotEmpty(itemvalue)">
+				#{itemvalue},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptstatus)">
+				#{rptstatus},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptbatch)">
+				#{rptbatch},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptdate)">
+				#{rptdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(processstatus)">
+				#{processstatus},
+			</if>
+			<if test="@Ognl@isNotEmpty(deleteflag)">
+				#{deleteflag},
+			</if>
+			<if test="@Ognl@isNotEmpty(validate)">
+				#{validate},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		UPDATE profit
+		set deleteflag = 1
+		WHERE
+        RPTID = #{rptid} 
+	</delete>
+	
+	<!-- 删审计报告的利润表 -->
+	<delete id="deleteProfit" parameterType="String">
+		UPDATE profit
+		set deleteflag = 1
+		WHERE
+        RPTMONTH = #{rptmonth} and deleteflag = 0
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getByRptid" parameterType="String" resultType="com.mf.financemng.entity.Profit">
+		SELECT <include refid="selectId" />
+		    FROM profit 
+	        WHERE 
+        RPTID = #{rptid} order by itemcode
+	</select>
+	
+	<!-- 根据rptmonth查实体 -->
+	<select id="getByRptmonth" parameterType="String" resultType="com.mf.financemng.entity.Profit">
+		SELECT <include refid="selectId" />
+		    FROM profit 
+	        WHERE 
+        RPTMONTH = #{rptmonth} and deleteflag = 0
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.financemng.entity.Profit">
+	    UPDATE profit SET
+	        RPTID = #{rptid} ,
+	        RPTMONTH = #{rptmonth} ,
+	        ITEMCODE = #{itemcode} ,
+	        ORGCODE = #{orgcode} ,
+	        RPTTYPE = #{rpttype} ,
+	        ITEMVALUE = #{itemvalue} ,
+	        RPTSTATUS = #{rptstatus} ,
+	        RPTBATCH = #{rptbatch} ,
+	        RPTDATE = #{rptdate} ,
+	        PROCESSSTATUS = #{processstatus} ,
+	        DELETEFLAG = #{deleteflag} ,
+	        VALIDATE = #{validate} 
+        WHERE 
+	        PROFITID = #{profitid} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(rptmonth)">
+			RPTMONTH = #{rptmonth},
+		</if>
+		<if test="@Ognl@isNotEmpty(itemcode)">
+			ITEMCODE = #{itemcode},
+		</if>
+		<if test="@Ognl@isNotEmpty(orgcode)">
+			ORGCODE = #{orgcode},
+		</if>
+		<if test="@Ognl@isNotEmpty(rpttype)">
+			RPTTYPE = #{rpttype},
+		</if>
+			ITEMVALUE = #{itemvalue},
+		<if test="@Ognl@isNotEmpty(rptstatus)">
+			RPTSTATUS = #{rptstatus},
+		</if>
+		<if test="@Ognl@isNotEmpty(rptbatch)">
+			RPTBATCH = #{rptbatch},
+		</if>
+		<if test="@Ognl@isNotEmpty(rptdate)">
+			RPTDATE = #{rptdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(processstatus)">
+			PROCESSSTATUS = #{processstatus},
+		</if>
+		<if test="@Ognl@isNotEmpty(deleteflag)">
+			DELETEFLAG = #{deleteflag},
+		</if>
+		<if test="@Ognl@isNotEmpty(validate)">
+			VALIDATE = #{validate},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.financemng.entity.Profit">
+	    UPDATE profit 
+		<include refid="updateset"/>
+        WHERE 
+	        RPTID = #{rptid} and ITEMCODE = #{itemcode}
+	</update>
+	
+	
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

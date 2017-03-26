@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntPersonJobDao">
+
+	
+	<sql id="selectId">
+		ID,
+		CLNTNO,
+OCCUPATION,
+BELONGEMP,
+BELONGSHRHLDR,
+COMPANY,
+INDUSTRY,
+OCCTYPE,
+OCCTEL,
+OCCZIP,
+STARTYEAR,
+OCCADDRESS,
+DUTY,
+CASTE,
+DUTYLEVEL,
+LAYOFFSNO,
+WAGEBANK,
+WAGENO
+    </sql>
+    
+
+	<select id="query" resultType="com.mf.client.entity.ClntPersonJob">
+		select
+		<include refid="selectId" />
+		from clnt_person_job
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if> 
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO = ${t.clntno}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.occupation)">
+					AND OCCUPATION like '%${t.occupation}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.belongemp)">
+					AND BELONGEMP like '%${t.belongemp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.belongshrhldr)">
+					AND BELONGSHRHLDR like '%${t.belongshrhldr}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.company)">
+					AND COMPANY like '%${t.company}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.industry)">
+					AND INDUSTRY like '%${t.industry}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.occtype)">
+					AND OCCTYPE like '%${t.occtype}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.occtel)">
+					AND OCCTEL like '%${t.occtel}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.occzip)">
+					AND OCCZIP like '%${t.occzip}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.startyear)">
+					AND STARTYEAR like '%${t.startyear}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.occaddress)">
+					AND OCCADDRESS like '%${t.occaddress}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.duty)">
+					AND DUTY like '%${t.duty}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.caste)">
+					AND CASTE like '%${t.caste}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.dutylevel)">
+					AND DUTYLEVEL like '%${t.dutylevel}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.layoffsno)">
+					AND LAYOFFSNO like '%${t.layoffsno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.wagebank)">
+					AND WAGEBANK like '%${t.wagebank}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.wageno)">
+					AND WAGENO like '%${t.wageno}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntPersonJob" resultType="int">
+		select count(0) from clnt_person_job
+	</select>
+	
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntPersonJob">
+		SELECT <include refid="selectId" />
+		    FROM clnt_person_job 
+	        WHERE ID = #{id}
+	</select>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(occupation)">
+			OCCUPATION = #{occupation},
+		</if>
+		<if test="@Ognl@isNotEmpty(belongemp)">
+			BELONGEMP = #{belongemp},
+		</if>
+		<if test="@Ognl@isNotEmpty(belongshrhldr)">
+			BELONGSHRHLDR = #{belongshrhldr},
+		</if>
+		<if test="@Ognl@isNotEmpty(company)">
+			COMPANY = #{company},
+		</if>
+		<if test="@Ognl@isNotEmpty(industry)">
+			INDUSTRY = #{industry},
+		</if>
+		<if test="@Ognl@isNotEmpty(occtype)">
+			OCCTYPE = #{occtype},
+		</if>
+		<if test="@Ognl@isNotEmpty(occtel)">
+			OCCTEL = #{occtel},
+		</if>
+		<if test="@Ognl@isNotEmpty(occzip)">
+			OCCZIP = #{occzip},
+		</if>
+		<if test="@Ognl@isNotEmpty(startyear)">
+			STARTYEAR = #{startyear},
+		</if>
+		<if test="@Ognl@isNotEmpty(occaddress)">
+			OCCADDRESS = #{occaddress},
+		</if>
+		<if test="@Ognl@isNotEmpty(duty)">
+			DUTY = #{duty},
+		</if>
+		<if test="@Ognl@isNotEmpty(caste)">
+			CASTE = #{caste},
+		</if>
+		<if test="@Ognl@isNotEmpty(dutylevel)">
+			DUTYLEVEL = #{dutylevel},
+		</if>
+		<if test="@Ognl@isNotEmpty(layoffsno)">
+			LAYOFFSNO = #{layoffsno},
+		</if>
+		<if test="@Ognl@isNotEmpty(wagebank)">
+			WAGEBANK = #{wagebank},
+		</if>
+		<if test="@Ognl@isNotEmpty(wageno)">
+			WAGENO = #{wageno},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntPersonJob">
+	    UPDATE clnt_person_job 
+		<include refid="updateset"/>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	
+	<insert id="add" parameterType="com.mf.client.entity.ClntPersonJob" useGeneratedKeys="true" keyProperty="id">
+		INSERT INTO clnt_person_job (
+			CLNTNO ,
+        	OCCUPATION ,
+        	BELONGEMP ,
+        	BELONGSHRHLDR ,
+        	COMPANY ,
+        	INDUSTRY ,
+        	OCCTYPE ,
+        	OCCTEL ,
+        	OCCZIP ,
+        	STARTYEAR ,
+        	OCCADDRESS ,
+        	DUTY ,
+        	CASTE ,
+        	DUTYLEVEL ,
+        	LAYOFFSNO ,
+        	WAGEBANK ,
+        	WAGENO 
+        ) VALUES (
+        	#{clntno} ,
+        	#{occupation} ,
+        	#{belongemp} ,
+        	#{belongshrhldr} ,
+        	#{company} ,
+        	#{industry} ,
+        	#{occtype} ,
+        	#{occtel} ,
+        	#{occzip} ,
+        	#{startyear} ,
+        	#{occaddress} ,
+        	#{duty} ,
+        	#{caste} ,
+        	#{dutylevel} ,
+        	#{layoffsno} ,
+        	#{wagebank} ,
+        	#{wageno} 
+        )
+	</insert>
+	
+</mapper>
+

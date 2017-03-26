@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntEeCapPeopleDao">
+
+	<resultMap id="ClntEeCapPeople" type="com.mf.client.entity.ClntEeCapPeople">
+        <result property="id" column="ID"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="hmnm" column="HMNM"/>
+        <result property="certtp" column="CERTTP"/>
+        <result property="certno" column="CERTNO"/>
+        <result property="hmclass" column="HMCLASS"/>
+        <result property="gender" column="GENDER"/>
+        <result property="birthdt" column="BIRTHDT"/>
+        <result property="hmlevel" column="HMLEVEL"/>
+        <result property="resume" column="RESUME"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ID,
+CLNTNO,
+HMNM,
+CERTTP,
+CERTNO,
+HMCLASS,
+GENDER,
+BIRTHDT,
+HMLEVEL,
+RESUME
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntEeCapPeople">
+		select
+		<include refid="selectId" />
+		from clnt_ee_cap_people
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntEeCapPeople" parameterType="com.mf.client.entity.ClntEeCapPeople">
+		select
+		<include refid="selectId" />
+		from clnt_ee_cap_people
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntEeCapPeople" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_ee_cap_people
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.hmnm)">
+					AND HMNM like '%${t.hmnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.certtp)">
+					AND CERTTP like '%${t.certtp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.certno)">
+					AND CERTNO like '%${t.certno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.hmclass)">
+					AND HMCLASS like '%${t.hmclass}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.gender)">
+					AND GENDER like '%${t.gender}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.birthdt)">
+					AND BIRTHDT like '%${t.birthdt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.hmlevel)">
+					AND HMLEVEL like '%${t.hmlevel}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.resume)">
+					AND RESUME like '%${t.resume}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(hmnm)">
+					AND HMNM like '%${hmnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(certtp)">
+					AND CERTTP like '%${certtp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(certno)">
+					AND CERTNO like '%${certno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(hmclass)">
+					AND HMCLASS like '%${hmclass}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(gender)">
+					AND GENDER like '%${gender}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(birthdt)">
+					AND BIRTHDT like '%${birthdt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(hmlevel)">
+					AND HMLEVEL like '%${hmlevel}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(resume)">
+					AND RESUME like '%${resume}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntEeCapPeople" resultType="int">
+		select count(0) from clnt_ee_cap_people
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntEeCapPeople">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_ee_cap_people (
+        	CLNTNO ,
+        	HMNM ,
+        	CERTTP ,
+        	CERTNO ,
+        	HMCLASS ,
+        	GENDER ,
+        	BIRTHDT ,
+        	HMLEVEL ,
+        	RESUME 
+        ) VALUES (
+        	#{clntno} ,
+        	#{hmnm} ,
+        	#{certtp} ,
+        	#{certno} ,
+        	#{hmclass} ,
+        	#{gender} ,
+        	#{birthdt} ,
+        	#{hmlevel} ,
+        	#{resume} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntEeCapPeople">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO clnt_ee_cap_people 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(hmnm)">
+				HMNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(certtp)">
+				CERTTP,
+			</if>
+			<if test="@Ognl@isNotEmpty(certno)">
+				CERTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(hmclass)">
+				HMCLASS,
+			</if>
+			<if test="@Ognl@isNotEmpty(gender)">
+				GENDER,
+			</if>
+			<if test="@Ognl@isNotEmpty(birthdt)">
+				BIRTHDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(hmlevel)">
+				HMLEVEL,
+			</if>
+			<if test="@Ognl@isNotEmpty(resume)">
+				RESUME,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(hmnm)">
+				#{hmnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(certtp)">
+				#{certtp},
+			</if>
+			<if test="@Ognl@isNotEmpty(certno)">
+				#{certno},
+			</if>
+			<if test="@Ognl@isNotEmpty(hmclass)">
+				#{hmclass},
+			</if>
+			<if test="@Ognl@isNotEmpty(gender)">
+				#{gender},
+			</if>
+			<if test="@Ognl@isNotEmpty(birthdt)">
+				#{birthdt},
+			</if>
+			<if test="@Ognl@isNotEmpty(hmlevel)">
+				#{hmlevel},
+			</if>
+			<if test="@Ognl@isNotEmpty(resume)">
+				#{resume},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM clnt_ee_cap_people WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntEeCapPeople">
+		SELECT <include refid="selectId" />
+		    FROM clnt_ee_cap_people 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntEeCapPeople">
+	    UPDATE clnt_ee_cap_people SET
+	        CLNTNO = #{clntno} ,
+	        HMNM = #{hmnm} ,
+	        CERTTP = #{certtp} ,
+	        CERTNO = #{certno} ,
+	        HMCLASS = #{hmclass} ,
+	        GENDER = #{gender} ,
+	        BIRTHDT = #{birthdt} ,
+	        HMLEVEL = #{hmlevel} ,
+	        RESUME = #{resume} 
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(hmnm)">
+			HMNM = #{hmnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(certtp)">
+			CERTTP = #{certtp},
+		</if>
+		<if test="@Ognl@isNotEmpty(certno)">
+			CERTNO = #{certno},
+		</if>
+		<if test="@Ognl@isNotEmpty(hmclass)">
+			HMCLASS = #{hmclass},
+		</if>
+		<if test="@Ognl@isNotEmpty(gender)">
+			GENDER = #{gender},
+		</if>
+		<if test="@Ognl@isNotEmpty(birthdt)">
+			BIRTHDT = #{birthdt},
+		</if>
+		<if test="@Ognl@isNotEmpty(hmlevel)">
+			HMLEVEL = #{hmlevel},
+		</if>
+		<if test="@Ognl@isNotEmpty(resume)">
+			RESUME = #{resume},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntEeCapPeople">
+	    UPDATE clnt_ee_cap_people 
+		<include refid="updateset"/>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

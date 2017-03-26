@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FnncDealtypDao">
+
+	<resultMap id="FnncDealtyp" type="com.mf.financemng.entity.FnncDealtyp">
+        <result property="rcrdid" column="RCRDID"/>
+        <result property="dealtype" column="DEALTYPE"/>
+        <result property="dealname" column="DEALNAME"/>
+        <result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		RCRDID,
+DEALTYPE,
+DEALNAME,
+REMARK
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.FnncDealtyp">
+		select
+		<include refid="selectId" />
+		from fnnc_dealtyp
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.FnncDealtyp" parameterType="com.mf.financemng.entity.FnncDealtyp">
+		select
+		<include refid="selectId" />
+		from fnnc_dealtyp
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.financemng.entity.FnncDealtyp" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fnnc_dealtyp
+		<include refid="querywhere"/>
+		 order by rcrdid 
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.dealtype)">
+					AND DEALTYPE like '%${t.dealtype}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.dealname)">
+					AND DEALNAME like '%${t.dealname}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(dealtype)">
+					AND DEALTYPE like '%${dealtype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(dealname)">
+					AND DEALNAME like '%${dealname}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.FnncDealtyp" resultType="int">
+		select count(0) from fnnc_dealtyp
+		<include refid="querywhere1"/>
+	</select>
+	
+
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.FnncDealtyp">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO fnnc_dealtyp 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(dealtype)">
+				DEALTYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(dealname)">
+				DEALNAME,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(dealtype)">
+				#{dealtype},
+			</if>
+			<if test="@Ognl@isNotEmpty(dealname)">
+				#{dealname},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM fnnc_dealtyp WHERE
+        RCRDID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.FnncDealtyp">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_dealtyp 
+	        WHERE 
+        RCRDID = #{rcrdid} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.financemng.entity.FnncDealtyp">
+	    UPDATE fnnc_dealtyp SET
+	        DEALTYPE = #{dealtype} ,
+	        DEALNAME = #{dealname} ,
+	        REMARK = #{remark} 
+        WHERE 
+	        RCRDID = #{rcrdid} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(dealtype)">
+			DEALTYPE = #{dealtype},
+		</if>
+		<if test="@Ognl@isNotEmpty(dealname)">
+			DEALNAME = #{dealname},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.financemng.entity.FnncDealtyp">
+	    UPDATE fnnc_dealtyp 
+		<include refid="updateset"/>
+        WHERE 
+	        RCRDID = #{rcrdid} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

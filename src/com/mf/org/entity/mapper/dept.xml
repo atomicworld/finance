@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.mf.org.dao.DeptDao">
+
+	<sql id="selectItems">
+		dptno, dptname,  addr, postcd, tel, fax, updptno,
+		headerno, crtdate, updtdate, isnormal, reserved,
+		dptmax
+  	</sql>
+    
+	<select id="query" resultType="Dept">
+		select
+		(select emplynm from EMPLOYEE t where t.emplyno=headerno) as headernoName,
+		<include refid="selectItems" />
+		from DPTMNT 
+		<include refid="querywhere"/>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.dptname)">
+					AND dptname like '%${t.dptname}%'
+			   </if>	       
+		</where>
+	</sql>
+	
+	<select id="queryAll" resultType="Dept">
+		select
+		<include refid="selectItems" />
+		from DPTMNT
+	</select>
+	
+	<!-- 总记录数 -->
+	<select id="count" parameterType="Dept" resultType="int">
+		select count(0) from DPTMNT 
+	</select>
+	
+	<!-- 查询depNo该部门是否有下属部门 -->
+	<select id="countSubDpt" parameterType="String" resultType="int">
+		select count(0) from DPTMNT where updptno=#{dptNo} 
+	</select>
+	
+	<select id="countEmp" parameterType="String" resultType="int">
+		select count(0) from employee where dptno=#{dptNo} and state='1'
+	</select>
+	
+	<select id="countDptEmp" parameterType="String" resultType="int">
+		select count(0) from employee where dptno=#{dptNo} and state = "1"
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="add" parameterType="Dept">
+		INSERT INTO DPTMNT (
+		    DPTNO,
+			DPTNAME,
+			DPTMAX,
+			ADDR,
+			POSTCD,
+			TEL,
+			FAX,
+			UPDPTNO
+         ) VALUES (
+            (select maxDptNo from  (SELECT (IFNULL(MAX(DPTNO),999)+1) as maxDptNo FROM DPTMNT) as t),
+			#{dptname,jdbcType=VARCHAR},
+			#{dptmax},
+			#{addr,jdbcType=VARCHAR},
+			#{postcd,jdbcType=VARCHAR},
+			#{tel,jdbcType=VARCHAR},
+			#{fax,jdbcType=VARCHAR},
+			#{updptno}
+        )
+	</insert>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="String">
+	    DELETE FROM DPTMNT 
+	    WHERE DPTNO=#{dptNo}
+	</delete>
+	
+	
+	<select id="getById" parameterType="String" resultType="Dept">
+	    select
+		<include refid="selectItems" />
+		from DPTMNT
+		where  DPTNO=#{dptNo}
+	</select>
+	
+	
+	<update id="modify" parameterType="Dept">
+		update DPTMNT 
+		<set>
+		   ADDR=#{addr},
+		   POSTCD=#{postcd},
+		   ADDR=#{addr},
+		   TEL=#{tel},
+		   FAX=#{fax},
+		   UPDPTNO=#{updptno},
+		   DPTNAME=#{dptname},
+		   DPTMAX=#{dptmax}
+		</set>
+		
+		WHERE DPTNO=#{dptno}
+	</update>
+	
+	
+	<update id="setDeptLeader" parameterType="Dept">
+		update DPTMNT 
+		<set>
+		   headerno=#{headerno}
+		</set>
+		WHERE DPTNO=#{dptno}
+	</update>
+	
+	
+	<update id="setNonFinance">
+		update DPTMNT 
+		set reserved=0
+	</update>
+	
+	<update id="setFinance" parameterType="Dept">
+		update DPTMNT 
+		set reserved=1
+		WHERE DPTNO=#{dptno}
+	</update>
+	
+	
+</mapper>
+

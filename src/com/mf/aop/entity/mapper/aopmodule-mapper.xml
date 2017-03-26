@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.aop.dao.AopModuleDao">
+
+	<resultMap id="AopModule" type="com.mf.aop.entity.AopModule">
+        <result property="id" column="id"/>
+        <result property="grade" column="grade"/>
+        <result property="moduleName" column="moduleName"/>
+        <result property="methodName" column="methodName"/>
+        <result property="methodPaName" column="methodPaName"/>
+        <result property="functionDescrip" column="FunctionDescrip"/>
+        <result property="remark" column="remark"/>
+        <result property="paramnumber" column="paramnumber"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		id,
+grade,
+moduleName,
+methodName,
+methodPaName,
+FunctionDescrip,
+remark,
+paramnumber
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.aop.entity.AopModule">
+		select
+		<include refid="selectId" />
+		from aop_module
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.aop.entity.AopModule" parameterType="com.mf.aop.entity.AopModule">
+		select
+		<include refid="selectId" />
+		from aop_module
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.aop.entity.AopModule" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from aop_module
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(t.grade)">
+					AND grade = '${t.grade}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.moduleName)">
+					AND moduleName like '%${t.moduleName}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.methodName)">
+					AND methodName like '%${t.methodName}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.methodPaName)">
+					AND methodPaName like '%${t.methodPaName}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.functionDescrip)">
+					AND FunctionDescrip like '%${t.functionDescrip}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND remark like '%${t.remark}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.paramnumber)">
+					AND paramnumber = '${t.paramnumber}'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(grade)">
+					AND grade = '${grade}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(moduleName)">
+					AND moduleName like '%${moduleName}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(methodName)">
+					AND methodName like '%${methodName}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(methodPaName)">
+					AND methodPaName like '%${methodPaName}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(functionDescrip)">
+					AND FunctionDescrip like '%${functionDescrip}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND remark like '%${remark}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(paramnumber)">
+					AND paramnumber = '${paramnumber}'
+			   </if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.aop.entity.AopModule" resultType="int">
+		select count(0) from aop_module
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.aop.entity.AopModule">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO aop_module (
+        	grade ,
+        	moduleName ,
+        	methodName ,
+        	methodPaName ,
+        	FunctionDescrip ,
+        	remark ,
+        	paramnumber 
+        ) VALUES (
+        	#{grade} ,
+        	#{moduleName} ,
+        	#{methodName} ,
+        	#{methodPaName} ,
+        	#{functionDescrip} ,
+        	#{remark} ,
+        	#{paramnumber} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.aop.entity.AopModule">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO aop_module 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(grade)">
+				grade,
+			</if>
+			<if test="@Ognl@isNotEmpty(moduleName)">
+				moduleName,
+			</if>
+			<if test="@Ognl@isNotEmpty(methodName)">
+				methodName,
+			</if>
+			<if test="@Ognl@isNotEmpty(methodPaName)">
+				methodPaName,
+			</if>
+			<if test="@Ognl@isNotEmpty(functionDescrip)">
+				FunctionDescrip,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				remark,
+			</if>
+			<if test="@Ognl@isNotEmpty(paramnumber)">
+				paramnumber,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(grade)">
+				#{grade},
+			</if>
+			<if test="@Ognl@isNotEmpty(moduleName)">
+				#{moduleName},
+			</if>
+			<if test="@Ognl@isNotEmpty(methodName)">
+				#{methodName},
+			</if>
+			<if test="@Ognl@isNotEmpty(methodPaName)">
+				#{methodPaName},
+			</if>
+			<if test="@Ognl@isNotEmpty(functionDescrip)">
+				#{functionDescrip},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@Ognl@isNotEmpty(paramnumber)">
+				#{paramnumber},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM aop_module WHERE
+        id = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.aop.entity.AopModule">
+		SELECT <include refid="selectId" />
+		    FROM aop_module 
+	        WHERE 
+        id = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.aop.entity.AopModule">
+	    UPDATE aop_module SET
+	        grade = #{grade} ,
+	        moduleName = #{moduleName} ,
+	        methodName = #{methodName} ,
+	        methodPaName = #{methodPaName} ,
+	        FunctionDescrip = #{functionDescrip} ,
+	        remark = #{remark} ,
+	        paramnumber = #{paramnumber} 
+        WHERE 
+	        id = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(grade)">
+			grade = #{grade},
+		</if>
+		<if test="@Ognl@isNotEmpty(moduleName)">
+			moduleName = #{moduleName},
+		</if>
+		<if test="@Ognl@isNotEmpty(methodName)">
+			methodName = #{methodName},
+		</if>
+		<if test="@Ognl@isNotEmpty(methodPaName)">
+			methodPaName = #{methodPaName},
+		</if>
+		<if test="@Ognl@isNotEmpty(functionDescrip)">
+			FunctionDescrip = #{functionDescrip},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			remark = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(paramnumber)">
+			paramnumber = #{paramnumber},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.aop.entity.AopModule">
+	    UPDATE aop_module 
+		<include refid="updateset"/>
+        WHERE 
+	        id = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

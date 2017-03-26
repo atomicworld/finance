@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntClientDao">
+
+	<sql id="selectId">
+		CLNTID,
+		CLNTNAME,
+		CERTTYPE,
+		CERTNO,
+		CLNTTYPE,
+		USERID,
+		(SELECT OPNM FROM operator  WHERE EMPLYNO = USERID) OPNM,
+		(SELECT DPTNO FROM operator  WHERE EMPLYNO = USERID) DPTNO,
+		(SELECT DPTNAME FROM dptmnt WHERE DPTNO = (SELECT DPTNO FROM operator  WHERE EMPLYNO = USERID)) DPTNAME,
+		SCDATE
+    </sql>
+   
+	<select id="query" resultType="com.mf.client.entity.ClntClient">
+		select
+		<include refid="selectId" />
+		from clnt_client 
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		 </if>
+	</select>
+	<select id="queryAll" resultType="com.mf.client.entity.ClntClient" parameterType="com.mf.client.entity.ClntClient">
+		select
+		<include refid="selectId" />
+		from clnt_client 
+		where 1=1
+		<if test="@Ognl@isNotEmpty(clnttype)">
+					AND clnttype=#{clnttype}
+		</if>
+		
+	</select>
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>
+				<if test="@Ognl@isNotEmpty(t.clntname)">
+					AND CLNTNAME like '%${t.clntname}%'
+			   </if>	      				
+		       <if test="@Ognl@isNotEmpty(t.clnttype)">
+					AND CLNTTYPE = '${t.clnttype}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.userid)">
+					AND USERID = '${t.userid}'
+			   </if>
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntClient" resultType="int">
+		select count(0) from clnt_client
+	</select>
+	
+	<select id="findByCertno" resultType="com.mf.client.entity.ClntClient">
+		select
+		<include refid="selectId" />
+		from clnt_client 
+		where certno = #{certno}
+	</select>
+	
+	
+	<!-- 新增 -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntClient">
+		INSERT INTO clnt_client (
+			CLNTID,
+        	CLNTNAME ,
+        	CERTTYPE ,
+        	CERTNO ,
+        	CLNTTYPE ,
+        	USERID ,
+        	SCDATE 
+        ) VALUES (
+        	#{clntid},
+        	#{clntname} ,
+        	#{certtype} ,
+        	#{certno} ,
+        	#{clnttype} ,
+        	#{userid} ,
+        	#{scdate} 
+        )
+	</insert>
+	
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntClient">
+		SELECT 
+			<include refid="selectId" />
+		FROM clnt_client 
+	    WHERE  clntid = #{id} 
+	</select>	
+	<!-- 根据主键查实体 -->
+	<select id="FindById" parameterType="String" resultType="com.mf.client.entity.ClntClient">
+		select 
+		a.clntid,
+		a.clntname,
+		a.clnttype,
+		b.opnm as userid,
+		dptname as certno 
+		from clnt_client a 
+		left join operator b on a.userid=b.emplyno 
+		left join dptmnt c on b.dptno=c.dptno
+	    WHERE  a.clntid = #{clntid} 
+	</select>	
+	
+	<select id="findByClntType" parameterType="String" resultType="com.mf.client.entity.ClntClient">
+		SELECT 
+			<include refid="selectId" />
+		FROM clnt_client 
+		WHERE CLNTTYPE = #{clnttype}
+	</select>	
+	
+	
+	<select id="findMaxId" resultType="int" parameterType="String">
+		SELECT MAX(CLNTID) 
+		FROM clnt_client 
+		WHERE CLNTTYPE = #{clnttype}
+	</select>
+	
+	<select id="queryClntno" resultType="com.mf.client.entity.ClntClient" parameterType="int">
+		SELECT 
+			<include refid="selectId" />
+		FROM clnt_client 
+		WHERE clntid = #{clntid}
+	</select>
+	
+	<!-- 供业务数据 businessData模块查询客户信息 -->
+	<select id="queryCust" resultType="com.mf.client.entity.ClntClient">
+		select
+		clntid,
+		clntname,
+		certtype,
+		certno,
+		b.sd_key clnttype,
+		userid,
+		scdate
+		from clnt_client a left join  sys_dictionary b on a.clnttype=b.sd_value where b.code=1023 
+		
+	</select>
+	
+	
+	<!-- addByGuo start -->
+	<select id="getCustById" parameterType="String" resultType="com.mf.client.entity.ClntClient">
+		SELECT 
+				CLNTID,
+				CLNTNAME,
+				CERTTYPE,
+				CERTNO,
+				CLNTTYPE,
+				USERID,
+				SCDATE
+		FROM clnt_client 
+	    WHERE  clntid = #{id} 
+	</select>	
+	
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntClient">
+		update clnt_client set USERID=#{userid} where USERID=#{clntname}
+	</update>
+	<update id="update" parameterType="com.mf.client.entity.ClntClient">
+		update clnt_client 
+		<set>
+		
+		  <if test="clntname!=null and clntname!='' ">
+		     CLNTNAME=#{clntname},
+		  </if>
+		  <!-- 证件号码 -->
+		   <if test="certno!=null and certno!='' ">
+		     CERTNO=#{certno},
+		  </if>
+		  <!-- 管户人 -->
+		  <if test="userid!=null and userid!='' ">
+		     USERID=#{userid},
+		  </if>
+		  
+		  SCDATE=SCDATE
+		</set>
+		WHERE clntid = #{clntid} 
+	</update>
+	
+	  <delete id="delete" parameterType="String">
+		    DELETE FROM clnt_client 
+		    WHERE clntid = #{clntid} 
+	  </delete>
+	
+	<!-- addByGuo end -->
+	<select id="queryType" resultType="com.mf.client.entity.ClntClient" parameterType="com.mf.client.entity.ClntClient" >
+		 select a.clntid,
+		 a.clntname,b.sd_key as certtype,
+		 a.certno,a.scdate,
+		 c.sd_key as clnttype,d.opnm as userid
+		 from clnt_client a 
+		 left join sys_dictionary b on a.certtype=b.sd_value 
+		 left join sys_dictionary c on a.clnttype=c.sd_value 
+		 left join operator d on a.userid=d.emplyno 
+		 where (b.code=6004 or b.code=1129) and c.code=1023 
+		 <if test="clnttype!=null and clnttype!='' ">
+		    and a.clnttype=#{clnttype}
+		 </if>
+		 <if test="clntname!=null and clntname!='' ">
+		    and a.clntname like '%${clntname}%'
+		 </if>
+		 <if test="clntid!=null and clntid!='' ">
+		    and a.clntid = #{clntid}
+		 </if>
+		 order by a.scdate desc
+	</select>
+</mapper>
+

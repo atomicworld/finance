@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- 命名空间全限定类名，interface xxxDao调用此id方法名 -->
+<mapper namespace="com.mf.sys.dao.SysDictionaryDao">
+
+	
+	<sql id="findAllFields">
+		id,
+		code,
+		sd_key sdkey,
+		sd_value sdvalue,
+		remark 
+	</sql>
+	
+	<sql id="findAllFieldsSearch">
+		s.id,
+		s.code,
+		s.sd_key sdkey,
+		s.sd_value sdvalue,
+		s.remark 
+	</sql>
+	
+	<select id="query" resultType="SysDictionary">
+		select 
+			<include refid="findAllFieldsSearch"/>
+		from sys_dictionary s,sys_dictype d
+		<!-- chenze  start -->
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+		<!-- chenze  end -->
+	</select>
+	<!-- chenze  start -->
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	 
+		     	s.code = d.code			
+			   <if test="@Ognl@isNotEmpty(t.sdkey)">
+					AND s.SD_KEY like '%${t.sdkey}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.code)">
+					AND s.code like '%${t.code}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.name)">
+					AND d.NAME like '%${t.name}%'
+			   </if>
+		</where>
+	</sql>
+	<!-- chenze  end -->
+	
+	
+	
+	<select id="count" parameterType="SysDictionary" resultType="int">
+		select count(0) from sys_dictionary
+	</select>
+	
+	<!-- chenze  start -->
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="SysDictionary">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO sys_dictionary 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(code)">
+				CODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(sdkey)">
+				SD_KEY,
+			</if>
+			<if test="@Ognl@isNotEmpty(sdvalue)">
+				SD_VALUE,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(code)">
+				#{code},
+			</if>
+			<if test="@Ognl@isNotEmpty(sdkey)">
+				#{sdkey},
+			</if>
+			<if test="@Ognl@isNotEmpty(sdvalue)">
+				#{sdvalue},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 根据主键查实体 -->
+	<select id="findByCode" parameterType="String" resultType="SysDictionary">
+		SELECT 
+		<include refid="findAllFields" />
+		    FROM sys_dictionary
+	        WHERE 
+        	code = #{code} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="modify" parameterType="SysDictionary">
+	    UPDATE sys_dictionary SET
+	        CODE = #{code} ,
+	        SD_KEY = #{sdkey} ,
+	        SD_VALUE = #{sdvalue} ,
+	        REMARK = #{remark} 
+        WHERE 
+	        ID = #{id}  
+	</update>
+	
+	<select id="findByCodeAndValue" resultType="SysDictionary">
+		SELECT 
+		<include refid="findAllFields" />
+		    FROM sys_dictionary
+	        WHERE
+        CODE = #{code} and
+        (SD_VALUE = #{sdvalue} or SD_KEY = #{sdkey} )
+        
+	</select>	
+	<!-- chenze  end -->
+	<select id="findSysDictionary" resultType="SysDictionary" parameterType="SysDictionary">
+		SELECT 
+		<include refid="findAllFields" />
+		    FROM sys_dictionary
+	        WHERE 1=1
+	        <if test="@Ognl@isNotEmpty(code)">
+				and  CODE = #{code}
+			</if>
+			<if test="@Ognl@isNotEmpty(sdvalue)">
+				and SD_VALUE = #{sdvalue} 
+			</if>
+			<if test="@Ognl@isNotEmpty(sdkey)">
+				 and SD_KEY = #{sdkey}
+			</if>
+	</select>
+	<select id="findSdBySdtCode" parameterType="String" resultType="SysDictionary">
+		select
+			<include refid="findAllFields" />
+		from sys_dictionary 
+		where code = #{code}
+	</select>
+	
+	<select id="findSdBySdtCode2" parameterType="SysDictionary" resultType="SysDictionary">
+		select
+			<include refid="findAllFields" />
+		from sys_dictionary 
+		where code = #{code} and substring(sd_value,1,1)=#{sdvalue} 
+	</select>
+	
+	<select id="findKeyByCodeAndValue" resultType="SysDictionary" parameterType="SysDictionary">
+		select 
+			<include refid="findAllFields"/>
+		from sys_dictionary 
+		where code = #{code} and sd_value = #{sdvalue}
+	</select>
+	
+	<select id="findByCodeAndRemark" resultType="SysDictionary" parameterType="String">
+		SELECT 
+		<include refid="findAllFields" />
+		    FROM sys_dictionary
+	        WHERE
+        CODE = #{code}
+		ORDER BY substring(SD_VALUE,1,1)
+	</select>	
+</mapper>

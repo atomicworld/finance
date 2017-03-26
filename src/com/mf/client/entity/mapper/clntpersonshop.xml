@@ -1,0 +1,332 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntPersonShopDao">
+
+	
+	<sql id="selectId">
+		ID,
+CLNTNO,
+SHOPNO,
+RECAPITAL,
+RUNSCALE,
+SHOPADDRESS,
+LICENSENO,
+TAXRENO,
+REDATE,
+NEWASDATE,
+WAGENO,
+WAGEBANK
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntPersonShop">
+		select
+		<include refid="selectId" />
+		from clnt_person_shop
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntPersonShop" parameterType="com.mf.client.entity.ClntPersonShop">
+		select
+		<include refid="selectId" />
+		from clnt_person_shop
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntPersonShop">
+		select
+		<include refid="selectId" />
+		from clnt_person_shop
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO = #{t.clntno}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.shopno)">
+					AND SHOPNO like '%${t.shopno}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.recapital)">
+					AND RECAPITAL = '${t.recapital}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.runscale)">
+					AND RUNSCALE like '%${t.runscale}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.shopaddress)">
+					AND SHOPADDRESS like '%${t.shopaddress}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.licenseno)">
+					AND LICENSENO like '%${t.licenseno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.taxreno)">
+					AND TAXRENO like '%${t.taxreno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.redate)">
+					AND REDATE like '%${t.redate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.newasdate)">
+					AND NEWASDATE like '%${t.newasdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.wageno)">
+					AND WAGENO like '%${t.wageno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.wagebank)">
+					AND WAGEBANK like '%${t.wagebank}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(shopno)">
+					AND SHOPNO like '%${shopno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(recapital)">
+					AND RECAPITAL = '${recapital}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(runscale)">
+					AND RUNSCALE like '%${runscale}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(shopaddress)">
+					AND SHOPADDRESS like '%${shopaddress}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(licenseno)">
+					AND LICENSENO like '%${licenseno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(taxreno)">
+					AND TAXRENO like '%${taxreno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(redate)">
+					AND REDATE like '%${redate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(newasdate)">
+					AND NEWASDATE like '%${newasdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(wageno)">
+					AND WAGENO like '%${wageno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(wagebank)">
+					AND WAGEBANK like '%${wagebank}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntPersonShop" resultType="int">
+		select count(0) from clnt_person_shop
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntPersonShop">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_person_shop (
+        	CLNTNO ,
+        	SHOPNO ,
+        	RECAPITAL ,
+        	RUNSCALE ,
+        	SHOPADDRESS ,
+        	LICENSENO ,
+        	TAXRENO ,
+        	REDATE ,
+        	NEWASDATE ,
+        	WAGENO ,
+        	WAGEBANK 
+        ) VALUES (
+        	#{clntno} ,
+        	#{shopno} ,
+        	#{recapital} ,
+        	#{runscale} ,
+        	#{shopaddress} ,
+        	#{licenseno} ,
+        	#{taxreno} ,
+        	#{redate} ,
+        	#{newasdate} ,
+        	#{wageno} ,
+        	#{wagebank} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntPersonShop">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO clnt_person_shop 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(shopno)">
+				SHOPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(recapital)">
+				RECAPITAL,
+			</if>
+			<if test="@Ognl@isNotEmpty(runscale)">
+				RUNSCALE,
+			</if>
+			<if test="@Ognl@isNotEmpty(shopaddress)">
+				SHOPADDRESS,
+			</if>
+			<if test="@Ognl@isNotEmpty(licenseno)">
+				LICENSENO,
+			</if>
+			<if test="@Ognl@isNotEmpty(taxreno)">
+				TAXRENO,
+			</if>
+			<if test="@Ognl@isNotEmpty(redate)">
+				REDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(newasdate)">
+				NEWASDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(wageno)">
+				WAGENO,
+			</if>
+			<if test="@Ognl@isNotEmpty(wagebank)">
+				WAGEBANK,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(shopno)">
+				#{shopno},
+			</if>
+			<if test="@Ognl@isNotEmpty(recapital)">
+				#{recapital},
+			</if>
+			<if test="@Ognl@isNotEmpty(runscale)">
+				#{runscale},
+			</if>
+			<if test="@Ognl@isNotEmpty(shopaddress)">
+				#{shopaddress},
+			</if>
+			<if test="@Ognl@isNotEmpty(licenseno)">
+				#{licenseno},
+			</if>
+			<if test="@Ognl@isNotEmpty(taxreno)">
+				#{taxreno},
+			</if>
+			<if test="@Ognl@isNotEmpty(redate)">
+				#{redate},
+			</if>
+			<if test="@Ognl@isNotEmpty(newasdate)">
+				#{newasdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(wageno)">
+				#{wageno},
+			</if>
+			<if test="@Ognl@isNotEmpty(wagebank)">
+				#{wagebank},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM clnt_person_shop WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntPersonShop">
+		SELECT <include refid="selectId" />
+		    FROM clnt_person_shop 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntPersonShop">
+	    UPDATE clnt_person_shop SET
+	        CLNTNO = #{clntno} ,
+	        SHOPNO = #{shopno} ,
+	        RECAPITAL = #{recapital} ,
+	        RUNSCALE = #{runscale} ,
+	        SHOPADDRESS = #{shopaddress} ,
+	        LICENSENO = #{licenseno} ,
+	        TAXRENO = #{taxreno} ,
+	        REDATE = #{redate} ,
+	        NEWASDATE = #{newasdate} ,
+	        WAGENO = #{wageno} ,
+	        WAGEBANK = #{wagebank} 
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(shopno)">
+			SHOPNO = #{shopno},
+		</if>
+		<if test="@Ognl@isNotEmpty(recapital)">
+			RECAPITAL = #{recapital},
+		</if>
+		<if test="@Ognl@isNotEmpty(runscale)">
+			RUNSCALE = #{runscale},
+		</if>
+		<if test="@Ognl@isNotEmpty(shopaddress)">
+			SHOPADDRESS = #{shopaddress},
+		</if>
+		<if test="@Ognl@isNotEmpty(licenseno)">
+			LICENSENO = #{licenseno},
+		</if>
+		<if test="@Ognl@isNotEmpty(taxreno)">
+			TAXRENO = #{taxreno},
+		</if>
+		<if test="@Ognl@isNotEmpty(redate)">
+			REDATE = #{redate},
+		</if>
+		<if test="@Ognl@isNotEmpty(newasdate)">
+			NEWASDATE = #{newasdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(wageno)">
+			WAGENO = #{wageno},
+		</if>
+		<if test="@Ognl@isNotEmpty(wagebank)">
+			WAGEBANK = #{wagebank},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntPersonShop">
+	    UPDATE clnt_person_shop 
+		<include refid="updateset"/>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

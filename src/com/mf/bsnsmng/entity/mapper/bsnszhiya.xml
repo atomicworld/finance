@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.bsnsmng.dao.BsnsZyDao">
+	<sql id="selectId">
+		CLNTNO,
+CLNTNM,
+APPLYNO,
+RCRDID,
+CNTRCTNO,
+ZHIYACNTRCTNO,
+OWNERNO,
+OWNERNM,
+ZHIYANM,
+ZHIYATYP,
+ZHIYANO,
+CURRNCY,
+DSCRB,
+ZHIYAREGORG,
+ZHIYAAMNT,
+EVLTMTHD,
+ZHIYAVLU,
+VLUDATE,
+ZHIYART,
+ASSRRT,
+EXPIREDATE,
+NTRZTNORG,
+NTRZTNDATE,
+NTRZTNNO,
+DEPNO,
+REGOPNO,
+REGDATE,
+UPDTDATE,
+REMARK,
+EXPRTFLG,
+ZHIYARENDZ,
+ZHIYAFAREN
+    </sql>
+    
+  
+	
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.bsnsmng.entity.BsnsZhiya">
+		INSERT INTO bsns_zhiya 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				CLNTNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				APPLYNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				CNTRCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyacntrctno)">
+				ZHIYACNTRCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(ownerno)">
+				OWNERNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(ownernm)">
+				OWNERNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyanm)">
+				ZHIYANM,
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyatyp)">
+				ZHIYATYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyano)">
+				ZHIYANO,
+			</if>
+			<if test="@Ognl@isNotEmpty(currncy)">
+				CURRNCY,
+			</if>
+			<if test="@Ognl@isNotEmpty(dscrb)">
+				DSCRB,
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyaregorg)">
+				ZHIYAREGORG,
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyaamnt)">
+				ZHIYAAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(evltmthd)">
+				EVLTMTHD,
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyavlu)">
+				ZHIYAVLU,
+			</if>
+			<if test="@Ognl@isNotEmpty(vludate)">
+				VLUDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyart)">
+				ZHIYART,
+			</if>
+			<if test="@Ognl@isNotEmpty(assrrt)">
+				ASSRRT,
+			</if>
+			<if test="@Ognl@isNotEmpty(expiredate)">
+				EXPIREDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(ntrztnorg)">
+				NTRZTNORG,
+			</if>
+			<if test="@Ognl@isNotEmpty(ntrztndate)">
+				NTRZTNDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(ntrztnno)">
+				NTRZTNNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(depno)">
+				DEPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				REGOPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(regdate)">
+				REGDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				UPDTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+			<if test="@Ognl@isNotEmpty(exprtflg)">
+				EXPRTFLG,
+			</if>
+				<if test="@Ognl@isNotEmpty(zhiyarendz)">
+				ZHIYARENDZ,
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyafaren)">
+				ZHIYAFAREN,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				#{clntnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				#{applyno},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				#{cntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyacntrctno)">
+				#{zhiyacntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(ownerno)">
+				#{ownerno},
+			</if>
+			<if test="@Ognl@isNotEmpty(ownernm)">
+				#{ownernm},
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyanm)">
+				#{zhiyanm},
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyatyp)">
+				#{zhiyatyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyano)">
+				#{zhiyano},
+			</if>
+			<if test="@Ognl@isNotEmpty(currncy)">
+				#{currncy},
+			</if>
+			<if test="@Ognl@isNotEmpty(dscrb)">
+				#{dscrb},
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyaregorg)">
+				#{zhiyaregorg},
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyaamnt)">
+				#{zhiyaamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(evltmthd)">
+				#{evltmthd},
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyavlu)">
+				#{zhiyavlu},
+			</if>
+			<if test="@Ognl@isNotEmpty(vludate)">
+				#{vludate},
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyart)">
+				#{zhiyart},
+			</if>
+			<if test="@Ognl@isNotEmpty(assrrt)">
+				#{assrrt},
+			</if>
+			<if test="@Ognl@isNotEmpty(expiredate)">
+				#{expiredate},
+			</if>
+			<if test="@Ognl@isNotEmpty(ntrztnorg)">
+				#{ntrztnorg},
+			</if>
+			<if test="@Ognl@isNotEmpty(ntrztndate)">
+				#{ntrztndate},
+			</if>
+			<if test="@Ognl@isNotEmpty(ntrztnno)">
+				#{ntrztnno},
+			</if>
+			<if test="@Ognl@isNotEmpty(depno)">
+				#{depno},
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				#{regopno},
+			</if>
+			<if test="@Ognl@isNotEmpty(regdate)">
+				#{regdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				#{updtdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@Ognl@isNotEmpty(exprtflg)">
+				#{exprtflg},
+			</if>
+				<if test="@Ognl@isNotEmpty(zhiyarendz)">
+				#{zhiyarendz},
+			</if>
+			<if test="@Ognl@isNotEmpty(zhiyafaren)">
+				#{zhiyafaren},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM bsns_zhiya WHERE
+        applyNo = #{applyNo} 
+	</delete>
+	<delete id="deleteCntrctno" parameterType="String">
+		DELETE FROM bsns_zhiya WHERE
+        cntrctno = #{cntrctno} 
+	</delete>
+
+	
+	
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntnm)">
+			CLNTNM = #{clntnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(applyno)">
+			APPLYNO = #{applyno},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctno)">
+			CNTRCTNO = #{cntrctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(zhiyacntrctno)">
+			ZHIYACNTRCTNO = #{zhiyacntrctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(ownerno)">
+			OWNERNO = #{ownerno},
+		</if>
+		<if test="@Ognl@isNotEmpty(ownernm)">
+			OWNERNM = #{ownernm},
+		</if>
+		<if test="@Ognl@isNotEmpty(zhiyanm)">
+			ZHIYANM = #{zhiyanm},
+		</if>
+		<if test="@Ognl@isNotEmpty(zhiyatyp)">
+			ZHIYATYP = #{zhiyatyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(zhiyano)">
+			ZHIYANO = #{zhiyano},
+		</if>
+		<if test="@Ognl@isNotEmpty(currncy)">
+			CURRNCY = #{currncy},
+		</if>
+		<if test="@Ognl@isNotEmpty(dscrb)">
+			DSCRB = #{dscrb},
+		</if>
+		<if test="@Ognl@isNotEmpty(zhiyaregorg)">
+			ZHIYAREGORG = #{zhiyaregorg},
+		</if>
+		<if test="@Ognl@isNotEmpty(zhiyaamnt)">
+			ZHIYAAMNT = #{zhiyaamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(evltmthd)">
+			EVLTMTHD = #{evltmthd},
+		</if>
+		<if test="@Ognl@isNotEmpty(zhiyavlu)">
+			ZHIYAVLU = #{zhiyavlu},
+		</if>
+		<if test="@Ognl@isNotEmpty(vludate)">
+			VLUDATE = #{vludate},
+		</if>
+		<if test="@Ognl@isNotEmpty(zhiyart)">
+			ZHIYART = #{zhiyart},
+		</if>
+		<if test="@Ognl@isNotEmpty(assrrt)">
+			ASSRRT = #{assrrt},
+		</if>
+		<if test="@Ognl@isNotEmpty(expiredate)">
+			EXPIREDATE = #{expiredate},
+		</if>
+		<if test="@Ognl@isNotEmpty(ntrztnorg)">
+			NTRZTNORG = #{ntrztnorg},
+		</if>
+		<if test="@Ognl@isNotEmpty(ntrztndate)">
+			NTRZTNDATE = #{ntrztndate},
+		</if>
+		<if test="@Ognl@isNotEmpty(ntrztnno)">
+			NTRZTNNO = #{ntrztnno},
+		</if>
+		<if test="@Ognl@isNotEmpty(depno)">
+			DEPNO = #{depno},
+		</if>
+		<if test="@Ognl@isNotEmpty(regopno)">
+			REGOPNO = #{regopno},
+		</if>
+		<if test="@Ognl@isNotEmpty(regdate)">
+			REGDATE = #{regdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(updtdate)">
+			UPDTDATE = #{updtdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(exprtflg)">
+			EXPRTFLG = #{exprtflg},
+		</if>
+			<if test="@Ognl@isNotEmpty(zhiyarendz)">
+			ZHIYARENDZ = #{zhiyarendz},
+		</if>
+		<if test="@Ognl@isNotEmpty(zhiyafaren)">
+			ZHIYAFAREN = #{zhiyafaren},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.bsnsmng.entity.BsnsZhiya">
+	    UPDATE bsns_zhiya 
+		<include refid="updateset"/>
+        WHERE 
+	        applyNo = #{applyno} 
+	</update>
+	<!-- 更新Selective -->
+	<update id="modifyCntrct" parameterType="com.mf.bsnsmng.entity.BsnsZhiya">
+	    UPDATE bsns_zhiya 
+		<include refid="updateset"/>
+        WHERE 
+	       cntrctno = #{cntrctno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	<!-- 根据申请编号查询 -->
+	<select id="getById" parameterType="String" resultType="com.mf.bsnsmng.entity.BsnsZhiya">
+	    select  
+	      <include refid="selectId"/> from bsns_zhiya
+	      where applyNo=#{applyNo}
+	</select>
+	<select id="getByCntrctno" parameterType="String" resultType="com.mf.bsnsmng.entity.BsnsZhiya">
+	    select  
+	      <include refid="selectId"/> from bsns_zhiya
+	 where cntrctno=#{cntrctno}
+	
+	</select>
+	
+	
+</mapper>
+

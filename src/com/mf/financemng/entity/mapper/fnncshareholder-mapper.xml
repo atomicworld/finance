@@ -1,0 +1,724 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FnncShareholderDao">
+
+	<resultMap id="FnncShareholder" type="com.mf.financemng.entity.FnncShareholder">
+        <result property="sharholdno" column="sharholdno"/>
+        <result property="sharholdnm" column="sharholdnm"/>
+        <result property="gender" column="gender"/>
+        <result property="sharholdstt" column="sharholdstt"/>
+        <result property="capitalno" column="capitalno"/>
+        <result property="certtype" column="certtype"/>
+        <result property="certno" column="certno"/>
+        <result property="sharholdtp" column="sharholdtp"/>
+        <result property="stocktype" column="stocktype"/>
+        <result property="invtype" column="invtype"/>
+        <result property="invamt" column="invamt"/>
+        <result property="upinvamt" column="upinvamt"/>
+        <result property="curtp" column="curtp"/>
+        <result property="prate" column="prate"/>
+        <result property="upprate" column="upprate"/>
+        <result property="stockno" column="stockno"/>
+        <result property="sts" column="sts"/>
+        <result property="linkman" column="linkman"/>
+        <result property="hometel" column="hometel"/>
+        <result property="mobiletel" column="mobiletel"/>
+        <result property="company" column="company"/>
+        <result property="occaddress" column="occaddress"/>
+        <result property="sharesdate" column="sharesdate"/>
+        <result property="upsharesdate" column="upsharesdate"/>
+        <result property="scdate" column="scdate"/>
+        <result property="lastmoddate" column="lastmoddate"/>
+        <result property="regopno" column="regopno"/>
+        <result property="depno" column="depno"/>
+        <result property="remark" column="remark"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		sharholdno,
+sharholdnm,
+gender,
+sharholdstt,
+capitalno,
+certtype,
+certno,
+sharholdtp,
+stocktype,
+invtype,
+invamt,
+upinvamt,
+curtp,
+prate,
+upprate,
+stockno,
+sts,
+linkman,
+hometel,
+mobiletel,
+company,
+occaddress,
+sharesdate,
+upsharesdate,
+scdate,
+lastmoddate,
+regopno,
+depno,
+remark
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.FnncShareholder">
+		select
+		<include refid="selectId" />
+		from fnnc_shareholder
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.FnncShareholder" parameterType="com.mf.financemng.entity.FnncShareholder">
+		select
+		<include refid="selectId" />
+		from fnnc_shareholder
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.financemng.entity.FnncShareholder" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fnnc_shareholder
+			where upinvamt!=0
+			<if test="@Ognl@isNotEmpty(t.sharholdnm)">
+					AND sharholdnm like '%${t.sharholdnm}%'
+			</if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}		 
+		</if>
+	</select>
+	
+	<select id="queryhistory" resultType="com.mf.financemng.entity.FnncShareholder" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fnnc_shareholder
+			where upinvamt=0
+			<!-- <include refid="querywhere"/> -->
+			<if test="@Ognl@isNotEmpty(t.sharholdnm)">
+					AND sharholdnm like '%${t.sharholdnm}%'
+			</if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}		 
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.sharholdno)">
+					AND sharholdno like '%${t.sharholdno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.sharholdnm)">
+					AND sharholdnm like '%${t.sharholdnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.gender)">
+					AND gender like '%${t.gender}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.sharholdstt)">
+					AND sharholdstt like '%${t.sharholdstt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.capitalno)">
+					AND capitalno like '%${t.capitalno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.certtype)">
+					AND certtype like '%${t.certtype}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.certno)">
+					AND certno like '%${t.certno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.sharholdtp)">
+					AND sharholdtp like '%${t.sharholdtp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.stocktype)">
+					AND stocktype like '%${t.stocktype}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.invtype)">
+					AND invtype like '%${t.invtype}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.invamt)">
+					AND invamt like '%${t.invamt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.upinvamt)">
+					AND upinvamt like '%${t.upinvamt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.curtp)">
+					AND curtp like '%${t.curtp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.prate)">
+					AND prate like '%${t.prate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.upprate)">
+					AND upprate like '%${t.upprate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.stockno)">
+					AND stockno like '%${t.stockno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.sts)">
+					AND sts like '%${t.sts}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.linkman)">
+					AND linkman like '%${t.linkman}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.hometel)">
+					AND hometel like '%${t.hometel}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.mobiletel)">
+					AND mobiletel like '%${t.mobiletel}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.company)">
+					AND company like '%${t.company}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.occaddress)">
+					AND occaddress like '%${t.occaddress}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.sharesdate)">
+					AND sharesdate like '%${t.sharesdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.upsharesdate)">
+					AND upsharesdate like '%${t.upsharesdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.scdate)">
+					AND scdate like '%${t.scdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.lastmoddate)">
+					AND lastmoddate like '%${t.lastmoddate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regopno)">
+					AND regopno like '%${t.regopno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.depno)">
+					AND depno like '%${t.depno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND remark like '%${t.remark}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(sharholdno)">
+					AND sharholdno like '%${sharholdno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(sharholdnm)">
+					AND sharholdnm like '%${sharholdnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(gender)">
+					AND gender like '%${gender}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(sharholdstt)">
+					AND sharholdstt like '%${sharholdstt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(capitalno)">
+					AND capitalno like '%${capitalno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(certtype)">
+					AND certtype like '%${certtype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(certno)">
+					AND certno like '%${certno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(sharholdtp)">
+					AND sharholdtp like '%${sharholdtp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(stocktype)">
+					AND stocktype like '%${stocktype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(invtype)">
+					AND invtype like '%${invtype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(invamt)">
+					AND invamt like '%${invamt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(upinvamt)">
+					AND upinvamt like '%${upinvamt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(curtp)">
+					AND curtp like '%${curtp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(prate)">
+					AND prate like '%${prate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(upprate)">
+					AND upprate like '%${upprate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(stockno)">
+					AND stockno like '%${stockno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(sts)">
+					AND sts like '%${sts}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(linkman)">
+					AND linkman like '%${linkman}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(hometel)">
+					AND hometel like '%${hometel}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(mobiletel)">
+					AND mobiletel like '%${mobiletel}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(company)">
+					AND company like '%${company}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(occaddress)">
+					AND occaddress like '%${occaddress}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(sharesdate)">
+					AND sharesdate like '%${sharesdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(upsharesdate)">
+					AND upsharesdate like '%${upsharesdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(scdate)">
+					AND scdate like '%${scdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(lastmoddate)">
+					AND lastmoddate like '%${lastmoddate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regopno)">
+					AND regopno like '%${regopno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(depno)">
+					AND depno like '%${depno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND remark like '%${remark}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.FnncShareholder" resultType="int">
+		select count(0) from fnnc_shareholder
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.financemng.entity.FnncShareholder">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO fnnc_shareholder (
+        	sharholdno ,
+        	sharholdnm ,
+        	gender ,
+        	sharholdstt ,
+        	capitalno ,
+        	certtype ,
+        	certno ,
+        	sharholdtp ,
+        	stocktype ,
+        	invtype ,
+        	invamt ,
+        	upinvamt ,
+        	curtp ,
+        	prate ,
+        	upprate ,
+        	stockno ,
+        	sts ,
+        	linkman ,
+        	hometel ,
+        	mobiletel ,
+        	company ,
+        	occaddress ,
+        	sharesdate ,
+        	upsharesdate ,
+        	scdate ,
+        	lastmoddate ,
+        	regopno ,
+        	depno ,
+        	remark 
+        ) VALUES (
+        	#{sharholdno} ,
+        	#{sharholdnm} ,
+        	#{gender} ,
+        	#{sharholdstt} ,
+        	#{capitalno} ,
+        	#{certtype} ,
+        	#{certno} ,
+        	#{sharholdtp} ,
+        	#{stocktype} ,
+        	#{invtype} ,
+        	#{invamt} ,
+        	#{upinvamt} ,
+        	#{curtp} ,
+        	#{prate} ,
+        	#{upprate} ,
+        	#{stockno} ,
+        	#{sts} ,
+        	#{linkman} ,
+        	#{hometel} ,
+        	#{mobiletel} ,
+        	#{company} ,
+        	#{occaddress} ,
+        	#{sharesdate} ,
+        	#{upsharesdate} ,
+        	#{scdate} ,
+        	#{lastmoddate} ,
+        	#{regopno} ,
+        	#{depno} ,
+        	#{remark} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.FnncShareholder">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO fnnc_shareholder 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(sharholdno)">
+				sharholdno,
+			</if>
+			<if test="@Ognl@isNotEmpty(sharholdnm)">
+				sharholdnm,
+			</if>
+			<if test="@Ognl@isNotEmpty(gender)">
+				gender,
+			</if>
+			<if test="@Ognl@isNotEmpty(sharholdstt)">
+				sharholdstt,
+			</if>
+			<if test="@Ognl@isNotEmpty(capitalno)">
+				capitalno,
+			</if>
+			<if test="@Ognl@isNotEmpty(certtype)">
+				certtype,
+			</if>
+			<if test="@Ognl@isNotEmpty(certno)">
+				certno,
+			</if>
+			<if test="@Ognl@isNotEmpty(sharholdtp)">
+				sharholdtp,
+			</if>
+			<if test="@Ognl@isNotEmpty(stocktype)">
+				stocktype,
+			</if>
+			<if test="@Ognl@isNotEmpty(invtype)">
+				invtype,
+			</if>
+			<if test="@Ognl@isNotEmpty(invamt)">
+				invamt,
+			</if>
+			<if test="@Ognl@isNotEmpty(upinvamt)">
+				upinvamt,
+			</if>
+			<if test="@Ognl@isNotEmpty(curtp)">
+				curtp,
+			</if>
+			<if test="@Ognl@isNotEmpty(prate)">
+				prate,
+			</if>
+			<if test="@Ognl@isNotEmpty(upprate)">
+				upprate,
+			</if>
+			<if test="@Ognl@isNotEmpty(stockno)">
+				stockno,
+			</if>
+			<if test="@Ognl@isNotEmpty(sts)">
+				sts,
+			</if>
+			<if test="@Ognl@isNotEmpty(linkman)">
+				linkman,
+			</if>
+			<if test="@Ognl@isNotEmpty(hometel)">
+				hometel,
+			</if>
+			<if test="@Ognl@isNotEmpty(mobiletel)">
+				mobiletel,
+			</if>
+			<if test="@Ognl@isNotEmpty(company)">
+				company,
+			</if>
+			<if test="@Ognl@isNotEmpty(occaddress)">
+				occaddress,
+			</if>
+			<if test="@Ognl@isNotEmpty(sharesdate)">
+				sharesdate,
+			</if>
+			<if test="@Ognl@isNotEmpty(upsharesdate)">
+				upsharesdate,
+			</if>
+			<if test="@Ognl@isNotEmpty(scdate)">
+				scdate,
+			</if>
+			<if test="@Ognl@isNotEmpty(lastmoddate)">
+				lastmoddate,
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				regopno,
+			</if>
+			<if test="@Ognl@isNotEmpty(depno)">
+				depno,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				remark,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(sharholdno)">
+				#{sharholdno},
+			</if>
+			<if test="@Ognl@isNotEmpty(sharholdnm)">
+				#{sharholdnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(gender)">
+				#{gender},
+			</if>
+			<if test="@Ognl@isNotEmpty(sharholdstt)">
+				#{sharholdstt},
+			</if>
+			<if test="@Ognl@isNotEmpty(capitalno)">
+				#{capitalno},
+			</if>
+			<if test="@Ognl@isNotEmpty(certtype)">
+				#{certtype},
+			</if>
+			<if test="@Ognl@isNotEmpty(certno)">
+				#{certno},
+			</if>
+			<if test="@Ognl@isNotEmpty(sharholdtp)">
+				#{sharholdtp},
+			</if>
+			<if test="@Ognl@isNotEmpty(stocktype)">
+				#{stocktype},
+			</if>
+			<if test="@Ognl@isNotEmpty(invtype)">
+				#{invtype},
+			</if>
+			<if test="@Ognl@isNotEmpty(invamt)">
+				#{invamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(upinvamt)">
+				#{upinvamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(curtp)">
+				#{curtp},
+			</if>
+			<if test="@Ognl@isNotEmpty(prate)">
+				#{prate},
+			</if>
+			<if test="@Ognl@isNotEmpty(upprate)">
+				#{upprate},
+			</if>
+			<if test="@Ognl@isNotEmpty(stockno)">
+				#{stockno},
+			</if>
+			<if test="@Ognl@isNotEmpty(sts)">
+				#{sts},
+			</if>
+			<if test="@Ognl@isNotEmpty(linkman)">
+				#{linkman},
+			</if>
+			<if test="@Ognl@isNotEmpty(hometel)">
+				#{hometel},
+			</if>
+			<if test="@Ognl@isNotEmpty(mobiletel)">
+				#{mobiletel},
+			</if>
+			<if test="@Ognl@isNotEmpty(company)">
+				#{company},
+			</if>
+			<if test="@Ognl@isNotEmpty(occaddress)">
+				#{occaddress},
+			</if>
+			<if test="@Ognl@isNotEmpty(sharesdate)">
+				#{sharesdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(upsharesdate)">
+				#{upsharesdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(scdate)">
+				#{scdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(lastmoddate)">
+				#{lastmoddate},
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				#{regopno},
+			</if>
+			<if test="@Ognl@isNotEmpty(depno)">
+				#{depno},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM fnnc_shareholder WHERE
+        sharholdno = #{sharholdno} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.FnncShareholder">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_shareholder 
+	        WHERE 
+        sharholdno = #{sharholdno} 
+	</select>
+
+	<select id="findbynm" parameterType="String" resultType="com.mf.financemng.entity.FnncShareholder">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_shareholder 
+	        WHERE 
+        sharholdnm = #{sharholdnm} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.financemng.entity.FnncShareholder">
+	    UPDATE fnnc_shareholder SET
+	        sharholdnm = #{sharholdnm} ,
+	        gender = #{gender} ,
+	        sharholdstt = #{sharholdstt} ,
+	        capitalno = #{capitalno} ,
+	        certtype = #{certtype} ,
+	        certno = #{certno} ,
+	        sharholdtp = #{sharholdtp} ,
+	        stocktype = #{stocktype} ,
+	        invtype = #{invtype} ,
+	        invamt = #{invamt} ,
+	        upinvamt = #{upinvamt} ,
+	        curtp = #{curtp} ,
+	        prate = #{prate} ,
+	        upprate = #{upprate} ,
+	        stockno = #{stockno} ,
+	        sts = #{sts} ,
+	        linkman = #{linkman} ,
+	        hometel = #{hometel} ,
+	        mobiletel = #{mobiletel} ,
+	        company = #{company} ,
+	        occaddress = #{occaddress} ,
+	        sharesdate = #{sharesdate} ,
+	        upsharesdate = #{upsharesdate} ,
+	        scdate = #{scdate} ,
+	        lastmoddate = #{lastmoddate} ,
+	        regopno = #{regopno} ,
+	        depno = #{depno} ,
+	        remark = #{remark} 
+        WHERE 
+	        sharholdno = #{sharholdno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(sharholdnm)">
+			sharholdnm = #{sharholdnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(gender)">
+			gender = #{gender},
+		</if>
+		<if test="@Ognl@isNotEmpty(sharholdstt)">
+			sharholdstt = #{sharholdstt},
+		</if>
+		<if test="@Ognl@isNotEmpty(capitalno)">
+			capitalno = #{capitalno},
+		</if>
+		<if test="@Ognl@isNotEmpty(certtype)">
+			certtype = #{certtype},
+		</if>
+		<if test="@Ognl@isNotEmpty(certno)">
+			certno = #{certno},
+		</if>
+		<if test="@Ognl@isNotEmpty(sharholdtp)">
+			sharholdtp = #{sharholdtp},
+		</if>
+		<if test="@Ognl@isNotEmpty(stocktype)">
+			stocktype = #{stocktype},
+		</if>
+		<if test="@Ognl@isNotEmpty(invtype)">
+			invtype = #{invtype},
+		</if>
+		<if test="@Ognl@isNotEmpty(invamt)">
+			invamt = #{invamt},
+		</if>
+		<if test="@Ognl@isNotEmpty(upinvamt)">
+			upinvamt = #{upinvamt},
+		</if>
+		<if test="@Ognl@isNotEmpty(curtp)">
+			curtp = #{curtp},
+		</if>
+		<if test="@Ognl@isNotEmpty(prate)">
+			prate = #{prate},
+		</if>
+		<if test="@Ognl@isNotEmpty(upprate)">
+			upprate = #{upprate},
+		</if>
+		<if test="@Ognl@isNotEmpty(stockno)">
+			stockno = #{stockno},
+		</if>
+		<if test="@Ognl@isNotEmpty(sts)">
+			sts = #{sts},
+		</if>
+		<if test="@Ognl@isNotEmpty(linkman)">
+			linkman = #{linkman},
+		</if>
+		<if test="@Ognl@isNotEmpty(hometel)">
+			hometel = #{hometel},
+		</if>
+		<if test="@Ognl@isNotEmpty(mobiletel)">
+			mobiletel = #{mobiletel},
+		</if>
+		<if test="@Ognl@isNotEmpty(company)">
+			company = #{company},
+		</if>
+		<if test="@Ognl@isNotEmpty(occaddress)">
+			occaddress = #{occaddress},
+		</if>
+		<if test="@Ognl@isNotEmpty(sharesdate)">
+			sharesdate = #{sharesdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(upsharesdate)">
+			upsharesdate = #{upsharesdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(scdate)">
+			scdate = #{scdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(lastmoddate)">
+			lastmoddate = #{lastmoddate},
+		</if>
+		<if test="@Ognl@isNotEmpty(regopno)">
+			regopno = #{regopno},
+		</if>
+		<if test="@Ognl@isNotEmpty(depno)">
+			depno = #{depno},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			remark = #{remark},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.financemng.entity.FnncShareholder">
+	    UPDATE fnnc_shareholder 
+		<include refid="updateset"/>
+        WHERE 
+	        sharholdno = #{sharholdno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

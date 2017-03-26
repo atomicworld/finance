@@ -1,0 +1,538 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.businessInfo.dao.MothDao">
+
+	<resultMap id="Moth" type="com.mf.businessInfo.entity.Checkinfo">
+         <result property="bankbillid" column="BANKBILLID"/>
+        <result property="rptyear" column="RPTYEAR"/>
+        <result property="rptmonth" column="RPTMONTH"/>
+        <result property="rptday" column="RPTDAY"/>
+        <result property="summery" column="SUMMERY"/>
+        <result property="blanchout" column="BLANCHOUT"/>
+        <result property="blanchin" column="BLANCHIN"/>
+        <result property="leftamount" column="LEFTAMOUNT"/>
+        <result property="leftdatetime" column="LEFTDATETIME"/>
+        <result property="orgcode" column="ORGCODE"/>
+        <result property="createby" column="CREATEBY"/>
+        <result property="createdate" column="CREATEDATE"/>
+        <result property="updateby" column="UPDATEBY"/>
+        <result property="updatedate" column="UPDATEDATE"/>
+        <result property="outcnt" column="OUTCNT"/>
+        <result property="incnt" column="INCNT"/>
+        <result property="rptdate" column="RPTDATE"/>
+        <result property="bankname" column="BANKNAME"/>
+        <result property="bankacc" column="BANKACC"/>
+        <result property="rptstatus" column="RPTSTATUS"/>
+        <result property="rptbatch" column="RPTBATCH"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		BANKBILLID,
+RPTYEAR,
+RPTMONTH,
+RPTDAY,
+SUMMERY,
+BLANCHOUT,
+BLANCHIN,
+LEFTAMOUNT,
+LEFTDATETIME,
+ORGCODE,
+CREATEBY,
+date(CREATEDATE) as createdate,
+UPDATEBY,
+UPDATEDATE,
+OUTCNT,
+INCNT,
+RPTDATE,
+BANKNAME,
+BANKACC,
+RPTSTATUS,
+RPTBATCH
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.businessInfo.entity.Checkinfo">
+		select
+		<include refid="selectId" />
+		from checkinfo
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.businessInfo.entity.Checkinfo" parameterType="com.mf.businessInfo.entity.Checkinfo">
+		select
+		<include refid="selectId" />
+		from checkinfo
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+	<select id="query" resultType="com.mf.businessInfo.entity.Checkinfo" parameterType="java.util.HashMap">
+						select c.blanchin,c.blanchout,c.bankname,b.rptdate,c.OUTCNT,c.LEFTAMOUNT,c.BANKACC,c.INCNT,b.rptday from 
+						(
+						(SELECT MAX(RPTDAY) as rptday,rptdate,bankname from checkinfo group by rptdate order by rptdate)
+						) as b
+						left join 
+						(
+						select sum(a.BLANCHIN) as blanchin,sum(a.BLANCHOUT) as blanchout,a.rptdate,BANKACC,BANKNAME,INCNT,OUTCNT,
+						(sum(a.BLANCHIN)-sum(a.BLANCHOUT))as LEFTAMOUNT
+						 from checkinfo a 
+						GROUP BY a.RPTDATE,BANKACC,BANKNAME,INCNT,OUTCNT order by rptdate
+						)c
+						on c.rptdate=b.rptdate  where 1=1
+				<if test="@Ognl@isNotEmpty(t.bankname)">
+					AND c.bankname like'%${t.bankname}%'
+			   </if>
+			     <if test="@Ognl@isNotEmpty(t.rptdate)">
+					AND c.RPTDATE = '${t.rptdate}'
+			   </if>
+				order by c.rptdate desc
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(t.rptyear)">
+					AND RPTYEAR = '${t.rptyear}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rptmonth)">
+					AND RPTMONTH = '${t.rptmonth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rptday)">
+					AND RPTDAY = '${t.rptday}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.summery)">
+					AND SUMMERY like '%${t.summery}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.blanchout)">
+					AND BLANCHOUT = '${t.blanchout}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.blanchin)">
+					AND BLANCHIN = '${t.blanchin}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.leftamount)">
+					AND LEFTAMOUNT = '${t.leftamount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.leftdatetimeBegin)">
+					AND LEFTDATETIME >= #{t.leftdatetimeBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.leftdatetimeEnd)">
+					AND LEFTDATETIME &lt;= #{t.leftdatetimeEnd}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.orgcode)">
+					AND ORGCODE like '%${t.orgcode}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.createby)">
+					AND CREATEBY like '%${t.createby}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.createdateBegin)">
+					AND CREATEDATE >= #{t.createdateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.createdateEnd)">
+					AND CREATEDATE &lt;= #{t.createdateEnd}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.updateby)">
+					AND UPDATEBY like '%${t.updateby}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.updatedateBegin)">
+					AND UPDATEDATE >= #{t.updatedateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.updatedateEnd)">
+					AND UPDATEDATE &lt;= #{t.updatedateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.outcnt)">
+					AND OUTCNT = '${t.outcnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.incnt)">
+					AND INCNT = '${t.incnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rptdate)">
+					AND RPTDATE = '${t.rptdate}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bankname)">
+					AND BANKNAME like '%${t.bankname}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bankacc)">
+					AND BANKACC like '%${t.bankacc}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rptstatus)">
+					AND RPTSTATUS = '${t.rptstatus}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rptbatch)">
+					AND RPTBATCH like '%${t.rptbatch}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(rptyear)">
+					AND RPTYEAR = '${rptyear}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rptmonth)">
+					AND RPTMONTH = '${rptmonth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rptday)">
+					AND RPTDAY = '${rptday}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(summery)">
+					AND SUMMERY like '%${summery}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(blanchout)">
+					AND BLANCHOUT = '${blanchout}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(blanchin)">
+					AND BLANCHIN = '${blanchin}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(leftamount)">
+					AND LEFTAMOUNT = '${leftamount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(leftdatetimeBegin)">
+					AND LEFTDATETIME >= #{leftdatetimeBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(leftdatetimeEnd)">
+					AND LEFTDATETIME &lt;= #{leftdatetimeEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(orgcode)">
+					AND ORGCODE like '%${orgcode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(createby)">
+					AND CREATEBY like '%${createby}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(createdateBegin)">
+					AND CREATEDATE >= #{createdateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(createdateEnd)">
+					AND CREATEDATE &lt;= #{createdateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(updateby)">
+					AND UPDATEBY like '%${updateby}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(updatedateBegin)">
+					AND UPDATEDATE >= #{updatedateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(updatedateEnd)">
+					AND UPDATEDATE &lt;= #{updatedateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(outcnt)">
+					AND OUTCNT = '${outcnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(incnt)">
+					AND INCNT = '${incnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rptdate)">
+					AND RPTDATE = '${rptdate}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(bankname)">
+					AND BANKNAME like '%${bankname}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bankacc)">
+					AND BANKACC like '%${bankacc}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rptstatus)">
+					AND RPTSTATUS = '${rptstatus}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rptbatch)">
+					AND RPTBATCH like '%${rptbatch}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 求单个  -->
+	<select id="getBank" resultType="com.mf.businessInfo.entity.Checkinfo" >
+		SELECT DISTINCT BANKNAME,BANKACC FROM Checkinfo
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.businessInfo.entity.Checkinfo">
+		INSERT INTO checkinfo (
+        	RPTYEAR ,
+        	RPTMONTH ,
+        	RPTDAY ,
+        	SUMMERY ,
+        	BLANCHOUT ,
+        	BLANCHIN ,
+        	LEFTAMOUNT ,
+        	LEFTDATETIME ,
+        	ORGCODE ,
+        	CREATEBY ,
+        	CREATEDATE ,
+        	UPDATEBY ,
+        	UPDATEDATE ,
+        	OUTCNT ,
+        	INCNT ,
+        	RPTDATE ,
+        	BANKNAME ,
+        	BANKACC ,
+        	RPTSTATUS ,
+        	RPTBATCH 
+        ) VALUES (
+        	#{rptyear} ,
+        	#{rptmonth} ,
+        	#{rptday} ,
+        	#{summery} ,
+        	#{blanchout} ,
+        	#{blanchin} ,
+        	#{leftamount} ,
+        	#{leftdatetime} ,
+        	#{orgcode} ,
+        	#{createby} ,
+        	#{createdate} ,
+        	#{updateby} ,
+        	#{updatedate} ,
+        	#{outcnt} ,
+        	#{incnt} ,
+        	#{rptdate} ,
+        	#{bankname} ,
+        	#{bankacc} ,
+        	#{rptstatus} ,
+        	#{rptbatch} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.businessInfo.entity.Checkinfo">
+		INSERT INTO Checkinfo 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+	<if test="@Ognl@isNotEmpty(bankbillid)">
+				bankbillid,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptyear)">
+				RPTYEAR,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptmonth)">
+				RPTMONTH,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptday)">
+				RPTDAY,
+			</if>
+			<if test="@Ognl@isNotEmpty(summery)">
+				SUMMERY,
+			</if>
+			<if test="@Ognl@isNotEmpty(blanchout)">
+				BLANCHOUT,
+			</if>
+			<if test="@Ognl@isNotEmpty(blanchin)">
+				BLANCHIN,
+			</if>
+			<if test="@Ognl@isNotEmpty(leftamount)">
+				LEFTAMOUNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(leftdatetime)">
+				LEFTDATETIME,
+			</if>
+			<if test="@Ognl@isNotEmpty(orgcode)">
+				ORGCODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(createby)">
+				CREATEBY,
+			</if>
+			<if test="@Ognl@isNotEmpty(createdate)">
+				CREATEDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(updateby)">
+				UPDATEBY,
+			</if>
+			<if test="@Ognl@isNotEmpty(updatedate)">
+				UPDATEDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(outcnt)">
+				OUTCNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(incnt)">
+				INCNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptdate)">
+				RPTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(bankname)">
+				BANKNAME,
+			</if>
+			<if test="@Ognl@isNotEmpty(bankacc)">
+				BANKACC,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptstatus)">
+				RPTSTATUS,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptbatch)">
+				RPTBATCH,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    <if test="@Ognl@isNotEmpty(bankbillid)">
+				#{bankbillid},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptyear)">
+				#{rptyear},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptmonth)">
+				#{rptmonth},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptday)">
+				#{rptday},
+			</if>
+			<if test="@Ognl@isNotEmpty(summery)">
+				#{summery},
+			</if>
+			<if test="@Ognl@isNotEmpty(blanchout)">
+				#{blanchout},
+			</if>
+			<if test="@Ognl@isNotEmpty(blanchin)">
+				#{blanchin},
+			</if>
+			<if test="@Ognl@isNotEmpty(leftamount)">
+				#{leftamount},
+			</if>
+			<if test="@Ognl@isNotEmpty(leftdatetime)">
+				#{leftdatetime},
+			</if>
+			<if test="@Ognl@isNotEmpty(orgcode)">
+				#{orgcode},
+			</if>
+			<if test="@Ognl@isNotEmpty(createby)">
+				#{createby},
+			</if>
+			<if test="@Ognl@isNotEmpty(createdate)">
+				#{createdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(updateby)">
+				#{updateby},
+			</if>
+			<if test="@Ognl@isNotEmpty(updatedate)">
+				#{updatedate},
+			</if>
+			<if test="@Ognl@isNotEmpty(outcnt)">
+				#{outcnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(incnt)">
+				#{incnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptdate)">
+				#{rptdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(bankname)">
+				#{bankname},
+			</if>
+			<if test="@Ognl@isNotEmpty(bankacc)">
+				#{bankacc},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptstatus)">
+				#{rptstatus},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptbatch)">
+				#{rptbatch},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM Checkinfo WHERE
+        rptdate = #{id} 
+	</delete>
+	<!-- 删  not use can delete file-->
+	<delete id="delete2" parameterType="String">
+		DELETE FROM Checkinfo WHERE
+        BANKBILLID = #{id} 
+	</delete>
+	<!-- 根据主键查实体   验证月份 存在时用-->
+	<select id="getById" parameterType="String" resultType="com.mf.businessInfo.entity.Checkinfo">
+		SELECT DISTINCT BANKNAME ,BANKACC,OUTCNT,INCNT,RPTDATE,BANKBILLID
+		    FROM Checkinfo 
+	        WHERE 
+        rptdate = #{id} 
+	</select>
+	<!-- 根据主键查实体 -->
+	<select id="getById2" parameterType="String" resultType="com.mf.businessInfo.entity.Checkinfo">
+		SELECT <include refid="selectId" />
+		    FROM Checkinfo 
+	        WHERE 
+        rptdate = #{id}
+	</select>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(rptyear)">
+			RPTYEAR = #{rptyear},
+		</if>
+		<if test="@Ognl@isNotEmpty(rptmonth)">
+			RPTMONTH = #{rptmonth},
+		</if>
+		<if test="@Ognl@isNotEmpty(rptday)">
+			RPTDAY = #{rptday},
+		</if>
+		<if test="@Ognl@isNotEmpty(summery)">
+			SUMMERY = #{summery},
+		</if>
+		<if test="@Ognl@isNotEmpty(blanchout)">
+			BLANCHOUT = #{blanchout},
+		</if>
+		<if test="@Ognl@isNotEmpty(blanchin)">
+			BLANCHIN = #{blanchin},
+		</if>
+		<if test="@Ognl@isNotEmpty(leftamount)">
+			LEFTAMOUNT = #{leftamount},
+		</if>
+		<if test="@Ognl@isNotEmpty(leftdatetime)">
+			LEFTDATETIME = #{leftdatetime},
+		</if>
+		<if test="@Ognl@isNotEmpty(orgcode)">
+			ORGCODE = #{orgcode},
+		</if>
+		<if test="@Ognl@isNotEmpty(createby)">
+			CREATEBY = #{createby},
+		</if>
+		<if test="@Ognl@isNotEmpty(createdate)">
+			CREATEDATE = #{createdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(updateby)">
+			UPDATEBY = #{updateby},
+		</if>
+		<if test="@Ognl@isNotEmpty(updatedate)">
+			UPDATEDATE = #{updatedate},
+		</if>
+		<if test="@Ognl@isNotEmpty(outcnt)">
+			OUTCNT = #{outcnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(incnt)">
+			INCNT = #{incnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(rptdate)">
+			RPTDATE = #{rptdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(bankname)">
+			BANKNAME = #{bankname},
+		</if>
+		<if test="@Ognl@isNotEmpty(bankacc)">
+			BANKACC = #{bankacc},
+		</if>
+		<if test="@Ognl@isNotEmpty(rptstatus)">
+			RPTSTATUS = #{rptstatus},
+		</if>
+		<if test="@Ognl@isNotEmpty(rptbatch)">
+			RPTBATCH = #{rptbatch},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.businessInfo.entity.Checkinfo">
+	    UPDATE checkinfo 
+		<include refid="updateset"/>
+        WHERE 
+	        BANKBILLID = #{bankbillid} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

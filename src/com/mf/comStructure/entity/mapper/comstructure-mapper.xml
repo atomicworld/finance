@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.mf.comStructure.dao.ComStructureDao">
+
+	<resultMap id="ComStructure" type="com.mf.comStructure.entity.ComStructure">
+        <result property="id" column="ID"/>
+        <result property="stockName" column="STOCK_NAME"/>
+        <result property="shareRatio" column="SHARE_RATIO"/>
+        <result property="preName" column="PRE_NAME"/>
+        <result property="prePhone" column="PRE_PHONE"/>
+        <result property="preMobile" column="PRE_MOBILE"/>
+        <result property="mgrName" column="MGR_NAME"/>
+        <result property="mgrPhone" column="MGR_PHONE"/>
+        <result property="mgrMobile" column="MGR_MOBILE"/>
+        <result property="startDate" column="START_DATE"/>
+        <result property="status" column="STATUS"/>
+        <result property="submitDate" column="SUBMIT_DATE"/>
+        <result property="createDate" column="CREATE_DATE"/>
+	</resultMap>
+
+	<sql id="selectId">
+		ID,
+STOCK_NAME,
+SHARE_RATIO,
+PRE_NAME,
+PRE_PHONE,
+PRE_MOBILE,
+MGR_NAME,
+MGR_PHONE,
+MGR_MOBILE,
+START_DATE,
+STATUS,
+SUBMIT_DATE,
+CREATE_DATE
+    </sql>
+    
+	<select id="query" resultMap="ComStructure" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from com_structure
+		<include refid="querywhere"/>
+	</select>
+
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   
+		</where>
+	</sql>
+	
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.comStructure.entity.ComStructure" resultType="int">
+		select count(0) from com_structure
+		<include refid="querywhere"/>
+	</select>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.comStructure.entity.ComStructure">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO com_structure 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(stockName)">
+				STOCK_NAME,
+			</if>
+			<if test="@Ognl@isNotEmpty(shareRatio)">
+				SHARE_RATIO,
+			</if>
+			<if test="@Ognl@isNotEmpty(preName)">
+				PRE_NAME,
+			</if>
+			<if test="@Ognl@isNotEmpty(prePhone)">
+				PRE_PHONE,
+			</if>
+			<if test="@Ognl@isNotEmpty(preMobile)">
+				PRE_MOBILE,
+			</if>
+			<if test="@Ognl@isNotEmpty(mgrName)">
+				MGR_NAME,
+			</if>
+			<if test="@Ognl@isNotEmpty(mgrPhone)">
+				MGR_PHONE,
+			</if>
+			<if test="@Ognl@isNotEmpty(mgrMobile)">
+				MGR_MOBILE,
+			</if>
+			<if test="@Ognl@isNotEmpty(startDate)">
+				START_DATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(status)">
+				STATUS,
+			</if>
+			<if test="@Ognl@isNotEmpty(submitDate)">
+				SUBMIT_DATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(createDate)">
+				CREATE_DATE,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(stockName)">
+				#{stockName},
+			</if>
+			<if test="@Ognl@isNotEmpty(shareRatio)">
+				#{shareRatio},
+			</if>
+			<if test="@Ognl@isNotEmpty(preName)">
+				#{preName},
+			</if>
+			<if test="@Ognl@isNotEmpty(prePhone)">
+				#{prePhone},
+			</if>
+			<if test="@Ognl@isNotEmpty(preMobile)">
+				#{preMobile},
+			</if>
+			<if test="@Ognl@isNotEmpty(mgrName)">
+				#{mgrName},
+			</if>
+			<if test="@Ognl@isNotEmpty(mgrPhone)">
+				#{mgrPhone},
+			</if>
+			<if test="@Ognl@isNotEmpty(mgrMobile)">
+				#{mgrMobile},
+			</if>
+			<if test="@Ognl@isNotEmpty(startDate)">
+				#{startDate},
+			</if>
+			<if test="@Ognl@isNotEmpty(status)">
+				#{status},
+			</if>
+			<if test="@Ognl@isNotEmpty(submitDate)">
+				#{submitDate},
+			</if>
+			<if test="@Ognl@isNotEmpty(createDate)">
+				#{createDate},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM com_structure WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultMap="ComStructure">
+		SELECT <include refid="selectId" />
+		    FROM com_structure 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="modify" parameterType="com.mf.comStructure.entity.ComStructure">
+	    UPDATE com_structure SET
+	        STOCK_NAME = #{stockName} ,
+	        SHARE_RATIO = #{shareRatio} ,
+	        PRE_NAME = #{preName} ,
+	        PRE_PHONE = #{prePhone} ,
+	        PRE_MOBILE = #{preMobile} ,
+	        MGR_NAME = #{mgrName} ,
+	        MGR_PHONE = #{mgrPhone} ,
+	        MGR_MOBILE = #{mgrMobile} ,
+	        START_DATE = #{startDate}
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 提交 -->
+	<update id="submit" parameterType="String">
+		UPDATE com_structure SET
+	        STATUS = '1',
+	        SUBMIT_DATE = date_format(sysdate(),'%Y-%m-%d')
+        WHERE 
+	        ID = #{id} AND STATUS = '0'
+	</update>
+</mapper>
+

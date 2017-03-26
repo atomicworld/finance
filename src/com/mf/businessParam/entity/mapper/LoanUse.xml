@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.mf.businessParam.dao.LoanUseDao">
+
+	<sql id="selectItems">
+		useno, usenm, usedes, isused, frstfthr, scndfthr, thrdfthr,
+			lvl, isbttm, reserved
+  	</sql>
+    
+	<select id="query" resultType="LoanUse">
+		select
+		<include refid="selectItems" />
+		from loanuse
+	</select>
+	
+	<select id="queryAll" resultType="LoanUse">
+		select
+		<include refid="selectItems" />
+		from loanuse
+	</select>
+	
+	<!-- 总记录数 -->
+	<select id="count" parameterType="LoanUse" resultType="int">
+		select count(0) from loanuse
+	</select>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="Loanuse">
+		INSERT INTO loanuse 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+	<if test="@Ognl@isNotEmpty(useno)">
+				USENO,
+			</if>
+			<if test="@Ognl@isNotEmpty(usenm)">
+				USENM,
+			</if>
+			<if test="@Ognl@isNotEmpty(usedes)">
+				USEDES,
+			</if>
+			<if test="@Ognl@isNotEmpty(isused)">
+				ISUSED,
+			</if>
+			<if test="@Ognl@isNotEmpty(frstfthr)">
+				FRSTFTHR,
+			</if>
+			<if test="@Ognl@isNotEmpty(scndfthr)">
+				SCNDFTHR,
+			</if>
+			<if test="@Ognl@isNotEmpty(thrdfthr)">
+				THRDFTHR,
+			</if>
+			<if test="@Ognl@isNotEmpty(lvl)">
+				LVL,
+			</if>
+			<if test="@Ognl@isNotEmpty(isbttm)">
+				ISBTTM,
+			</if>
+			<if test="@Ognl@isNotEmpty(reserved)">
+				RESERVED,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(useno)">
+				#{useno},
+			</if>
+			<if test="@Ognl@isNotEmpty(usenm)">
+				#{usenm},
+			</if>
+			<if test="@Ognl@isNotEmpty(usedes)">
+				#{usedes},
+			</if>
+			<if test="@Ognl@isNotEmpty(isused)">
+				#{isused},
+			</if>
+			<if test="@Ognl@isNotEmpty(frstfthr)">
+				#{frstfthr},
+			</if>
+			<if test="@Ognl@isNotEmpty(scndfthr)">
+				#{scndfthr},
+			</if>
+			<if test="@Ognl@isNotEmpty(thrdfthr)">
+				#{thrdfthr},
+			</if>
+			<if test="@Ognl@isNotEmpty(lvl)">
+				#{lvl},
+			</if>
+			<if test="@Ognl@isNotEmpty(isbttm)">
+				#{isbttm},
+			</if>
+			<if test="@Ognl@isNotEmpty(reserved)">
+				#{reserved},
+			</if>
+    </trim>
+	</sql>
+	<!-- 删除 -->
+	<delete id="delete" parameterType="String">
+	    DELETE FROM LOANUSE 
+	    WHERE useno=#{useno}
+	</delete>
+	
+	
+	<select id="getById" parameterType="String" resultType="LoanUse">
+	    select
+		<include refid="selectItems" />
+		from LOANUSE
+		where  useno=#{useno}
+	</select>
+	
+	<select id="queryLvl" parameterType="LoanUse" resultType="LoanUse">
+	    select
+		<include refid="selectItems" />
+		from LOANUSE
+		where  lvl=#{lvl}
+		<if test="@Ognl@isNotEmpty(useno)">
+			and useno like '${useno}%'
+		</if>
+	</select>
+		<select id="queryMaxLen" parameterType="LoanUse" resultType="Integer">
+	   select 
+	   
+	   case when max(substring(useno,length('${useno}')+1)+1) is null then 1 
+	   else max(substring(useno,length('${useno}')+1)+1) end a
+		from LOANUSE
+		where  lvl=#{lvl}
+		<if test="@Ognl@isNotEmpty(useno)">
+			and useno like '${useno}%'
+		</if>
+	</select>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(usenm)">
+			USENM = #{usenm},
+		</if>
+		<if test="@Ognl@isNotEmpty(usedes)">
+			USEDES = #{usedes},
+		</if>
+		<if test="@Ognl@isNotEmpty(isused)">
+			ISUSED = #{isused},
+		</if>
+		<if test="@Ognl@isNotEmpty(frstfthr)">
+			FRSTFTHR = #{frstfthr},
+		</if>
+		<if test="@Ognl@isNotEmpty(scndfthr)">
+			SCNDFTHR = #{scndfthr},
+		</if>
+		<if test="@Ognl@isNotEmpty(thrdfthr)">
+			THRDFTHR = #{thrdfthr},
+		</if>
+		<if test="@Ognl@isNotEmpty(lvl)">
+			LVL = #{lvl},
+		</if>
+		<if test="@Ognl@isNotEmpty(isbttm)">
+			ISBTTM = #{isbttm},
+		</if>
+		<if test="@Ognl@isNotEmpty(reserved)">
+			RESERVED = #{reserved},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="Loanuse">
+	    UPDATE loanuse 
+		<include refid="updateset"/>
+        WHERE 
+	        USENO = #{useno} 
+	</update>
+	
+	
+	<update id="changeStatus" parameterType="LoanUse">
+		update LOANUSE 
+		<set>
+		    isused=#{isused}
+		</set>
+		WHERE useno=#{useno}
+	</update>
+	
+</mapper>
+

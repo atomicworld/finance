@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.AuditReportDao">
+
+	<resultMap id="AuditReport" type="com.mf.financemng.entity.AuditReport">
+        <result property="reportid" column="REPORTID"/>
+        <result property="reportyear" column="REPORTYEAR"/>
+        <result property="reporttype" column="REPORTTYPE"/>
+        <result property="orgcode" column="ORGCODE"/>
+        <result property="organization" column="ORGANIZATION"/>
+        <result property="updatedate" column="UPDATEDATE"/>
+        <result property="pstatus" column="PSTATUS"/>
+        <result property="zstatus" column="ZSTATUS"/>
+        <result property="xstatus" column="XSTATUS"/>
+        <result property="deleteflag" column="DELETEFLAG"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		REPORTID,
+REPORTYEAR,
+REPORTTYPE,
+ORGCODE,
+ORGANIZATION,
+date(UPDATEDATE) as UPDATEDATE,
+PSTATUS,
+ZSTATUS,
+XSTATUS,
+DELETEFLAG
+    </sql>
+    
+
+
+	<select id="query" resultType="com.mf.financemng.entity.AuditReport" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from audit_report where deleteflag = 0
+	</select>
+	
+	<select id="query1" resultType="com.mf.financemng.entity.AuditReport" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from audit_report where reportyear = '${t.reportyear}' and deleteflag = 0
+	</select>
+	
+	<select id="query2" resultType="com.mf.financemng.entity.AuditReport" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from audit_report where reportyear &gt;= '${t.reportyear}' and deleteflag = 0
+	</select>
+	
+	<select id="query3" resultType="com.mf.financemng.entity.AuditReport" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from audit_report where reportyear &lt;= '${t.reportyear}' and deleteflag = 0
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.reportyear)">
+					AND REPORTYEAR like '%${t.reportyear}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.reporttype)">
+					AND REPORTTYPE = '${t.reporttype}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.orgcode)">
+					AND ORGCODE like '%${t.orgcode}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.organization)">
+					AND ORGANIZATION like '%${t.organization}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.updatedateBegin)">
+					AND UPDATEDATE >= #{t.updatedateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.updatedateEnd)">
+					AND UPDATEDATE &lt;= #{t.updatedateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.pstatus)">
+					AND PSTATUS = '${t.pstatus}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.zstatus)">
+					AND ZSTATUS = '${t.zstatus}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.xstatus)">
+					AND XSTATUS = '${t.xstatus}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.deleteflag)">
+					AND DELETEFLAG = '${t.deleteflag}'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+	
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.AuditReport">
+		INSERT INTO audit_report 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(reportid)">
+				REPORTID,
+			</if>
+			<if test="@Ognl@isNotEmpty(reportyear)">
+				REPORTYEAR,
+			</if>
+			<if test="@Ognl@isNotEmpty(reporttype)">
+				REPORTTYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(orgcode)">
+				ORGCODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(organization)">
+				ORGANIZATION,
+			</if>
+			<if test="@Ognl@isNotEmpty(updatedate)">
+				UPDATEDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(pstatus)">
+				PSTATUS,
+			</if>
+			<if test="@Ognl@isNotEmpty(zstatus)">
+				ZSTATUS,
+			</if>
+			<if test="@Ognl@isNotEmpty(xstatus)">
+				XSTATUS,
+			</if>
+			<if test="@Ognl@isNotEmpty(deleteflag)">
+				DELETEFLAG,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(reportid)">
+				#{reportid},
+			</if>
+			<if test="@Ognl@isNotEmpty(reportyear)">
+				#{reportyear},
+			</if>
+			<if test="@Ognl@isNotEmpty(reporttype)">
+				#{reporttype},
+			</if>
+			<if test="@Ognl@isNotEmpty(orgcode)">
+				#{orgcode},
+			</if>
+			<if test="@Ognl@isNotEmpty(organization)">
+				#{organization},
+			</if>
+			<if test="@Ognl@isNotEmpty(updatedate)">
+				#{updatedate},
+			</if>
+			<if test="@Ognl@isNotEmpty(pstatus)">
+				#{pstatus},
+			</if>
+			<if test="@Ognl@isNotEmpty(zstatus)">
+				#{zstatus},
+			</if>
+			<if test="@Ognl@isNotEmpty(xstatus)">
+				#{xstatus},
+			</if>
+			<if test="@Ognl@isNotEmpty(deleteflag)">
+				#{deleteflag},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM audit_report WHERE
+        REPORTID = #{reportid} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.AuditReport">
+		SELECT <include refid="selectId" />
+		    FROM audit_report 
+	        WHERE 
+        REPORTID = #{reportid} 
+	</select>
+	
+	<!-- 根据year查实体 -->
+	<select id="getByYear" parameterType="String" resultType="com.mf.financemng.entity.AuditReport">
+		SELECT <include refid="selectId" />
+		    FROM audit_report 
+	        WHERE 
+        reportyear = #{reportyear} and deleteflag = 0
+	</select>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(reportyear)">
+			REPORTYEAR = #{reportyear},
+		</if>
+		<if test="@Ognl@isNotEmpty(reporttype)">
+			REPORTTYPE = #{reporttype},
+		</if>
+		<if test="@Ognl@isNotEmpty(orgcode)">
+			ORGCODE = #{orgcode},
+		</if>
+		<if test="@Ognl@isNotEmpty(organization)">
+			ORGANIZATION = #{organization},
+		</if>
+		<if test="@Ognl@isNotEmpty(updatedate)">
+			UPDATEDATE = #{updatedate},
+		</if>
+		<if test="@Ognl@isNotEmpty(pstatus)">
+			PSTATUS = #{pstatus},
+		</if>
+		<if test="@Ognl@isNotEmpty(zstatus)">
+			ZSTATUS = #{zstatus},
+		</if>
+		<if test="@Ognl@isNotEmpty(xstatus)">
+			XSTATUS = #{xstatus},
+		</if>
+		<if test="@Ognl@isNotEmpty(deleteflag)">
+			DELETEFLAG = #{deleteflag},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.financemng.entity.AuditReport">
+	    UPDATE audit_report 
+		<include refid="updateset"/>
+        WHERE 
+	        REPORTID = #{reportid} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.mf.org.dao.OperatorDao">
+
+	<sql id="selectItems">
+		 DPTNO,EMPLYNO,IDNUM,RLID,RLNM,OPTYPE,ISUSED,OPRIGHT,INPOSTN,VPNACCT,RESERVED,OPNM,CSTMRTYPE,BSBSKND,PWD
+  	</sql>
+  	
+  	<!-- 去掉RLNM字段 -->
+  	<sql id="sltItmes">
+  		DPTNO,EMPLYNO,IDNUM,RLID,OPTYPE,ISUSED,OPRIGHT,INPOSTN,VPNACCT,RESERVED,OPNM,CSTMRTYPE,BSBSKND,PWD
+  	</sql>
+    
+	<select id="query" resultType="Operator">
+		select
+		<include refid="sltItmes" />
+		, (SELECT RLNM FROM sys_role r WHERE r.RLID=a.RLID limit 1) as RLNM
+		, (SELECT dptName FROM dptmnt d WHERE d.DPTNO = a.DPTNO limit 1) as dptName
+		from OPERATOR a
+		<include refid="querywhere" />
+	</select>
+	
+	<select id="queryAll" resultType="Operator">
+		select
+		<include refid="selectItems" />
+		from OPERATOR
+	</select>
+	
+	<select id="getOperators" resultType="Operator">
+		select
+		<include refid="selectItems" />
+		from OPERATOR where EMPLYNO!='999999'
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	    				
+			   <if test="@Ognl@isNotEmpty(t.opnm)">
+					AND OPNM like '%${t.opnm}%'
+			   </if>
+			   AND EMPLYNO!='999999' 
+		</where>
+	</sql>
+	
+	<!-- 总记录数 -->
+	<select id="count" parameterType="Operator" resultType="int">
+		select count(0) from OPERATOR
+	</select>
+	
+	<select id="countMngr" parameterType="String" resultType="int">
+		select count(0) from cstmrmngr where EMPLYNO=#{emplyno}
+	</select>
+	<select id="countAppr" parameterType="String" resultType="int">
+		select count(0) from flow_apprler where OPNO=#{emplyno}
+	</select>
+	<select id="countClnt" parameterType="String" resultType="int">
+		select count(0) from clnt_client where USERID=#{emplyno}
+	</select>
+	
+	<select id="countByAcct" parameterType="String" resultType="int">
+		select count(1) 
+		from operator where vpnacct = #{vpnacct}
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="add" parameterType="Operator">
+		INSERT INTO OPERATOR (
+			 DPTNO,EMPLYNO,IDNUM,RLID,RLNM,OPTYPE,ISUSED,OPRIGHT,INPOSTN,VPNACCT,PWD,RESERVED,
+			 OPNM,BSBSKND,CSTMRTYPE
+         ) VALUES (
+			 #{dptno},#{emplyno},#{idnum},#{rlid},#{rlnm},#{optype},#{isused},#{opright},#{inpostn},#{vpnacct},#{pwd},#{reserved},
+			 #{opnm},#{bsbsknd},#{cstmrtype}
+        )
+	</insert>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterType="String">
+	    DELETE FROM OPERATOR 
+	    WHERE emplyno=#{emplyno}
+	</delete>
+	
+	
+	<select id="getById" parameterType="String" resultType="Operator">
+	    select
+		<include refid="selectItems" />
+		from OPERATOR
+		where  emplyno=#{emplyno}
+	</select>
+	<select id="getOpnm" parameterType="String" resultType="Operator">
+	    select
+		<include refid="selectItems" />
+		from OPERATOR
+		where  emplyno=#{opno}
+	</select>
+	
+	<update id="changeUsed" parameterType="Operator">
+		update OPERATOR
+		<set>
+		isused=#{isused}
+		</set>
+		WHERE emplyno=#{emplyno}
+	</update>
+	
+	<update id="modify" parameterType="Operator">
+		update OPERATOR 
+		<set>
+		dptno=#{dptno},
+		emplyno=#{emplyno},
+		idnum=#{idnum},
+		rlid=#{rlid},
+		rlnm=#{rlnm},
+		optype=#{optype},
+		isused=#{isused},
+		opright=#{opright},
+		inpostn=#{inpostn},
+		vpnacct=#{vpnacct},
+		pwd=#{pwd},
+		reserved=#{reserved},
+	    opnm=#{opnm},
+	    bsbsknd=#{bsbsknd},
+	    cstmrtype=#{cstmrtype}
+		</set>
+		WHERE emplyno=#{emplyno}
+	</update>
+	<select id="getByCzy" parameterType="String" resultType="Operator">
+	    select
+		<include refid="selectItems" />
+		from OPERATOR
+		where  DPTNO=#{dptNo}
+	</select>
+	
+	<update id="changePwd" parameterType="Operator">
+		update OPERATOR 
+		<set>
+		pwd=#{pwd}
+		</set>
+		where emplyno=#{emplyno}
+	</update>
+	
+	<!-- used for login start -->
+	<sql id="selectId">
+		DPTNO,IDNUM,EMPLYNO,PWD,OPNM,RLID,RLNM,OPTYPE,ISUSED,OPRIGHT,UPTDATE,BSBSKND,INPOSTN,CSTMRTYPE,VPNACCT,RESERVED
+    </sql>
+	
+	<select id="findOneUser" parameterType="com.mf.org.entity.Operator" resultType="com.mf.org.entity.Operator">
+		select
+		<include refid="selectId" />
+		from operator where vpnacct = #{vpnacct}
+	</select>
+	
+	<select id="checkpwd" parameterType="com.mf.org.entity.Operator" resultType="int">
+		select count(1) 
+		from operator where vpnacct = #{vpnacct} and pwd = #{pwd}
+	</select>
+	
+	<select id="findByEmpno" parameterType="com.mf.org.entity.Operator" resultType="com.mf.org.entity.Operator">
+		select
+		<include refid="selectId" />
+		from operator where EMPLYNO = #{emplyno}
+	</select>
+	<!-- used for login end -->
+</mapper>
+

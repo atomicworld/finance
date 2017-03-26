@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.shareholder.dao.CorpShareholderDao">
+
+	<resultMap id="CorpShareholder" type="com.mf.shareholder.entity.CorpShareholder">
+        <result property="shareno" column="shareno"/>
+        <result property="sharename" column="sharename"/>
+        <result property="corpno" column="corpno"/>
+        <result property="shareType" column="shareType"/>
+        <result property="cardType" column="CardType"/>
+        <result property="holderDocNo" column="HolderDocNo"/>
+        <result property="area" column="Area"/>
+        <result property="holdAmount" column="HoldAmount"/>
+        <result property="holdProportion" column="HoldProportion"/>
+        <result property="sortNo" column="SortNo"/>
+        <result property="remark" column="remark"/>
+        <result property="delFlg" column="delFlg"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		shareno,
+sharename,
+corpno,
+shareType,
+CardType,
+HolderDocNo,
+Area,
+HoldAmount,
+HoldProportion,
+SortNo,
+remark,
+delFlg
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.shareholder.entity.CorpShareholder">
+		select
+		<include refid="selectId" />
+		from corp_shareholder
+	</select>
+	
+	<select id="query" resultType="com.mf.shareholder.entity.CorpShareholder" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from corp_shareholder
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	
+			   <if test="@Ognl@isNotEmpty(t.shareno)">
+					AND shareno like '%${t.shareno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.sharename)">
+					AND sharename like '%${t.sharename}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.corpno)">
+					AND corpno like '%${t.corpno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.shareType)">
+					AND shareType like '%${t.shareType}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cardType)">
+					AND CardType like '%${t.cardType}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.holderDocNo)">
+					AND HolderDocNo like '%${t.holderDocNo}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.area)">
+					AND Area like '%${t.area}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.holdAmount)">
+					AND HoldAmount = '${t.holdAmount}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.holdProportion)">
+					AND HoldProportion like '%${t.holdProportion}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.sortNo)">
+					AND SortNo like '%${t.sortNo}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND remark like '%${t.remark}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.delFlg)">
+					AND delFlg = '${t.delFlg}'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.shareholder.entity.CorpShareholder">
+		INSERT INTO corp_shareholder 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(shareno)">
+				shareno,
+			</if>
+			<if test="@Ognl@isNotEmpty(sharename)">
+				sharename,
+			</if>
+			<if test="@Ognl@isNotEmpty(corpno)">
+				corpno,
+			</if>
+			<if test="@Ognl@isNotEmpty(shareType)">
+				shareType,
+			</if>
+			<if test="@Ognl@isNotEmpty(cardType)">
+				CardType,
+			</if>
+			<if test="@Ognl@isNotEmpty(holderDocNo)">
+				HolderDocNo,
+			</if>
+			<if test="@Ognl@isNotEmpty(area)">
+				Area,
+			</if>
+			<if test="@Ognl@isNotEmpty(holdAmount)">
+				HoldAmount,
+			</if>
+			<if test="@Ognl@isNotEmpty(holdProportion)">
+				HoldProportion,
+			</if>
+			<if test="@Ognl@isNotEmpty(sortNo)">
+				SortNo,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				remark,
+			</if>
+			<if test="@Ognl@isNotEmpty(delFlg)">
+				delFlg,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(shareno)">
+				#{shareno},
+			</if>
+			<if test="@Ognl@isNotEmpty(sharename)">
+				#{sharename},
+			</if>
+			<if test="@Ognl@isNotEmpty(corpno)">
+				#{corpno},
+			</if>
+			<if test="@Ognl@isNotEmpty(shareType)">
+				#{shareType},
+			</if>
+			<if test="@Ognl@isNotEmpty(cardType)">
+				#{cardType},
+			</if>
+			<if test="@Ognl@isNotEmpty(holderDocNo)">
+				#{holderDocNo},
+			</if>
+			<if test="@Ognl@isNotEmpty(area)">
+				#{area},
+			</if>
+			<if test="@Ognl@isNotEmpty(holdAmount)">
+				#{holdAmount},
+			</if>
+			<if test="@Ognl@isNotEmpty(holdProportion)">
+				#{holdProportion},
+			</if>
+			<if test="@Ognl@isNotEmpty(sortNo)">
+				#{sortNo},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@Ognl@isNotEmpty(delFlg)">
+				#{delFlg},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM corp_shareholder WHERE shareno = #{shareno}
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.shareholder.entity.CorpShareholder">
+		SELECT <include refid="selectId" />
+		    FROM corp_shareholder 
+	        WHERE shareno = #{shareno}
+	</select>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(shareno)">
+			shareno = #{shareno},
+		</if>
+		<if test="@Ognl@isNotEmpty(sharename)">
+			sharename = #{sharename},
+		</if>
+		<if test="@Ognl@isNotEmpty(corpno)">
+			corpno = #{corpno},
+		</if>
+		<if test="@Ognl@isNotEmpty(shareType)">
+			shareType = #{shareType},
+		</if>
+		<if test="@Ognl@isNotEmpty(cardType)">
+			CardType = #{cardType},
+		</if>
+		<if test="@Ognl@isNotEmpty(holderDocNo)">
+			HolderDocNo = #{holderDocNo},
+		</if>
+		<if test="@Ognl@isNotEmpty(area)">
+			Area = #{area},
+		</if>
+		<if test="@Ognl@isNotEmpty(holdAmount)">
+			HoldAmount = #{holdAmount},
+		</if>
+		<if test="@Ognl@isNotEmpty(holdProportion)">
+			HoldProportion = #{holdProportion},
+		</if>
+		<if test="@Ognl@isNotEmpty(sortNo)">
+			SortNo = #{sortNo},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			remark = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(delFlg)">
+			delFlg = #{delFlg},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.shareholder.entity.CorpShareholder">
+	    UPDATE corp_shareholder 
+		<include refid="updateset"/>
+        WHERE shareno = #{shareno}
+	</update>
+	
+</mapper>
+

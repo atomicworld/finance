@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FnncCrryovraccntDao">
+
+	<resultMap id="FnncCrryovraccnt" type="com.mf.financemng.entity.FnncCrryovraccnt">
+        <result property="crryovrtyp" column="CRRYOVRTYP"/>
+        <result property="crryovrid" column="CRRYOVRID"/>
+        <result property="crryovraccntno" column="CRRYOVRACCNTNO"/>
+        <result property="accntnm" column="ACCNTNM"/>
+        <result property="seqno" column="SEQNO"/>
+        <result property="dscp" column="DSCP"/>
+        <result property="rcrdid" column="RCRDID"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		CRRYOVRTYP,
+		CRRYOVRID,
+		CRRYOVRACCNTNO,
+		ACCNTNM,
+		SEQNO,
+		DSCP,
+		RCRDID
+    </sql>
+	
+
+	<select id="query" resultType="com.mf.financemng.entity.FnncCrryovraccnt" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fnnc_crryovraccnt
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.crryovrtyp)">
+					AND CRRYOVRTYP like '%${t.crryovrtyp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.crryovrid)">
+					AND CRRYOVRID like '%${t.crryovrid}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.crryovraccntno)">
+					AND CRRYOVRACCNTNO like '%${t.crryovraccntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.accntnm)">
+					AND ACCNTNM like '%${t.accntnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.seqno)">
+					AND SEQNO like '%${t.seqno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.dscp)">
+					AND DSCP like '%${t.dscp}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(crryovrtyp)">
+					AND CRRYOVRTYP like '%${crryovrtyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(crryovrid)">
+					AND CRRYOVRID like '%${crryovrid}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(crryovraccntno)">
+					AND CRRYOVRACCNTNO like '%${crryovraccntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(accntnm)">
+					AND ACCNTNM like '%${accntnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(seqno)">
+					AND SEQNO like '%${seqno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(dscp)">
+					AND DSCP like '%${dscp}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	
+	
+	
+	
+	<!-- 新增Selective 
+	<insert id="add" parameterType="com.mf.financemng.entity.FnncCrryovraccnt">
+		INSERT INTO fnnc_crryovraccnt 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(crryovrtyp)">
+				CRRYOVRTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(crryovrid)">
+				CRRYOVRID,
+			</if>
+			<if test="@Ognl@isNotEmpty(crryovraccntno)">
+				CRRYOVRACCNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(accntnm)">
+				ACCNTNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(seqno)">
+				SEQNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(dscp)">
+				DSCP,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(crryovrtyp)">
+				#{crryovrtyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(crryovrid)">
+				#{crryovrid},
+			</if>
+			<if test="@Ognl@isNotEmpty(crryovraccntno)">
+				#{crryovraccntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(accntnm)">
+				#{accntnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(seqno)">
+				#{seqno},
+			</if>
+			<if test="@Ognl@isNotEmpty(dscp)">
+				#{dscp},
+			</if>
+    </trim>
+	</sql>
+	-->
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM fnnc_crryovraccnt WHERE
+        RCRDID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.FnncCrryovraccnt">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_crryovraccnt 
+	        WHERE 
+        RCRDID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.financemng.entity.FnncCrryovraccnt">
+	    UPDATE fnnc_crryovraccnt SET
+	        CRRYOVRTYP = #{crryovrtyp} ,
+	        CRRYOVRID = #{crryovrid} ,
+	        CRRYOVRACCNTNO = #{crryovraccntno} ,
+	        ACCNTNM = #{accntnm} ,
+	        SEQNO = #{seqno} ,
+	        DSCP = #{dscp} 
+        WHERE 
+	        RCRDID = #{rcrdid} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(crryovrtyp)">
+			CRRYOVRTYP = #{crryovrtyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(crryovrid)">
+			CRRYOVRID = #{crryovrid},
+		</if>
+		<if test="@Ognl@isNotEmpty(crryovraccntno)">
+			CRRYOVRACCNTNO = #{crryovraccntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(accntnm)">
+			ACCNTNM = #{accntnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(seqno)">
+			SEQNO = #{seqno},
+		</if>
+		<if test="@Ognl@isNotEmpty(dscp)">
+			DSCP = #{dscp},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.financemng.entity.FnncCrryovraccnt">
+	    UPDATE fnnc_crryovraccnt 
+		<include refid="updateset"/>
+        WHERE 
+	        RCRDID = #{rcrdid} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+	<select id="queryJZ" resultType="com.mf.financemng.entity.FnncCrryovraccnt" parameterType="java.util.HashMap">
+		select 
+		case when a.crryovrtyp=0 then '收入类' else '成本类' end crryovrtyp,
+		crryovraccntno,
+		accntnm,
+		case when a.crryovrtyp=0 then b.dbq_amt-b.jbq_amt else b.jbq_amt-b.dbq_amt end dscp 
+		from fnnc_crryovraccnt a 
+		left join fnnc_ledger b on a.crryovraccntno=b.accntno 
+		where b.accntno is not null and (b.jbq_amt&gt;0 or b.dbq_amt&gt;0)
+	</select>
+	
+</mapper>
+

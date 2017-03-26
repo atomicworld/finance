@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.aftrmng.dao.AfterReadamntDao">
+
+	<resultMap id="AfterReadamnt" type="com.mf.aftrmng.entity.AfterReadamnt">
+        <result property="recdid" column="recdid"/>
+        <result property="totalamnt" column="totalamnt"/>
+        <result property="amnt" column="amnt"/>
+        <result property="rate" column="rate"/>
+        <result property="crtdate" column="crtdate"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		recdid,
+totalamnt,
+amnt,
+rate,
+crtdate
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.aftrmng.entity.AfterReadamnt">
+		select
+		<include refid="selectId" />
+		from after_readamnt
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.aftrmng.entity.AfterReadamnt" parameterType="com.mf.aftrmng.entity.AfterReadamnt">
+		select
+		<include refid="selectId" />
+		from after_readamnt
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.aftrmng.entity.AfterReadamnt" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from after_readamnt
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(t.totalamnt)">
+					AND totalamnt = '${t.totalamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.amnt)">
+					AND amnt = '${t.amnt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rate)">
+					AND rate like '%${t.rate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.crtdate)">
+					AND crtdate like '%${t.crtdate}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(totalamnt)">
+					AND totalamnt = '${totalamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(amnt)">
+					AND amnt = '${amnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rate)">
+					AND rate like '%${rate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(crtdate)">
+					AND crtdate like '%${crtdate}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.aftrmng.entity.AfterReadamnt" resultType="int">
+		select count(0) from after_readamnt
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.aftrmng.entity.AfterReadamnt">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO after_readamnt (
+        	totalamnt ,
+        	amnt ,
+        	rate ,
+        	crtdate 
+        ) VALUES (
+        	#{totalamnt} ,
+        	#{amnt} ,
+        	#{rate} ,
+        	#{crtdate} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.aftrmng.entity.AfterReadamnt">
+	
+		INSERT INTO after_readamnt 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(recdid)">
+				recdid,
+			</if>
+			<if test="@Ognl@isNotEmpty(totalamnt)">
+				totalamnt,
+			</if>
+			<if test="@Ognl@isNotEmpty(amnt)">
+				amnt,
+			</if>
+			<if test="@Ognl@isNotEmpty(rate)">
+				rate,
+			</if>
+			<if test="@Ognl@isNotEmpty(crtdate)">
+				crtdate,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(recdid)">
+				#{recdid},
+			</if>
+			<if test="@Ognl@isNotEmpty(totalamnt)">
+				#{totalamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(amnt)">
+				#{amnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(rate)">
+				#{rate},
+			</if>
+			<if test="@Ognl@isNotEmpty(crtdate)">
+				#{crtdate},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM after_readamnt WHERE
+        recdid = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.aftrmng.entity.AfterReadamnt">
+		SELECT <include refid="selectId" />
+		    FROM after_readamnt 
+	        WHERE 
+        recdid = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.aftrmng.entity.AfterReadamnt">
+	    UPDATE after_readamnt SET
+	        totalamnt = #{totalamnt} ,
+	        amnt = #{amnt} ,
+	        rate = #{rate} ,
+	        crtdate = #{crtdate} 
+        WHERE 
+	        recdid = #{recdid} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(totalamnt)">
+			totalamnt = #{totalamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(amnt)">
+			amnt = #{amnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(rate)">
+			rate = #{rate},
+		</if>
+		<if test="@Ognl@isNotEmpty(crtdate)">
+			crtdate = #{crtdate},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.aftrmng.entity.AfterReadamnt">
+	    UPDATE after_readamnt 
+		<include refid="updateset"/>
+        WHERE 
+	        recdid = #{recdid} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

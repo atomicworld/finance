@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntGradeCommerceDao">
+
+	<resultMap id="ClntGradeCommerce" type="com.mf.client.entity.ClntGradeCommerce">
+        <result property="clntno" column="clntno"/>
+        <result property="invest" column="invest"/>
+        <result property="register" column="register"/>
+        <result property="bankinfo" column="bankinfo"/>
+        <result property="capital" column="capital"/>
+        <result property="manager" column="manager"/>
+        <result property="payinfo" column="payinfo"/>
+        <result property="base" column="base"/>
+        <result property="clique" column="clique"/>
+        <result property="score" column="score"/>
+        <result property="memo" column="memo"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		clntno,
+register,
+bankinfo,
+capital,
+manager,
+payinfo,
+base,
+clique,
+score,
+invest,
+memo
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntGradeCommerce">
+		select
+		<include refid="selectId" />
+		from clnt_grade_commerce
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntGradeCommerce" parameterType="com.mf.client.entity.ClntGradeCommerce">
+		select
+		<include refid="selectId" />
+		from clnt_grade_commerce
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntGradeCommerce" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_grade_commerce
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.register)">
+					AND register like '%${t.register}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bankinfo)">
+					AND bankinfo like '%${t.bankinfo}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.capital)">
+					AND capital like '%${t.capital}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.manager)">
+					AND manager like '%${t.manager}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.payinfo)">
+					AND payinfo like '%${t.payinfo}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.base)">
+					AND base like '%${t.base}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clique)">
+					AND clique like '%${t.clique}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.score)">
+					AND score like '%${t.score}%'
+			   </if>
+	       		<if test="@Ognl@isNotEmpty(t.invest)">
+					AND invest like '%${t.invest}%'
+			   </if>
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(register)">
+					AND register like '%${register}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bankinfo)">
+					AND bankinfo like '%${bankinfo}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(capital)">
+					AND capital like '%${capital}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(manager)">
+					AND manager like '%${manager}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(payinfo)">
+					AND payinfo like '%${payinfo}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(base)">
+					AND base like '%${base}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clique)">
+					AND clique like '%${clique}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(score)">
+					AND score like '%${score}%'
+				</if>
+	       		<if test="@Ognl@isNotEmpty(invest)">
+					AND invest like '%${invest}%'
+			   </if>
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntGradeCommerce" resultType="int">
+		select count(0) from clnt_grade_commerce
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntGradeCommerce">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_grade_commerce (
+        	register ,
+        	bankinfo ,
+        	capital ,
+        	manager ,
+        	payinfo ,
+        	base ,
+        	clique ,
+        	score,
+        	invest,
+        	memo
+        ) VALUES (
+        	#{register} ,
+        	#{bankinfo} ,
+        	#{capital} ,
+        	#{manager} ,
+        	#{payinfo} ,
+        	#{base} ,
+        	#{clique} ,
+        	#{score} ,
+        	#{invest} ,
+        	#{memo} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntGradeCommerce">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO clnt_grade_commerce 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				clntno,
+			</if>
+			<if test="@Ognl@isNotEmpty(invest)">
+				invest,
+			</if>
+			<if test="@Ognl@isNotEmpty(register)">
+				register,
+			</if>
+			<if test="@Ognl@isNotEmpty(bankinfo)">
+				bankinfo,
+			</if>
+			<if test="@Ognl@isNotEmpty(capital)">
+				capital,
+			</if>
+			<if test="@Ognl@isNotEmpty(manager)">
+				manager,
+			</if>
+			<if test="@Ognl@isNotEmpty(payinfo)">
+				payinfo,
+			</if>
+			<if test="@Ognl@isNotEmpty(base)">
+				base,
+			</if>
+			<if test="@Ognl@isNotEmpty(clique)">
+				clique,
+			</if>
+			<if test="@Ognl@isNotEmpty(score)">
+				score,
+			</if>
+			<if test="@Ognl@isNotEmpty(memo)">
+				memo,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(invest)">
+				#{invest},
+			</if>
+			<if test="@Ognl@isNotEmpty(register)">
+				#{register},
+			</if>
+			<if test="@Ognl@isNotEmpty(bankinfo)">
+				#{bankinfo},
+			</if>
+			<if test="@Ognl@isNotEmpty(capital)">
+				#{capital},
+			</if>
+			<if test="@Ognl@isNotEmpty(manager)">
+				#{manager},
+			</if>
+			<if test="@Ognl@isNotEmpty(payinfo)">
+				#{payinfo},
+			</if>
+			<if test="@Ognl@isNotEmpty(base)">
+				#{base},
+			</if>
+			<if test="@Ognl@isNotEmpty(clique)">
+				#{clique},
+			</if>
+			<if test="@Ognl@isNotEmpty(score)">
+				#{score},
+			</if>
+			<if test="@Ognl@isNotEmpty(memo)">
+				#{memo},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM clnt_grade_commerce WHERE
+        clntno = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntGradeCommerce">
+		SELECT <include refid="selectId" />
+		    FROM clnt_grade_commerce 
+	        WHERE 
+        clntno = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntGradeCommerce">
+	    UPDATE clnt_grade_commerce SET
+	        register = #{register} ,
+	        bankinfo = #{bankinfo} ,
+	        capital = #{capital} ,
+	        manager = #{manager} ,
+	        payinfo = #{payinfo} ,
+	        base = #{base} ,
+	        clique = #{clique} ,
+	        score = #{score} ,
+	        memo = #{memo} 
+        WHERE 
+	        clntno = #{clntno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+	<if test="@Ognl@isNotEmpty(invest)">
+			invest = #{invest},
+		</if>
+		<if test="@Ognl@isNotEmpty(register)">
+			register = #{register},
+		</if>
+		<if test="@Ognl@isNotEmpty(bankinfo)">
+			bankinfo = #{bankinfo},
+		</if>
+		<if test="@Ognl@isNotEmpty(capital)">
+			capital = #{capital},
+		</if>
+		<if test="@Ognl@isNotEmpty(manager)">
+			manager = #{manager},
+		</if>
+		<if test="@Ognl@isNotEmpty(payinfo)">
+			payinfo = #{payinfo},
+		</if>
+		<if test="@Ognl@isNotEmpty(base)">
+			base = #{base},
+		</if>
+		<if test="@Ognl@isNotEmpty(clique)">
+			clique = #{clique},
+		</if>
+		<if test="@Ognl@isNotEmpty(score)">
+			score = #{score},
+		</if>
+		<if test="@Ognl@isNotEmpty(memo)">
+			memo = #{memo},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntGradeCommerce">
+	    UPDATE clnt_grade_commerce 
+		<include refid="updateset"/>
+        WHERE 
+	        clntno = #{clntno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

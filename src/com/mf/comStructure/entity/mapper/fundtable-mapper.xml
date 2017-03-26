@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.comStructure.dao.FundtableDao">
+
+	<resultMap id="Fundtable" type="com.mf.comStructure.entity.Fundtable">
+        <result property="id" column="id"/>
+        <result property="busiamt" column="BUSIAMT"/>
+        <result property="ssegamt" column="SSEGAMT"/>
+        <result property="addno" column="ADDNO"/>
+        <result property="addamt" column="ADDAMT"/>
+        <result property="bankno" column="BANKNO"/>
+        <result property="bankamt" column="BANKAMT"/>
+        <result property="otherform" column="OTHERFORM"/>
+        <result property="otherno" column="OTHERNO"/>
+        <result property="otheramt" column="OTHERAMT"/>
+        <result property="yearmonth" column="YEARMONTH"/>
+        <result property="subtime" column="SUBTIME"/>
+        <result property="state" column="STATE"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		id,
+BUSIAMT,
+SSEGAMT,
+ADDNO,
+ADDAMT,
+BANKNO,
+BANKAMT,
+OTHERFORM,
+OTHERNO,
+OTHERAMT,
+YEARMONTH,
+SUBTIME,
+STATE
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.comStructure.entity.Fundtable">
+		select
+		<include refid="selectId" />
+		from fundtable
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.comStructure.entity.Fundtable" parameterType="com.mf.comStructure.entity.Fundtable">
+		select
+		<include refid="selectId" />
+		from fundtable
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.comStructure.entity.Fundtable" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fundtable
+	</select>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(busiamt)">
+					AND BUSIAMT like '%${busiamt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(ssegamt)">
+					AND SSEGAMT like '%${ssegamt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(addno)">
+					AND ADDNO like '%${addno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(addamt)">
+					AND ADDAMT like '%${addamt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bankno)">
+					AND BANKNO like '%${bankno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bankamt)">
+					AND BANKAMT like '%${bankamt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(otherform)">
+					AND OTHERFORM like '%${otherform}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(otherno)">
+					AND OTHERNO like '%${otherno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(otheramt)">
+					AND OTHERAMT like '%${otheramt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(yearmonth)">
+					AND YEARMONTH like '%${yearmonth}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(subtimeBegin)">
+					AND SUBTIME >= #{subtimeBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(subtimeEnd)">
+					AND SUBTIME &lt;= #{subtimeEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(state)">
+					AND STATE like '%${state}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.comStructure.entity.Fundtable" resultType="int">
+		select count(0) from fundtable
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.comStructure.entity.Fundtable">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO fundtable 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(busiamt)">
+				BUSIAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(ssegamt)">
+				SSEGAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(addno)">
+				ADDNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(addamt)">
+				ADDAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(bankno)">
+				BANKNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(bankamt)">
+				BANKAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(otherform)">
+				OTHERFORM,
+			</if>
+			<if test="@Ognl@isNotEmpty(otherno)">
+				OTHERNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(otheramt)">
+				OTHERAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(yearmonth)">
+				YEARMONTH,
+			</if>
+			<if test="@Ognl@isNotEmpty(subtime)">
+				SUBTIME,
+			</if>
+			<if test="@Ognl@isNotEmpty(state)">
+				STATE,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(busiamt)">
+				#{busiamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(ssegamt)">
+				#{ssegamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(addno)">
+				#{addno},
+			</if>
+			<if test="@Ognl@isNotEmpty(addamt)">
+				#{addamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(bankno)">
+				#{bankno},
+			</if>
+			<if test="@Ognl@isNotEmpty(bankamt)">
+				#{bankamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(otherform)">
+				#{otherform},
+			</if>
+			<if test="@Ognl@isNotEmpty(otherno)">
+				#{otherno},
+			</if>
+			<if test="@Ognl@isNotEmpty(otheramt)">
+				#{otheramt},
+			</if>
+			<if test="@Ognl@isNotEmpty(yearmonth)">
+				#{yearmonth},
+			</if>
+			<if test="@Ognl@isNotEmpty(subtime)">
+				#{subtime},
+			</if>
+			<if test="@Ognl@isNotEmpty(state)">
+				#{state},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM fundtable WHERE
+        id = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.comStructure.entity.Fundtable">
+		SELECT <include refid="selectId" />
+		    FROM fundtable 
+	        WHERE 
+        id = #{id} 
+	</select>
+	
+	<!-- 更新 -->
+	<update id="modify" parameterType="com.mf.comStructure.entity.Fundtable">
+	    UPDATE fundtable SET
+	        BUSIAMT = #{busiamt} ,
+	        SSEGAMT = #{ssegamt} ,
+	        ADDNO = #{addno} ,
+	        ADDAMT = #{addamt} ,
+	        BANKNO = #{bankno} ,
+	        BANKAMT = #{bankamt} ,
+	        OTHERFORM = #{otherform} ,
+	        OTHERNO = #{otherno} ,
+	        OTHERAMT = #{otheramt} 
+        WHERE 
+	        id = #{id} 
+	</update>
+	
+	<!-- 提交 -->
+	<update id="submit" parameterType="String">
+		UPDATE fundtable SET
+	        STATE = '1',
+	        SUBTIME = date_format(sysdate(),'%Y-%m-%d')
+        WHERE 
+	        ID = #{id} AND STATE = '0'
+	</update>
+	
+</mapper>
+

@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FnnzcfzDao">
+
+	<resultMap id="Fnnzcfz" type="com.mf.financemng.entity.Fnnzcfz">
+      <result property="assetid" column="ASSETID"/>
+        <result property="rptmonth" column="RPTMONTH"/>
+        <result property="itemcode" column="ITEMCODE"/>
+        <result property="rpttype" column="RPTTYPE"/>
+        <result property="itemvalue" column="ITEMVALUE"/>
+        <result property="rptstatus" column="RPTSTATUS"/>
+        <result property="rptbatch" column="RPTBATCH"/>
+        <result property="rptdate" column="RPTDATE"/>
+        <result property="processstatus" column="PROCESSSTATUS"/>
+        <result property="deleteflag" column="DELETEFLAG"/>
+        <result property="validate" column="VALIDATE"/>
+        <result property="orgcode" column="ORGCODE"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ASSETID,
+		rptid,
+RPTMONTH,
+ITEMCODE,
+RPTTYPE,
+ITEMVALUE,
+RPTSTATUS,
+RPTBATCH,
+RPTDATE,
+PROCESSSTATUS,
+DELETEFLAG,
+VALIDATE,
+ORGCODE
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.Fnnzcfz">
+		select
+		<include refid="selectId" />
+		from FINREPORTASSET
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.Fnnzcfz" parameterType="com.mf.financemng.entity.Fnnzcfz">
+		select
+		<include refid="selectId" />
+		from FINREPORTASSET
+		<include refid="querywhere1"/>
+		 order by itemcode
+	</select>
+
+	<select id="query" resultType="com.mf.financemng.entity.Fnnzcfz" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from FINREPORTASSET
+		<where>
+				deleteflag=0
+			 <if test="@Ognl@isNotEmpty(t.rptmonth)">
+					AND RPTMONTH = '${t.rptmonth}'
+			   </if>
+		</where>
+		group by month
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.assetid)">
+					AND ASSETID like '%${t.assetid}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rptmonth)">
+					AND RPTMONTH = '${t.rptmonth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.itemcode)">
+					AND ITEMCODE = '${t.itemcode}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rpttype)">
+					AND RPTTYPE like '%${t.rpttype}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.itemvalue)">
+					AND ITEMVALUE = '${t.itemvalue}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rptstatus)">
+					AND RPTSTATUS = '${t.rptstatus}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rptbatch)">
+					AND RPTBATCH like '%${t.rptbatch}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rptdateBegin)">
+					AND RPTDATE >= #{t.rptdateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rptdateEnd)">
+					AND RPTDATE &lt;= #{t.rptdateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.processstatus)">
+					AND PROCESSSTATUS = '${t.processstatus}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.deleteflag)">
+					AND DELETEFLAG = '${t.deleteflag}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.validate)">
+					AND VALIDATE = '${t.validate}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.orgcode)">
+					AND ORGCODE like '%${t.orgcode}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	  
+			deleteflag=0    				
+		       <if test="@Ognl@isNotEmpty(rptmonth)">
+					AND RPTMONTH = '${rptmonth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rptid)">
+					AND rptid = '${rptid}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(orgcode)">
+					AND ORGCODE like '%${orgcode}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.Fnnzcfz" resultType="int">
+		select count(0) from FINREPORTASSET
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.Fnnzcfz">
+		INSERT INTO FINREPORTASSET 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(assetid)">
+				ASSETID,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptid)">
+				rptid,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptmonth)">
+				RPTMONTH,
+			</if>
+			<if test="@Ognl@isNotEmpty(itemcode)">
+				ITEMCODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(rpttype)">
+				RPTTYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(itemvalue)">
+				ITEMVALUE,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptstatus)">
+				RPTSTATUS,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptbatch)">
+				RPTBATCH,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptdate)">
+				RPTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(processstatus)">
+				PROCESSSTATUS,
+			</if>
+			<if test="@Ognl@isNotEmpty(deleteflag)">
+				DELETEFLAG,
+			</if>
+			<if test="@Ognl@isNotEmpty(validate)">
+				VALIDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(orgcode)">
+				ORGCODE,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(assetid)">
+				#{assetid},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptid)">
+				#{rptid},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptmonth)">
+				#{rptmonth},
+			</if>
+			<if test="@Ognl@isNotEmpty(itemcode)">
+				#{itemcode},
+			</if>
+			<if test="@Ognl@isNotEmpty(rpttype)">
+				#{rpttype},
+			</if>
+			<if test="@Ognl@isNotEmpty(itemvalue)">
+				#{itemvalue},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptstatus)">
+				#{rptstatus},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptbatch)">
+				#{rptbatch},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptdate)">
+				#{rptdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(processstatus)">
+				#{processstatus},
+			</if>
+			<if test="@Ognl@isNotEmpty(deleteflag)">
+				#{deleteflag},
+			</if>
+			<if test="@Ognl@isNotEmpty(validate)">
+				#{validate},
+			</if>
+			<if test="@Ognl@isNotEmpty(orgcode)">
+				#{orgcode},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删  really-->
+	<delete id="deleteById" parameterType="int">
+		DELETE FROM FINREPORTASSET WHERE
+        rptmonth = #{id} 
+	</delete>
+	<!-- 删  flag  -->
+	<delete id="deleteByFlag" parameterType="String">
+		update finreportasset set deleteflag=1 where
+		rptid=#{id}
+	</delete>
+	
+	<!-- 删审计报告的资产负债表 -->
+	<delete id="deleteFnnzcfz" parameterType="String">
+		UPDATE FINREPORTASSET
+		set deleteflag = 1
+		WHERE
+        rptmonth = #{reportMonth}  and deleteflag = 0
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getByZcfzId" parameterType="int" resultType="com.mf.financemng.entity.Fnnzcfz">
+		SELECT <include refid="selectId" />
+		    FROM FINREPORTASSET 
+	        WHERE 
+        rptmonth = #{id} and deleteflag=0
+	</select>
+	<!-- 根据reportMonth查询  查重复月份 A资产负债 -->
+	<select id="getByReport" parameterType="String" resultType="com.mf.financemng.entity.Fnnzcfz">
+		SELECT <include refid="selectId" />
+		    FROM FINREPORTASSET 
+	        WHERE 
+         rptmonth = #{reportMonth} and deleteflag=0 AND rpttype='A'
+	</select>
+	<!-- 根据reportMonth和parentId查找查实体 -->
+	<select id="getFnnzcfz" parameterType="com.mf.financemng.entity.Fnnzcfz"  resultType="com.mf.financemng.entity.Fnnzcfz">
+		SELECT <include refid="selectId" />
+		    FROM FINREPORTASSET 
+	        WHERE 
+       rptmonth = #{reportMonth} 
+	</select>
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(itemvalue)">
+			ITEMVALUE = #{itemvalue},
+		</if>
+		<if test="@Ognl@isNotEmpty(assetid)">
+			assetid = #{assetid},
+		</if>
+    </set>
+	</sql>
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.financemng.entity.Fnnzcfz">
+	    UPDATE FINREPORTASSET 
+		<include refid="updateset"/>
+        WHERE 
+	        ASSETID = #{assetid} 
+	</update>
+	<!-- 更新审计报告的资产负债表  -->
+	<update id="updateFnnzcfz" parameterType="com.mf.financemng.entity.Fnnzcfz">
+	    UPDATE FINREPORTASSET 
+		<include refid="updateset"/>
+        WHERE 
+	        assetid = #{assetid} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

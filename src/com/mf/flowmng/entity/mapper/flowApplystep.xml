@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.mf.flowmng.dao.FlowApplystepDao">
+    
+     <sql id="selectId">
+         apprltyp,
+         apprlno,
+         stepnm,
+         stepflg,
+         steplvl,
+         stepxy
+     </sql>
+     
+    <select id="findAll" resultType="com.mf.flowmng.entity.FlowApplystep">
+		select
+		<include refid="selectId" />
+		from flow_apprl_step 
+		order by apprlno asc
+	</select>   
+	
+	<select id="findByapprlno" resultType="com.mf.flowmng.entity.FlowApplystep">
+		select
+		<include refid="selectId" />
+		from flow_apprl_step where apprlno in(${_parameter})
+		
+	</select>   
+	
+	<select id="getByapprlno" resultType="com.mf.flowmng.entity.FlowApplystep">
+		
+		select
+		<include refid="selectId" />
+		from flow_apprl_step where apprlno =${_parameter}
+		
+	</select>
+		
+	
+	 
+	 <select id="query" resultType="com.mf.flowmng.entity.FlowApplystep" parameterType="java.util.HashMap">
+	   select
+		<include refid="selectId" />
+		from flow_apprl_step  order by cast(apprlno as  SIGNED)  
+	 
+	 </select>
+	 
+	 <!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.flowmng.entity.FlowApplystep">
+		INSERT INTO flow_apprl_step
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+	       <if test="@Ognl@isNotEmpty(apprltyp)">
+				APPRLTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(apprlno)">
+				APPRLNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(stepnm)">
+				STEPNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(stepflg)">
+				STEPFLG,
+			</if>
+			<if test="@Ognl@isNotEmpty(steplvl)">
+				STEPLVL,
+			</if>
+			<if test="@Ognl@isNotEmpty(stepxy)">
+				STEPXY,
+			</if>
+			
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+             <if test="@Ognl@isNotEmpty(apprltyp)">
+				#{apprltyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(apprlno)">
+				#{apprlno},
+			</if>
+			<if test="@Ognl@isNotEmpty(stepnm)">
+				#{stepnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(stepflg)">
+				#{stepflg},
+			</if>
+			<if test="@Ognl@isNotEmpty(steplvl)">
+				#{steplvl},
+			</if>
+			<if test="@Ognl@isNotEmpty(stepxy)">
+				#{stepxy},
+			</if>
+    </trim>
+	</sql>
+    <select id="getMax" resultType="com.mf.flowmng.entity.FlowApplystep">
+	   select
+		<include refid="selectId" />
+		from flow_apprl_step order by apprlno desc    limit 1
+	 
+	</select>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(apprltyp)">
+			APPRLTYP = #{apprltyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(apprlno)">
+			APPRLNO = #{apprlno},
+		</if>
+		<if test="@Ognl@isNotEmpty(stepnm)">
+			STEPNM= #{stepnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(stepflg)">
+			STEPFLG = #{stepflg},
+		</if>
+		<if test="@Ognl@isNotEmpty(steplvl)">
+			STEPLVL = #{steplvl},
+		</if>
+		<if test="@Ognl@isNotEmpty(stepxy)">
+			STEPXY = #{stepxy},
+		</if>
+		
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.flowmng.entity.FlowApplystep">
+	    UPDATE flow_apprl_step
+		<include refid="updateset"/>
+        WHERE 
+	        APPRLNO = #{apprlno} 
+	</update>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM flow_apprl_step WHERE
+        APPRLNO = #{apprlno} 
+	</delete>
+</mapper>

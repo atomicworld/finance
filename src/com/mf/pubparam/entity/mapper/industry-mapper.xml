@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.pubparam.dao.IndustryDao">
+
+	<resultMap id="Industry" type="com.mf.pubparam.entity.Industry">
+        <result property="industryCode" column="INDUSTRY_CODE"/>
+        <result property="industryName" column="INDUSTRY_NAME"/>
+        <result property="remark" column="REMARK"/>
+        <result property="tiercode" column="TIERCODE"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		INDUSTRY_CODE,
+INDUSTRY_NAME,
+REMARK,
+TIERCODE
+    </sql>
+    
+	<select id="getByTCode" parameterType="String" resultMap="Industry">
+		SELECT <include refid="selectId" />
+		    FROM industry 
+	        WHERE 
+        TIERCODE = #{tcode}
+	</select>
+	
+	<select id="queryIndusty" parameterType="com.mf.pubparam.entity.Industry" resultMap="Industry">
+		SELECT <include refid="selectId" />
+		    FROM industry 
+	        WHERE
+	    INDUSTRY_CODE LIKE CONCAT(#{industryCode},'%') AND TIERCODE = #{tiercode}
+	</select>
+	<select id="findByCode" parameterType="String" resultType="com.mf.pubparam.entity.Industry">
+			select  group_concat(industry_name) as industryName 
+			from industry 
+			where industry_code in(left(#{industryCode},1),left(#{industryCode},3),left(#{industryCode},4),left(#{industryCode},5))
+	</select>
+</mapper>
+

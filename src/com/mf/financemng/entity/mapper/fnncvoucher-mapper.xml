@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FnncVoucherDao">
+
+	<resultMap id="FnncVoucher" type="com.mf.financemng.entity.FnncVoucher">
+        <result property="pzno" column="pzno"/>
+        <result property="cntrctno" column="cntrctno"/>
+        <result property="dueno" column="dueno"/>
+        <result property="type" column="type"/>
+        <result property="status" column="status"/>
+         <result property="logid" column="logid"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		pzno,
+		cntrctno,
+		dueno,
+		type,
+		status,
+		logid
+    </sql>
+	
+
+	<select id="queryOutmnt" resultType="com.mf.cntrtmng.entity.BsnsCntrct" parameterType="java.util.HashMap">
+		select a.clntnm,
+		b.clntno,
+		b.cntrctsdate,
+		b.cntrctedate,
+		concat(b.trmmnth,'月',b.trmday)as trmmnth,
+		b.bsnsrt,a.outamnt,
+		a.outdate as trmday,v.pzno as cntrctno
+		from fnnc_voucher v 
+		left join bsns_lnout a on a.outno=v.dueno 
+		left join bsns_cntrct b on b.cntrctno=v.cntrctno 
+		where v.status='0' and v.type=1 and a.clntnm is not null
+	</select>
+	<select id="queryPaymnt" resultType="com.mf.cntrtmng.entity.BsnsCntrct" parameterType="java.util.HashMap">
+		 select b.clntnm,
+		b.clntno,
+		b.cntrctsdate,
+		b.cntrctedate,
+		concat(b.trmmnth,'月',b.trmday)as trmmnth,
+		b.bsnsrt,a.rcvprinamnt as outamnt,
+		a.paydt as trmday,v.pzno as cntrctno
+		from fnnc_voucher v 
+		left join bsns_repaylog a on a.logid=v.logid
+		left join bsns_cntrct b on b.cntrctno=v.cntrctno 
+		where v.status='0' and v.type=2 and  b.clntnm is not null and a.rcvprinamnt is not null order by v.pzno desc
+		</select>
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.FnncVoucher">
+		INSERT INTO fnnc_voucher 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(pzno)">
+				pzno,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				cntrctno,
+			</if>
+			<if test="@Ognl@isNotEmpty(dueno)">
+				dueno,
+			</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				type,
+			</if>
+			<if test="@Ognl@isNotEmpty(status)">
+				status,
+			</if>
+			<if test="@Ognl@isNotEmpty(logid)">
+				logid
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(pzno)">
+				#{pzno},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				#{cntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(dueno)">
+				#{dueno},
+			</if>
+			<if test="@Ognl@isNotEmpty(type)">
+				#{type},
+			</if>
+			<if test="@Ognl@isNotEmpty(status)">
+				#{status},
+			</if>
+			<if test="@Ognl@isNotEmpty(logid)">
+				#{logid}
+			</if>
+    </trim>
+	</sql>
+	
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.FnncVoucher">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_voucher 
+	        WHERE 
+        pzno = #{pzno} 
+	</select>
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(cntrctno)">
+			cntrctno = #{cntrctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(dueno)">
+			dueno = #{dueno},
+		</if>
+		<if test="@Ognl@isNotEmpty(type)">
+			type = #{type},
+		</if>
+		<if test="@Ognl@isNotEmpty(status)">
+			status = #{status},
+		</if>
+		<if test="@Ognl@isNotEmpty(logid)">
+			logid = #{logid}
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.financemng.entity.FnncVoucher">
+	    UPDATE fnnc_voucher 
+		<include refid="updateset"/>
+        WHERE 
+	        pzno = #{pzno} 
+	</update>
+	<!-- wyy根据借据号删除 -->
+	<delete id="deleteDueno" parameterType="String">
+		delete from fnnc_voucher where
+        dueno = #{dueno} 
+	</delete>
+</mapper>
+

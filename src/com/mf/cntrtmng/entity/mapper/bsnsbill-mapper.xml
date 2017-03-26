@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.cntrtmng.dao.BsnsBillDao">
+
+	<resultMap id="BsnsBill" type="com.mf.cntrtmng.entity.BsnsBill">
+        <result property="dueno" column="DUENO"/>
+        <result property="outno" column="OUTNO"/>
+        <result property="cntrctno" column="CNTRCTNO"/>
+        <result property="applyno" column="APPLYNO"/>
+        <result property="occrdate" column="OCCRDATE"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="clntnm" column="CLNTNM"/>
+        <result property="dueamnt" column="DUEAMNT"/>
+        <result property="outdate" column="OUTDATE"/>
+        <result property="mtrtydate" column="MTRTYDATE"/>
+        <result property="rledate" column="RLEDATE"/>
+        <result property="extno" column="EXTNO"/>
+        <result property="dlflg" column="DLFLG"/>
+        <result property="lnamnt" column="LNAMNT"/>
+        <result property="othramnt" column="OTHRAMNT"/>
+        <result property="regdate" column="REGDATE"/>
+        <result property="updtdate" column="UPDTDATE"/>
+        <result property="clssflg" column="CLSSFLG"/>
+        <result property="outflg" column="OUTFLG"/>
+        <result property="recflg" column="RECFLG"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		DUENO,
+OUTNO,
+CNTRCTNO,
+APPLYNO,
+OCCRDATE,
+CLNTNO,
+CLNTNM,
+DUEAMNT,
+OUTDATE,
+MTRTYDATE,
+RLEDATE,
+EXTNO,
+DLFLG,
+LNAMNT,
+OTHRAMNT,
+REGDATE,
+UPDTDATE,
+CLSSFLG,
+OUTFLG,
+RECFLG
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.cntrtmng.entity.BsnsBill">
+		select
+		<include refid="selectId" />
+		from bsns_bill
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.cntrtmng.entity.BsnsBill" parameterType="com.mf.cntrtmng.entity.BsnsBill">
+		select
+		<include refid="selectId" />
+		from bsns_bill
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.cntrtmng.entity.BsnsBill" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_bill
+		<include refid="querywhere"/>
+	</select>
+	<!--  贷款逾期预警查询-->
+	<select id="queryOverWarn" resultType="com.mf.cntrtmng.entity.BsnsBill" parameterType="java.util.HashMap">
+		select
+			a.dueno,a.outno,a.cntrctno,a.applyno,a.occrdate,a.clntno,a.clntnm,a.dueamnt,a.outdate,a.mtrtydate,
+			a.rledate,a.extno,a.dlflg,a.lnamnt,a.othramnt,a.regdate,a.updtdate,a.clssflg,a.outflg,a.recflg,d.sdate
+		from bsns_bill a
+		left join (select cntrctno,srlno,max(sdate)as sdate from message group by cntrctno,srlno) d 
+			on a.cntrctno=d.cntrctno and d.srlno is null			
+		where recflg &lt;&gt;1 and datediff(CURDATE(),mtrtydate)&gt;#{t.flag} and mtrtydate&lt;CURDATE()
+		<if test="@Ognl@isNotEmpty(t.clntnm)">
+					AND CLNTNM like '%${t.clntnm}%'
+		</if>      
+				
+	</select>
+	<!--  贷款到期预警查询-->
+	<select id="queryWarn" resultType="com.mf.cntrtmng.entity.BsnsBill" parameterType="java.util.HashMap">
+		select
+			a.dueno,a.outno,a.cntrctno,a.applyno,a.occrdate,a.clntno,a.clntnm,a.dueamnt,a.outdate,a.mtrtydate,
+			a.rledate,a.extno,a.dlflg,a.lnamnt,a.othramnt,a.regdate,a.updtdate,a.clssflg,a.outflg,a.recflg,d.sdate
+		from bsns_bill a
+			left join (select cntrctno,srlno,max(sdate)as sdate from message group by cntrctno,srlno) d 
+				on a.cntrctno=d.cntrctno and d.srlno is null
+		where recflg &lt;&gt;1 and datediff(mtrtydate,CURDATE())&lt;#{t.flag} and mtrtydate&gt;=CURDATE()
+		<if test="@Ognl@isNotEmpty(t.clntnm)">
+					AND CLNTNM like '%${t.clntnm}%'
+		</if>      
+	</select>
+	<!-- 还款到期预警 -->
+	<select id="queryRtrnTimeWarn" resultType="com.mf.aftrmng.entity.BsnsRepayplanAll" parameterType="java.util.HashMap">
+		select a.cntrctno,
+		b.dueno,
+		c.srlno,
+		a.clntno,
+		a.clntnm,
+		c.currepayamnt,
+		c.repayinstamnt,
+		c.repaytermno,
+		d.sdate
+		from bsns_repayplan c
+		left join bsns_bill b on c.cntrctno=b.cntrctno and c.dueno=b.dueno
+		left join bsns_cntrct a on c.cntrctno=a.cntrctno 
+		left join (select cntrctno,srlno,max(sdate)as sdate from message group by cntrctno,srlno) d 
+			on c.cntrctno=d.cntrctno and c.srlno=d.srlno		
+		where c.repaystt &lt;&gt; 1 and c.srlno is not null and (datediff(c.cycleedt,CURDATE())&lt;#{t.flag}) and c.cycleedt&gt;=CURDATE()
+		<if test="@Ognl@isNotEmpty(t.clntnm)">
+					and a.clntnm like '%${t.clntnm}%'
+		</if>      
+	</select>
+	<!-- 还款逾期预警 -->
+	<select id="queryRtrnOverWarn" resultType="com.mf.aftrmng.entity.BsnsRepayplanAll" parameterType="java.util.HashMap">
+		select a.cntrctno,
+		b.dueno,
+		c.srlno,	
+		<!-- add by fankb on 2015-06-16(for send short message)  -->
+		a.clntno,
+		a.clntnm,
+		c.currepayamnt,
+	<!--	c.repayinstamnt,  -->
+		c.cyclesdt,
+		c.cycleedt ,
+		c.repaytermno ,
+		d.sdate
+		from  bsns_repayplan c  
+			left join bsns_bill b on c.cntrctno=b.cntrctno and c.dueno=b.dueno
+			left join  bsns_cntrct a on a.cntrctno=c.cntrctno  
+			left join (select cntrctno,srlno,max(sdate)as sdate from message group by cntrctno,srlno) d 
+			on d.cntrctno=c.cntrctno and c.srlno=d.srlno 		
+		where c.repaystt &lt;&gt; 1 and c.srlno is not null and (datediff(CURDATE(),c.cycleedt)&gt;#{t.flag}) and CURDATE()&gt;c.cycleedt
+		<if test="@Ognl@isNotEmpty(t.clntnm)">
+					and a.clntnm like '%${t.clntnm}%'
+		</if>   
+	</select>
+	
+	<!-- 提前还款 
+	<select id="queryAdvance" resultType="com.mf.acctmoduel.entity.AdvancePayMoney" parameterType="java.util.HashMap">
+		select 
+		a.dueno,
+		a.clntnm,
+		b.bsnsrt,
+		b.intrstmd,
+		b.bsnsdptno,
+		sum(c.repayprinamnt)as repayprinamnt,
+		sum(c.fnamnt)as fnamnt 
+		from bsns_bill a 
+		left join bsns_cntrct b on a.cntrctno=b.cntrctno 
+		left join bsns_repaylog c on a.dueno=c.bsnsno
+		where a.dlflg &lt;&gt; 2 group by a.dueno
+		order by a.dueno
+	</select>
+	-->
+	<!-- 提前还款   hw -->
+	<select id="queryAdvance" resultType="com.mf.acctmoduel.entity.AdvancePay" parameterType="java.util.HashMap">
+		select 
+		a.dueno,
+		a.cntrctno,
+		a.clntnm,
+		a.clntno,
+		c.rpmntway,
+		c.intrstmd,
+		a.dueamnt,
+		b.lnblnc,
+		a.outdate,
+		a.mtrtydate
+		from bsns_bill a 		
+		left join bsns_lnmain b on a.dueno=b.bsnsno
+		left join bsns_cntrct c on a.cntrctno=c.cntrctno
+		left join bsns_lnout d on a.dueno=d.outno
+		where a.recflg &lt;&gt; 1 and d.outstt=3 
+		<if test="@Ognl@isNotEmpty(t.clntnm)">
+					and a.clntnm like '%${t.clntnm}%'
+		</if> 
+		group by a.dueno
+		order by a.dueno
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.outno)">
+					AND OUTNO like '%${t.outno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cntrctno)">
+					AND CNTRCTNO like '%${t.cntrctno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.applyno)">
+					AND APPLYNO like '%${t.applyno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.occrdate)">
+					AND OCCRDATE like '%${t.occrdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntnm)">
+					AND CLNTNM like '%${t.clntnm}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.dueamnt)">
+					AND DUEAMNT = '${t.dueamnt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.outdate)">
+					AND OUTDATE like '%${t.outdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.mtrtydate)">
+					AND MTRTYDATE like '%${t.mtrtydate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rledate)">
+					AND RLEDATE like '%${t.rledate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.extno)">
+					AND EXTNO like '%${t.extno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.dlflg)">
+					AND DLFLG like '%${t.dlflg}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.lnamnt)">
+					AND LNAMNT = '${t.lnamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.othramnt)">
+					AND OTHRAMNT = '${t.othramnt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regdate)">
+					AND REGDATE like '%${t.regdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.updtdate)">
+					AND UPDTDATE like '%${t.updtdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clssflg)">
+					AND CLSSFLG like '%${t.clssflg}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clssflg)">
+					AND OUTFLG like '%${t.outflg}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clssflg)">
+					AND RECFLG like '%${t.recflg}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(outno)">
+					AND OUTNO like '%${outno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cntrctno)">
+					AND CNTRCTNO like '%${cntrctno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(applyno)">
+					AND APPLYNO like '%${applyno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(occrdate)">
+					AND OCCRDATE like '%${occrdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntnm)">
+					AND CLNTNM like '%${clntnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(dueamnt)">
+					AND DUEAMNT = '${dueamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(outdate)">
+					AND OUTDATE like '%${outdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(mtrtydate)">
+					AND MTRTYDATE like '%${mtrtydate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rledate)">
+					AND RLEDATE like '%${rledate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(extno)">
+					AND EXTNO like '%${extno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(dlflg)">
+					AND DLFLG like '%${dlflg}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(lnamnt)">
+					AND LNAMNT = '${lnamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(othramnt)">
+					AND OTHRAMNT = '${othramnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(regdate)">
+					AND REGDATE like '%${regdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(updtdate)">
+					AND UPDTDATE like '%${updtdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clssflg)">
+					AND CLSSFLG like '%${clssflg}%'
+				</if>
+				<if test="@Ognl@isNotEmpty(clssflg)">
+					AND OUTFLG like '%${outflg}%'
+				</if>
+				<if test="@Ognl@isNotEmpty(clssflg)">
+					AND RECFLG like '%${recflg}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.cntrtmng.entity.BsnsBill" resultType="int">
+		select count(0) from bsns_bill
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.cntrtmng.entity.BsnsBill">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO bsns_bill (
+        	OUTNO ,
+        	CNTRCTNO ,
+        	APPLYNO ,
+        	OCCRDATE ,
+        	CLNTNO ,
+        	CLNTNM ,
+        	DUEAMNT ,
+        	OUTDATE ,
+        	MTRTYDATE ,
+        	RLEDATE ,
+        	EXTNO ,
+        	DLFLG ,
+        	LNAMNT ,
+        	OTHRAMNT ,
+        	REGDATE ,
+        	UPDTDATE ,
+        	CLSSFLG ,
+        	OUTFLG,
+        	RECFLG
+        ) VALUES (
+        	#{outno} ,
+        	#{cntrctno} ,
+        	#{applyno} ,
+        	#{occrdate} ,
+        	#{clntno} ,
+        	#{clntnm} ,
+        	#{dueamnt} ,
+        	#{outdate} ,
+        	#{mtrtydate} ,
+        	#{rledate} ,
+        	#{extno} ,
+        	#{dlflg} ,
+        	#{lnamnt} ,
+        	#{othramnt} ,
+        	#{regdate} ,
+        	#{updtdate} ,
+        	#{clssflg} ,
+        	#{outflg} ,
+        	#{recflg} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.cntrtmng.entity.BsnsBill">
+		INSERT INTO bsns_bill 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(dueno)">
+				DUENO,
+			</if>
+			<if test="@Ognl@isNotEmpty(outno)">
+				OUTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				CNTRCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				APPLYNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(occrdate)">
+				OCCRDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				CLNTNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(dueamnt)">
+				DUEAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(outdate)">
+				OUTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(mtrtydate)">
+				MTRTYDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(rledate)">
+				RLEDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(extno)">
+				EXTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(dlflg)">
+				DLFLG,
+			</if>
+			<if test="@Ognl@isNotEmpty(lnamnt)">
+				LNAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(othramnt)">
+				OTHRAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(regdate)">
+				REGDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				UPDTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(clssflg)">
+				CLSSFLG,
+			</if>
+			<if test="@Ognl@isNotEmpty(outflg)">
+				OUTFLG,
+			</if>
+			<if test="@Ognl@isNotEmpty(recflg)">
+				RECFLG,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(dueno)">
+				#{dueno},
+			</if>
+			<if test="@Ognl@isNotEmpty(outno)">
+				#{outno},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				#{cntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				#{applyno},
+			</if>
+			<if test="@Ognl@isNotEmpty(occrdate)">
+				#{occrdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				#{clntnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(dueamnt)">
+				#{dueamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(outdate)">
+				#{outdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(mtrtydate)">
+				#{mtrtydate},
+			</if>
+			<if test="@Ognl@isNotEmpty(rledate)">
+				#{rledate},
+			</if>
+			<if test="@Ognl@isNotEmpty(extno)">
+				#{extno},
+			</if>
+			<if test="@Ognl@isNotEmpty(dlflg)">
+				#{dlflg},
+			</if>
+			<if test="@Ognl@isNotEmpty(lnamnt)">
+				#{lnamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(othramnt)">
+				#{othramnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(regdate)">
+				#{regdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				#{updtdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(clssflg)">
+				#{clssflg},
+			</if>
+			<if test="@Ognl@isNotEmpty(outflg)">
+				#{outflg},
+			</if>
+			<if test="@Ognl@isNotEmpty(recflg)">
+				#{recflg},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM bsns_bill WHERE
+        DUENO = #{dueno} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsBill">
+		SELECT <include refid="selectId" />
+		    FROM bsns_bill 
+	        WHERE 
+        DUENO = #{id} 
+	</select>
+	<!-- 通过合同编号查询 -->
+	<select id="getByCntrctno" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsBill">
+		SELECT <include refid="selectId" />
+		    FROM bsns_bill 
+	        WHERE 
+        cntrctno = #{cntrctno} 
+	</select>
+	
+	<select id="queryBillouted" parameterType="java.util.HashMap" resultType="com.mf.cntrtmng.entity.BsnsBill">
+		SELECT *
+		FROM bsns_bill
+		WHERE cntrctno  = #{t.cntrctno}
+		AND DLFLG = #{t.dlflg}
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.cntrtmng.entity.BsnsBill">
+	    UPDATE bsns_bill SET
+	        OUTNO = #{outno} ,
+	        CNTRCTNO = #{cntrctno} ,
+	        APPLYNO = #{applyno} ,
+	        OCCRDATE = #{occrdate} ,
+	        CLNTNO = #{clntno} ,
+	        CLNTNM = #{clntnm} ,
+	        DUEAMNT = #{dueamnt} ,
+	        OUTDATE = #{outdate} ,
+	        MTRTYDATE = #{mtrtydate} ,
+	        RLEDATE = #{rledate} ,
+	        EXTNO = #{extno} ,
+	        DLFLG = #{dlflg} ,
+	        LNAMNT = #{lnamnt} ,
+	        OTHRAMNT = #{othramnt} ,
+	        REGDATE = #{regdate} ,
+	        UPDTDATE = #{updtdate} ,
+	        CLSSFLG = #{clssflg} ,
+	        OUTFLG = #{outflg} ,
+	        RECFLG = #{recflg} 
+        WHERE 
+	        DUENO = #{dueno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(outno)">
+			OUTNO = #{outno},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctno)">
+			CNTRCTNO = #{cntrctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(applyno)">
+			APPLYNO = #{applyno},
+		</if>
+		<if test="@Ognl@isNotEmpty(occrdate)">
+			OCCRDATE = #{occrdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntnm)">
+			CLNTNM = #{clntnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(dueamnt)">
+			DUEAMNT = #{dueamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(outdate)">
+			OUTDATE = #{outdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(mtrtydate)">
+			MTRTYDATE = #{mtrtydate},
+		</if>
+		<if test="@Ognl@isNotEmpty(rledate)">
+			RLEDATE = #{rledate},
+		</if>
+		<if test="@Ognl@isNotEmpty(extno)">
+			EXTNO = #{extno},
+		</if>
+		<if test="@Ognl@isNotEmpty(dlflg)">
+			DLFLG = #{dlflg},
+		</if>
+		<if test="@Ognl@isNotEmpty(lnamnt)">
+			LNAMNT = #{lnamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(othramnt)">
+			OTHRAMNT = #{othramnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(regdate)">
+			REGDATE = #{regdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(updtdate)">
+			UPDTDATE = #{updtdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(clssflg)">
+			CLSSFLG = #{clssflg},
+		</if>
+		<if test="@Ognl@isNotEmpty(outflg)">
+			OUTFLG = #{outflg},
+		</if>
+		<if test="@Ognl@isNotEmpty(recflg)">
+			RECFLG = #{recflg},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.cntrtmng.entity.BsnsBill">
+	    UPDATE bsns_bill 
+		<include refid="updateset"/>
+        WHERE 
+	        DUENO = #{dueno} 
+	</update>
+	<update id="modify" parameterType="com.mf.cntrtmng.entity.BsnsBill">
+	    UPDATE bsns_bill 
+		<include refid="updateset"/>
+        WHERE 
+	        DUENO = #{dueno} 
+	</update>
+	
+	
+	<select id="findByDueno" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsBill">
+		SELECT <include refid="selectId" />
+		    FROM bsns_bill 
+	        WHERE 
+        DUENO = #{dueno} 
+	</select>
+	<select id="getTotal"  parameterType="String" resultType="String">
+             SELECT SUM(DUEAMNT) FROM bsns_bill  WHERE CNTRCTNO=#{cntrctno}
+    </select>
+	<select id="queryCancel" resultType="com.mf.cntrtmng.entity.BsnsBill" parameterType="com.mf.cntrtmng.entity.BsnsBill">
+		select
+		<include refid="selectId" />
+		from bsns_bill
+	</select>
+<!--xujiuhua	-->
+	<select id="queryBLBill" parameterType="java.util.HashMap" resultType="com.mf.cntrtmng.entity.BsnsBill"> 
+	SELECT *
+		FROM bsns_bill
+	WHERE cntrctno IN
+	(SELECT cntrctno
+		FROM bsns_cntrct
+	WHERE cntrctno IN(SELECT cntrctno FROM bsns_bill WHERE dlflg = #{t.dlflg} GROUP BY cntrctno) AND cntrctstt = '91') 
+	AND dlflg = #{t.dlflg} and recflg&lt;&gt;1
+	<if test="@Ognl@isNotEmpty(t.dueno)">
+		AND DUENO like '%${t.dueno}%'
+   </if>
+   <if test="@Ognl@isNotEmpty(t.clntnm)">
+		AND CLNTNM like '%${t.clntnm}%'
+   </if>
+	<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+	</if>
+</select>
+	
+</mapper>
+

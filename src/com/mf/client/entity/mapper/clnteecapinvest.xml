@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntEeCapInvestDao">
+
+	<resultMap id="ClntEeCapInvest" type="com.mf.client.entity.ClntEeCapInvest">
+        <result property="id" column="ID"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="invester" column="INVESTER"/>
+        <result property="invlnno" column="INVLNNO"/>
+        <result property="orgno" column="ORGNO"/>
+        <result property="rerecode" column="RERECODE"/>
+        <result property="certtype" column="CERTTYPE"/>
+        <result property="certno" column="CERTNO"/>
+        <result property="curtp" column="CURTP"/>
+        <result property="invamt" column="INVAMT"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ID,
+CLNTNO,
+INVESTER,
+INVLNNO,
+ORGNO,
+RERECODE,
+CERTTYPE,
+CERTNO,
+CURTP,
+INVAMT
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntEeCapInvest">
+		select
+		<include refid="selectId" />
+		from clnt_ee_cap_invest
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntEeCapInvest" parameterType="com.mf.client.entity.ClntEeCapInvest">
+		select
+		<include refid="selectId" />
+		from clnt_ee_cap_invest
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntEeCapInvest" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_ee_cap_invest
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.invester)">
+					AND INVESTER like '%${t.invester}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.invlnno)">
+					AND INVLNNO like '%${t.invlnno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.orgno)">
+					AND ORGNO like '%${t.orgno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rerecode)">
+					AND RERECODE like '%${t.rerecode}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.certtype)">
+					AND CERTTYPE like '%${t.certtype}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.certno)">
+					AND CERTNO like '%${t.certno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.curtp)">
+					AND CURTP like '%${t.curtp}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.invamt)">
+					AND INVAMT = '${t.invamt}'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(invester)">
+					AND INVESTER like '%${invester}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(invlnno)">
+					AND INVLNNO like '%${invlnno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(orgno)">
+					AND ORGNO like '%${orgno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rerecode)">
+					AND RERECODE like '%${rerecode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(certtype)">
+					AND CERTTYPE like '%${certtype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(certno)">
+					AND CERTNO like '%${certno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(curtp)">
+					AND CURTP like '%${curtp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(invamt)">
+					AND INVAMT = '${invamt}'
+			   </if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntEeCapInvest" resultType="int">
+		select count(0) from clnt_ee_cap_invest
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntEeCapInvest">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_ee_cap_invest (
+        	CLNTNO ,
+        	INVESTER ,
+        	INVLNNO ,
+        	ORGNO ,
+        	RERECODE ,
+        	CERTTYPE ,
+        	CERTNO ,
+        	CURTP ,
+        	INVAMT 
+        ) VALUES (
+        	#{clntno} ,
+        	#{invester} ,
+        	#{invlnno} ,
+        	#{orgno} ,
+        	#{rerecode} ,
+        	#{certtype} ,
+        	#{certno} ,
+        	#{curtp} ,
+        	#{invamt} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntEeCapInvest">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO clnt_ee_cap_invest 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(invester)">
+				INVESTER,
+			</if>
+			<if test="@Ognl@isNotEmpty(invlnno)">
+				INVLNNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(orgno)">
+				ORGNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(rerecode)">
+				RERECODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(certtype)">
+				CERTTYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(certno)">
+				CERTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(curtp)">
+				CURTP,
+			</if>
+			<if test="@Ognl@isNotEmpty(invamt)">
+				INVAMT,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(invester)">
+				#{invester},
+			</if>
+			<if test="@Ognl@isNotEmpty(invlnno)">
+				#{invlnno},
+			</if>
+			<if test="@Ognl@isNotEmpty(orgno)">
+				#{orgno},
+			</if>
+			<if test="@Ognl@isNotEmpty(rerecode)">
+				#{rerecode},
+			</if>
+			<if test="@Ognl@isNotEmpty(certtype)">
+				#{certtype},
+			</if>
+			<if test="@Ognl@isNotEmpty(certno)">
+				#{certno},
+			</if>
+			<if test="@Ognl@isNotEmpty(curtp)">
+				#{curtp},
+			</if>
+			<if test="@Ognl@isNotEmpty(invamt)">
+				#{invamt},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM clnt_ee_cap_invest WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntEeCapInvest">
+		SELECT <include refid="selectId" />
+		    FROM clnt_ee_cap_invest 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntEeCapInvest">
+	    UPDATE clnt_ee_cap_invest SET
+	        CLNTNO = #{clntno} ,
+	        INVESTER = #{invester} ,
+	        INVLNNO = #{invlnno} ,
+	        ORGNO = #{orgno} ,
+	        RERECODE = #{rerecode} ,
+	        CERTTYPE = #{certtype} ,
+	        CERTNO = #{certno} ,
+	        CURTP = #{curtp} ,
+	        INVAMT = #{invamt} 
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(invester)">
+			INVESTER = #{invester},
+		</if>
+		<if test="@Ognl@isNotEmpty(invlnno)">
+			INVLNNO = #{invlnno},
+		</if>
+		<if test="@Ognl@isNotEmpty(orgno)">
+			ORGNO = #{orgno},
+		</if>
+		<if test="@Ognl@isNotEmpty(rerecode)">
+			RERECODE = #{rerecode},
+		</if>
+		<if test="@Ognl@isNotEmpty(certtype)">
+			CERTTYPE = #{certtype},
+		</if>
+		<if test="@Ognl@isNotEmpty(certno)">
+			CERTNO = #{certno},
+		</if>
+		<if test="@Ognl@isNotEmpty(curtp)">
+			CURTP = #{curtp},
+		</if>
+		<if test="@Ognl@isNotEmpty(invamt)">
+			INVAMT = #{invamt},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntEeCapInvest">
+	    UPDATE clnt_ee_cap_invest 
+		<include refid="updateset"/>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

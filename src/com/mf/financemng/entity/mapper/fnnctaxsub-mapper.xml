@@ -1,0 +1,430 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FnncTaxsubDao">
+
+	<resultMap id="FnncTaxsub" type="com.mf.financemng.entity.FnncTaxsub">
+        <result property="taxid" column="TAXID"/>
+        <result property="taxstart" column="TAXSTART"/>
+        <result property="taxend" column="TAXEND"/>
+        <result property="taxname" column="TAXNAME"/>
+        <result property="taxtype" column="TAXTYPE"/>
+        <result property="taxsub" column="TAXSUB"/>
+        <result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		PAYTAXID,
+ORGCODE,
+BEGINMONTH,
+ENDMONTH,
+TAXTYPE,
+SUBTAXTYPE,
+BLEAVEAMOUNT,
+EAMOUNT,
+EALERADYAMOUNT,
+ELEAVEAMOUNT,
+REMARK,
+DELETEFLAG,
+RPTSTATUS,
+RPTBATCH,
+RPTDATE,
+PROCESSSTATUS,
+CREATEBY,
+CREATEDATE,
+UPDATEBY,
+UPDATEDATE
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.FnncTaxsub">
+		select
+		<include refid="selectId" />
+		from paytax
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.FnncTaxsub" parameterType="com.mf.financemng.entity.FnncTaxsub">
+		select
+		<include refid="selectId" />
+		from paytax
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+    <select id="query1" resultType="com.mf.financemng.entity.FnncTaxsub" parameterType="java.util.HashMap">
+	SELECT t1.sd_key as remark,t2.ealeradyamount,t2.ENDMONTH,t2.sd_key as rptdate,t2.PAYTAXID from 
+		(SELECT a.PAYTAXID,a.ealeradyamount,a.ENDMONTH,b.sd_key,b.sd_value as taxtype FROM paytax as a LEFT JOIN
+		(SELECT *  from `sys_dictionary` c WHERE c.`CODE`=8007) as b 
+		on a.TAXTYPE=b.SD_VALUE where a.DELETEFLAG=0)t2 LEFT JOIN(
+		SELECT d.PAYTAXID,f.sd_key,f.sd_value as SUBTAXTYPE FROM paytax as d 
+		LEFT JOIN
+		(SELECT *  from `sys_dictionary` e WHERE e.`CODE`=8008) as f
+		on d.SUBTAXTYPE=f.SD_VALUE where d.DELETEFLAG=0)t1 on t1.PAYTAXID=t2.paytaxid
+
+		<where>	      				
+		    
+		       <if test="@Ognl@isNotEmpty(t.endmonth)">
+					AND t2.ENDMONTH = '${t.endmonth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.taxtype)">
+					AND t2.TAXTYPE = '${t.taxtype}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.subtaxtype)">
+					AND t1.SUBTAXTYPE = '${t.subtaxtype}'
+			   </if>
+		</where>
+		order by t2.ENDMONTH desc,t2.PAYTAXID desc
+	</select>
+	
+	<select id="query2" resultType="com.mf.financemng.entity.FnncTaxsub" parameterType="java.util.HashMap">
+			SELECT t1.sd_key as remark,t2.ealeradyamount,t2.ENDMONTH,t2.sd_key as rptdate,t2.PAYTAXID from 
+		(SELECT a.PAYTAXID,a.ealeradyamount,a.ENDMONTH,b.sd_key,b.sd_value as taxtype FROM paytax as a LEFT JOIN
+		(SELECT *  from `sys_dictionary` c WHERE c.`CODE`=8007) as b 
+		on a.TAXTYPE=b.SD_VALUE where a.DELETEFLAG=0)t2 LEFT JOIN(
+		SELECT d.PAYTAXID,f.sd_key,f.sd_value as SUBTAXTYPE FROM paytax as d 
+		LEFT JOIN
+		(SELECT *  from `sys_dictionary` e WHERE e.`CODE`=8008) as f
+		on d.SUBTAXTYPE=f.SD_VALUE where d.DELETEFLAG=0)t1 on t1.PAYTAXID=t2.paytaxid
+
+		<where>	      				
+			  	 <if test="@Ognl@isNotEmpty(t.endmonth)">
+					AND t2.ENDMONTH &gt; '${t.endmonth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.taxtype)">
+					AND t2.TAXTYPE = '${t.taxtype}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.subtaxtype)">
+					AND t1.SUBTAXTYPE = '${t.subtaxtype}'
+			   </if>
+		</where>
+		order by t2.ENDMONTH desc,t2.PAYTAXID desc
+	</select>
+	
+	<select id="query3" resultType="com.mf.financemng.entity.FnncTaxsub" parameterType="java.util.HashMap">
+		SELECT t1.sd_key as remark,t2.ealeradyamount,t2.ENDMONTH,t2.sd_key as rptdate,t2.PAYTAXID from 
+		(SELECT a.PAYTAXID,a.ealeradyamount,a.ENDMONTH,b.sd_key,b.sd_value as taxtype FROM paytax as a LEFT JOIN
+		(SELECT *  from `sys_dictionary` c WHERE c.`CODE`=8007) as b 
+		on a.TAXTYPE=b.SD_VALUE where a.DELETEFLAG=0)t2 LEFT JOIN(
+		SELECT d.PAYTAXID,f.sd_key,f.sd_value as SUBTAXTYPE FROM paytax as d 
+		LEFT JOIN
+		(SELECT *  from `sys_dictionary` e WHERE e.`CODE`=8008) as f
+		on d.SUBTAXTYPE=f.SD_VALUE where d.DELETEFLAG=0)t1 on t1.PAYTAXID=t2.paytaxid
+		<where>	      				
+			  <if test="@Ognl@isNotEmpty(t.endmonth)">
+					AND t2.ENDMONTH &lt; '${t.endmonth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.taxtype)">
+					AND t2.TAXTYPE = '${t.taxtype}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.subtaxtype)">
+					AND t1.SUBTAXTYPE = '${t.subtaxtype}'
+			   </if>
+		</where>
+		order by t2.ENDMONTH desc,t2.PAYTAXID desc
+	</select>
+
+	<select id="query" resultType="com.mf.financemng.entity.FnncTaxsub" parameterType="java.util.HashMap">
+	SELECT t1.sd_key as remark,t2.ealeradyamount,t2.ENDMONTH,t2.sd_key as rptdate,t2.PAYTAXID from 
+		(SELECT a.PAYTAXID,a.ealeradyamount,a.ENDMONTH,b.sd_key,b.sd_value as taxtype FROM paytax as a LEFT JOIN
+		(SELECT *  from `sys_dictionary` c WHERE c.`CODE`=8007) as b 
+		on a.TAXTYPE=b.SD_VALUE where a.DELETEFLAG=0)t2 LEFT JOIN(
+		SELECT d.PAYTAXID,f.sd_key,f.sd_value as SUBTAXTYPE FROM paytax as d 
+		LEFT JOIN
+		(SELECT *  from `sys_dictionary` e WHERE e.`CODE`=8008) as f
+		on d.SUBTAXTYPE=f.SD_VALUE where d.DELETEFLAG=0)t1 on t1.PAYTAXID=t2.paytaxid
+		
+		<include refid="querywhere"/>
+		order by t2.ENDMONTH desc,t2.PAYTAXID desc
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.endmonth)">
+					AND t2.ENDMONTH &lt; '${t.endmonth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.taxtype)">
+					AND t2.TAXTYPE = '${t.taxtype}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.subtaxtype)">
+					AND t1.SUBTAXTYPE = '${t.subtaxtype}'
+			   </if>
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+<where>	      				
+		       <if test="@Ognl@isNotEmpty(orgcode)">
+					AND ORGCODE like '%${orgcode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(beginmonth)">
+					AND BEGINMONTH = '${beginmonth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(endmonth)">
+					AND ENDMONTH = '${endmonth}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(taxtype)">
+					AND TAXTYPE = '${taxtype}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(subtaxtype)">
+					AND SUBTAXTYPE = '${subtaxtype}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(bleaveamount)">
+					AND BLEAVEAMOUNT = '${bleaveamount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(eamount)">
+					AND EAMOUNT = '${eamount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(ealeradyamount)">
+					AND EALERADYAMOUNT = '${ealeradyamount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(eleaveamount)">
+					AND ELEAVEAMOUNT = '${eleaveamount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(deleteflag)">
+					AND DELETEFLAG = '${deleteflag}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rptstatus)">
+					AND RPTSTATUS = '${rptstatus}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rptbatch)">
+					AND RPTBATCH like '%${rptbatch}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rptdateBegin)">
+					AND RPTDATE >= #{rptdateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(rptdateEnd)">
+					AND RPTDATE &lt;= #{rptdateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(processstatus)">
+					AND PROCESSSTATUS = '${processstatus}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(createby)">
+					AND CREATEBY like '%${createby}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(createdateBegin)">
+					AND CREATEDATE >= #{createdateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(createdateEnd)">
+					AND CREATEDATE &lt;= #{createdateEnd}
+			   </if>
+		       <if test="@Ognl@isNotEmpty(updateby)">
+					AND UPDATEBY like '%${updateby}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(updatedateBegin)">
+					AND UPDATEDATE >= #{updatedateBegin}
+			   </if>
+			   <if test="@Ognl@isNotEmpty(updatedateEnd)">
+					AND UPDATEDATE &lt;= #{updatedateEnd}
+			   </if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.FnncTaxsub" resultType="int">
+		select count(0) from paytax
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.FnncTaxsub">
+	
+		INSERT INTO paytax 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(paytaxid)">
+				PAYTAXID,
+			</if>
+			<if test="@Ognl@isNotEmpty(orgcode)">
+				ORGCODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(beginmonth)">
+				BEGINMONTH,
+			</if>
+			<if test="@Ognl@isNotEmpty(endmonth)">
+				ENDMONTH,
+			</if>
+			<if test="@Ognl@isNotEmpty(taxtype)">
+				TAXTYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(subtaxtype)">
+				SUBTAXTYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(bleaveamount)">
+				BLEAVEAMOUNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(eamount)">
+				EAMOUNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(ealeradyamount)">
+				EALERADYAMOUNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(eleaveamount)">
+				ELEAVEAMOUNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+			<if test="@Ognl@isNotEmpty(deleteflag)">
+				DELETEFLAG,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptstatus)">
+				RPTSTATUS,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptbatch)">
+				RPTBATCH,
+			</if>
+			<if test="@Ognl@isNotEmpty(rptdate)">
+				RPTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(processstatus)">
+				PROCESSSTATUS,
+			</if>
+			<if test="@Ognl@isNotEmpty(createby)">
+				CREATEBY,
+			</if>
+			<if test="@Ognl@isNotEmpty(createdate)">
+				CREATEDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(updateby)">
+				UPDATEBY,
+			</if>
+			<if test="@Ognl@isNotEmpty(updatedate)">
+				UPDATEDATE,
+			</if>
+			
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    	<if test="@Ognl@isNotEmpty(paytaxid)">
+				#{paytaxid},
+			</if>
+   			<if test="@Ognl@isNotEmpty(orgcode)">
+				#{orgcode},
+			</if>
+			<if test="@Ognl@isNotEmpty(beginmonth)">
+				#{beginmonth},
+			</if>
+			<if test="@Ognl@isNotEmpty(endmonth)">
+				#{endmonth},
+			</if>
+			<if test="@Ognl@isNotEmpty(taxtype)">
+				#{taxtype},
+			</if>
+			<if test="@Ognl@isNotEmpty(subtaxtype)">
+				#{subtaxtype},
+			</if>
+			<if test="@Ognl@isNotEmpty(bleaveamount)">
+				#{bleaveamount},
+			</if>
+			<if test="@Ognl@isNotEmpty(eamount)">
+				#{eamount},
+			</if>
+			<if test="@Ognl@isNotEmpty(ealeradyamount)">
+				#{ealeradyamount},
+			</if>
+			<if test="@Ognl@isNotEmpty(eleaveamount)">
+				#{eleaveamount},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@Ognl@isNotEmpty(deleteflag)">
+				#{deleteflag},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptstatus)">
+				#{rptstatus},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptbatch)">
+				#{rptbatch},
+			</if>
+			<if test="@Ognl@isNotEmpty(rptdate)">
+				#{rptdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(processstatus)">
+				#{processstatus},
+			</if>
+			<if test="@Ognl@isNotEmpty(createby)">
+				#{createby},
+			</if>
+			<if test="@Ognl@isNotEmpty(createdate)">
+				#{createdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(updateby)">
+				#{updateby},
+			</if>
+			<if test="@Ognl@isNotEmpty(updatedate)">
+				#{updatedate},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		update paytax set deleteflag=1 where 
+        PAYTAXID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.FnncTaxsub">
+		SELECT <include refid="selectId" />
+		    FROM paytax 
+	        WHERE 
+        PAYTAXID = #{id} 
+	</select>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(beginmonth)">
+			BEGINMONTH = #{beginmonth},
+		</if>
+		<if test="@Ognl@isNotEmpty(endmonth)">
+			ENDMONTH = #{endmonth},
+		</if>
+		<if test="@Ognl@isNotEmpty(taxtype)">
+			TAXTYPE = #{taxtype},
+		</if>
+		<if test="@Ognl@isNotEmpty(subtaxtype)">
+			SUBTAXTYPE = #{subtaxtype},
+		</if>
+		<if test="@Ognl@isNotEmpty(ealeradyamount)">
+			EALERADYAMOUNT = #{ealeradyamount},
+		</if>
+		<if test="@Ognl@isNotEmpty(eleaveamount)">
+			ELEAVEAMOUNT = #{eleaveamount},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(updateby)">
+			UPDATEBY = #{updateby},
+		</if>
+		<if test="@Ognl@isNotEmpty(updatedate)">
+			UPDATEDATE = #{updatedate},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.financemng.entity.FnncTaxsub">
+	    UPDATE paytax 
+		<include refid="updateset"/>
+        WHERE 
+	        PAYTAXID = #{paytaxid} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

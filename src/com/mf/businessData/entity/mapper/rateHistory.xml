@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.mf.businessData.dao.RateHistoryDao">
+
+	<sql id="selectItems">
+		srlno, rtno, adjdate, rate, type, lowerlmt, upperlmt
+  	</sql>
+    
+	<select id="query" resultType="com.mf.businessData.entity.RateHistory" parameterType="com.mf.businessData.entity.RateHistory">
+		select
+		<include refid="selectItems" />
+		from ratehistry
+		where rtno=#{rtno}
+		
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.businessData.entity.RateHistory" parameterType="com.mf.businessData.entity.RateHistory">
+		select
+		<include refid="selectItems" />
+		from ratehistry
+		where rtno=#{rtno}
+	</select>
+	
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.businessData.entity.RateHistory" resultType="int">
+		select count(0) from ratehistry
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="add" parameterType="com.mf.businessData.entity.RateHistory">
+		INSERT INTO ratehistry (
+			srlno, 
+			rtno, 
+			adjdate, 
+			rate, 
+			type, 
+			lowerlmt, 
+			upperlmt
+         ) VALUES (
+			(select maxId from  (SELECT (IFNULL(MAX(srlno),999)+1) as maxId FROM ratehistry) as t),
+			#{rtno}, 
+			#{adjdate}, 
+			#{rate}, 
+			#{type}, 
+			#{lowerlmt}, 
+			#{upperlmt}
+        )
+	</insert>
+
+	<select id="getById" parameterType="String" resultType="com.mf.businessData.entity.RateHistory">
+	    select
+		<include refid="selectItems" />
+		from ratehistry
+		where  srlno=#{srlno}
+	</select>
+	
+</mapper>
+

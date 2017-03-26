@@ -1,0 +1,812 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.cntrtmng.dao.BsnsRepayplanDao">
+
+	<resultMap id="BsnsRepayplan" type="com.mf.cntrtmng.entity.BsnsRepayplan">
+        <result property="srlno" column="SRLNO"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="clntnm" column="CLNTNM"/>
+        <result property="cntrctno" column="CNTRCTNO"/>
+        <result property="tbrepaypttl" column="TBREPAYPTTL"/>
+        <result property="tbrepaybal" column="TBREPAYBAL"/>
+        <result property="actualrepaydt" column="ACTUALREPAYDT"/>
+        <result property="currepayamnt" column="CURREPAYAMNT"/>
+        <result property="repayedprinsum" column="REPAYEDPRINSUM"/>
+        <result property="dptno" column="DPTNO"/>
+        <result property="opno" column="OPNO"/>
+        <result property="cyclesdt" column="CYCLESDT"/>
+        <result property="cycleedt" column="CYCLEEDT"/>
+        <result property="dueno" column="DUENO"/>
+        <result property="intrstmd" column="INTRSTMD"/>
+        <result property="repayinstamnt" column="REPAYINSTAMNT"/>
+        <result property="repaystt" column="REPAYSTT"/>
+        <result property="repaytermno" column="REPAYTERMNO"/>
+        <result property="createdate" column="CREATEDATE"/>
+        <result property="updatedate" column="UPDATEDATE"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		SRLNO,
+		CLNTNO,
+		CLNTNM,
+		CNTRCTNO,
+		TBREPAYPTTL,
+		TBREPAYBAL,
+		ACTUALREPAYDT,
+		CURREPAYAMNT,
+		REPAYEDPRINSUM,
+		DPTNO,
+		OPNO,
+		CYCLESDT,
+		CYCLEEDT,
+		DUENO,
+		INTRSTMD,
+		REPAYINSTAMNT,
+		REPAYSTT,
+		REPAYTERMNO,
+		CREATEDATE,
+		UPDATEDATE
+    </sql>
+    <!-- 查询指定借据和还款日期且状态为“未还款”的的还款记录 add by fankb  -->
+    <select id="findAsEndDate" resultType="com.mf.cntrtmng.entity.BsnsRepayplan" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_repayplan where DUENO = #{dueno} and 
+				CYCLEEDT = #{cycleedt} and repaystt ='0'
+	</select>
+	<select id="getMaxPayedSumAsDueNo" resultType="double">
+			select
+				max(REPAYEDPRINSUM)
+			from bsns_repayplan where dueno = #{dueno} 
+	</select>	
+	
+    <select id="findAll" resultType="com.mf.cntrtmng.entity.BsnsRepayplan">
+		select
+		<include refid="selectId" />
+		from bsns_repayplan
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.cntrtmng.entity.BsnsRepayplan" parameterType="com.mf.cntrtmng.entity.BsnsRepayplan">
+		select
+		<include refid="selectId" />
+		from bsns_repayplan
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+	
+	<select id="queryBycyclesdt" resultType="com.mf.cntrtmng.entity.BsnsRepayplan" parameterType="com.mf.cntrtmng.entity.BsnsRepayplan">
+		select
+		<include refid="selectId" />
+		from bsns_repayplan
+		where cyclesdt &lt;#{cyclesdt} and dueno = #{dueno} and REPAYSTT!=1
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.cntrtmng.entity.BsnsRepayplan" parameterType="java.util.HashMap">
+		select
+		distinct 
+		a.clntno,
+		a.dueno,
+		a.cntrctno,
+		a.clntnm,
+		b.applyno as opno
+		from bsns_repayplan a
+		left join bsns_bill b on a.dueno=b.dueno 
+		where  A.REPAYSTT = 1 and B.OUTFLG=1
+	       <if test="@Ognl@isNotEmpty(t.clntnm)">
+				AND A.CLNTNM like '%${t.clntnm}%'
+		   </if>
+		   <if test="@Ognl@isNotEmpty(t.cyclesdt)">
+				AND b.outdate &gt;= '${t.cyclesdt}'
+		   </if>
+		   <if test="@Ognl@isNotEmpty(t.cycleedt)">
+		   		AND b.mtrtydate &lt;= '${t.cycleedt}'
+		   </if>
+		   <if test="@Ognl@isNotEmpty(t.dueno)">
+				AND A.DUENO ='${t.dueno}'
+		   </if>
+	       			
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	<!-- 查询未完成还款计划 -->
+	<select id="queryStatus" resultType="com.mf.cntrtmng.entity.BsnsRepayplan" parameterType="java.util.HashMap">
+		select
+		distinct 
+		a.clntno,
+		a.dueno,
+		a.cntrctno,
+		a.clntnm,
+		b.applyno as opno
+		from bsns_repayplan a
+		left join bsns_bill b on a.dueno=b.dueno 
+		where  A.REPAYSTT &lt;&gt; 1 and B.OUTFLG=1 and B.recflg &lt;&gt; 1
+	       <if test="@Ognl@isNotEmpty(t.clntnm)">
+				AND A.CLNTNM like '%${t.clntnm}%'
+		   </if>
+		   <if test="@Ognl@isNotEmpty(t.cyclesdt)">
+				AND b.outdate &gt;= '${t.cyclesdt}'
+		   </if>
+		   <if test="@Ognl@isNotEmpty(t.cycleedt)">
+		   		AND b.mtrtydate &lt;= '${t.cycleedt}'
+		   </if>
+		   <if test="@Ognl@isNotEmpty(t.dueno)">
+				AND A.DUENO ='${t.dueno}'
+		   </if>
+	       			
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<!-- 根据借据号查询未完成还款计划 -->
+	<select id="query1" resultType="com.mf.cntrtmng.entity.BsnsRepayplan" parameterType="java.util.HashMap">
+		select
+			SRLNO,
+				CLNTNO,
+				CLNTNM,
+				CNTRCTNO,
+				TBREPAYPTTL,
+				TBREPAYBAL,
+				ACTUALREPAYDT,
+				CURREPAYAMNT,
+				REPAYEDPRINSUM,
+				DPTNO,
+				OPNO,
+				CYCLESDT,
+				CYCLEEDT,
+				DUENO,
+				INTRSTMD,
+				(REPAYINSTAMNT - (Select IFNULL( sum(RCVINSTAMNT) ,0) from bsns_repaylog where SRLNO=a.SRLNO)) as REPAYINSTAMNT ,
+				REPAYSTT,
+				REPAYTERMNO,
+				CREATEDATE,
+				UPDATEDATE
+		from bsns_repayplan a		
+		where REPAYSTT!=1
+		<if test="@Ognl@isNotEmpty(t.dueno)">
+			  AND a.DUENO = '${t.dueno}'
+		</if>
+		<if test="@Ognl@isNotEmpty(t.cyclesdt)">
+				AND a.CYCLEEDT &gt;= '${t.cyclesdt}'
+		   </if>
+		   <if test="@Ognl@isNotEmpty(t.cycleedt)">
+		   		AND a.CYCLEEDT &lt;= '${t.cycleedt}'
+		   </if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+		<!-- 根据借据号查询未完成还款计划 -->
+	<select id="queryNew" resultType="com.mf.cntrtmng.entity.BsnsRepayplan" parameterType="java.util.HashMap">
+		select
+			SRLNO,CLNTNO,CLNTNM,CNTRCTNO,TBREPAYPTTL,TBREPAYBAL,ACTUALREPAYDT,CURREPAYAMNT,
+			REPAYEDPRINSUM,DPTNO,OPNO,CYCLESDT,CYCLEEDT,DUENO,INTRSTMD,
+			(REPAYINSTAMNT - (Select IFNULL( sum(RCVINSTAMNT) ,0) from bsns_repaylog where SRLNO=a.SRLNO)) as REPAYINSTAMNT ,
+			REPAYSTT,
+			REPAYTERMNO,CREATEDATE,UPDATEDATE
+		from bsns_repayplan a		
+		where REPAYSTT!=1
+		<if test="@Ognl@isNotEmpty(dueno)">
+			  AND a.DUENO = '${dueno}'
+		</if>
+		<if test="@Ognl@isNotEmpty(cyclesdt)">
+				AND a.CYCLEEDT &gt;= '${cyclesdt}'
+		   </if>
+		   <if test="@Ognl@isNotEmpty(cycleedt)">
+		   		AND a.CYCLEEDT &lt;= '${cycleedt}'
+		   </if>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+	
+	<!-- 根据借据号查询已完成还款计划 -->
+<!-- 	<select id="query2" resultType="com.mf.cntrtmng.entity.BsnsRepayplan" parameterType="java.util.HashMap">
+		select
+			SRLNO,
+				CLNTNO,
+				CLNTNM,
+				CNTRCTNO,
+				TBREPAYPTTL,
+				TBREPAYBAL,
+				ACTUALREPAYDT,
+				CURREPAYAMNT,
+				REPAYEDPRINSUM,
+				DPTNO,
+				OPNO,
+				CYCLESDT,
+				CYCLEEDT,
+				DUENO,
+				INTRSTMD,
+				(REPAYINSTAMNT - (Select IFNULL( sum(RCVINSTAMNT) ,0) from bsns_repaylog where SRLNO=a.SRLNO)) as REPAYINSTAMNT ,
+				REPAYSTT,
+				REPAYTERMNO
+		from bsns_repayplan a		
+		where REPAYSTT = 1
+		<if test="@Ognl@isNotEmpty(t.dueno)">
+			  AND a.DUENO = '${t.dueno}'
+		</if>
+		<if test="@Ognl@isNotEmpty(t.cyclesdt)">
+				AND a.CYCLEEDT &gt;= '${t.cyclesdt}'
+		   </if>
+		   <if test="@Ognl@isNotEmpty(t.cycleedt)">
+		   		AND a.CYCLEEDT &lt;= '${t.cycleedt}'
+		   </if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>	 -->
+	
+	<!-- add by hw -->
+	<select id="query2" resultType="com.mf.cntrtmng.entity.BsnsRepayplan" parameterType="java.util.HashMap">
+		select 
+			a.srlno,
+			a.dueno,
+			b.DUEAMNT as dueamnt, 
+			b.paydate as actualrepaydt, 
+			b.benjin as currepayamnt, 
+			b.lixi as repayinstamnt  
+		from bsns_repayplan a 
+		LEFT JOIN(select SRLNO,SUM(RCVAMNT) as DUEAMNT ,SUM(RCVPRINAMNT) as benjin , SUM(RCVINSTAMNT) as lixi, MAX(PAYDT) as paydate from bsns_repaylog GROUP BY SRLNO) b
+		on a.SRLNO=b.SRLNO
+		WHERE a.ACTUALREPAYDT IS NOT NULL 
+		<if test="@Ognl@isNotEmpty(t.dueno)">
+			  AND a.DUENO = '${t.dueno}'
+		</if>
+		<if test="@Ognl@isNotEmpty(t.cyclesdt)">
+				AND a.CYCLESDT &gt;= '${t.cyclesdt}'
+	    </if>
+	    <if test="@Ognl@isNotEmpty(t.cycleedt)">
+		   		AND a.CYCLEEDT &lt;= '${t.cycleedt}'
+	    </if>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntnm)">
+					AND CLNTNM like '%${t.clntnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cntrctno)">
+					AND CNTRCTNO like '%${t.cntrctno}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.tbrepaypttl)">
+					AND TBREPAYPTTL = '${t.tbrepaypttl}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.tbrepaybal)">
+					AND TBREPAYBAL = '${t.tbrepaybal}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.actualrepaydt)">
+					AND ACTUALREPAYDT like '%${t.actualrepaydt}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.currepayamnt)">
+					AND CURREPAYAMNT = '${t.currepayamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.repayedprinsum)">
+					AND REPAYEDPRINSUM = '${t.repayedprinsum}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.dptno)">
+					AND DPTNO like '%${t.dptno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.opno)">
+					AND OPNO like '%${t.opno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cyclesdt)">
+					AND CYCLEEDT &gt;= '${t.cyclesdt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cycleedt)">
+			   		AND CYCLEEDT &lt;= '${t.cycleedt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.dueno)">
+					AND DUENO like '%${t.dueno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.intrstmd)">
+					AND INTRSTMD like '%${t.intrstmd}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.repayinstamnt)">
+					AND REPAYINSTAMNT = '${t.repayinstamnt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.repaystt)">
+					AND REPAYSTT like '%${t.repaystt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.repaytermno)">
+					AND REPAYTERMNO like '%${t.repaytermno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.createdate)">
+					AND CREATEDATE like '%${t.createdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.updatedate)">
+					AND UPDATEDATE like '%${t.updatedate}%'
+			   </if>
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntnm)">
+					AND CLNTNM like '%${clntnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cntrctno)">
+					AND CNTRCTNO like '%${cntrctno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(tbrepaypttl)">
+					AND TBREPAYPTTL = '${tbrepaypttl}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(tbrepaybal)">
+					AND TBREPAYBAL = '${tbrepaybal}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(actualrepaydt)">
+					AND ACTUALREPAYDT like '%${actualrepaydt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(currepayamnt)">
+					AND CURREPAYAMNT = '${currepayamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(repayedprinsum)">
+					AND REPAYEDPRINSUM = '${repayedprinsum}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(dptno)">
+					AND DPTNO like '%${dptno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(opno)">
+					AND OPNO like '%${opno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cyclesdt)">
+					AND CYCLESDT like '%${cyclesdt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cycleedt)">
+					AND CYCLEEDT like '%${cycleedt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(dueno)">
+					AND DUENO like '%${dueno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(intrstmd)">
+					AND INTRSTMD like '%${intrstmd}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(repayinstamnt)">
+					AND REPAYINSTAMNT = '${repayinstamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(repaystt)">
+					AND REPAYSTT like '%${repaystt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(repaytermno)">
+					AND REPAYTERMNO like '%${repaytermno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(createdate)">
+					AND CREATEDATE like '%${createdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(updatedate)">
+					AND UPDATEDATE like '%${updatedate}%'
+				</if>
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.cntrtmng.entity.BsnsRepayplan" resultType="int">
+		select count(0) from bsns_repayplan
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.cntrtmng.entity.BsnsRepayplan">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO bsns_repayplan (
+        	CLNTNO ,
+        	CLNTNM ,
+        	CNTRCTNO ,
+        	TBREPAYPTTL ,
+        	TBREPAYBAL ,
+        	ACTUALREPAYDT ,
+        	CURREPAYAMNT ,
+        	REPAYEDPRINSUM ,
+        	DPTNO ,
+        	OPNO ,
+        	CYCLESDT ,
+        	CYCLEEDT ,
+        	DUENO ,
+        	INTRSTMD ,
+        	REPAYINSTAMNT ,
+        	REPAYSTT ,
+        	REPAYTERMNO ,
+        	CREATEDATE,
+			UPDATEDATE
+        ) VALUES (
+        	#{clntno} ,
+        	#{clntnm} ,
+        	#{cntrctno} ,
+        	#{tbrepaypttl} ,
+        	#{tbrepaybal} ,
+        	#{actualrepaydt} ,
+        	#{currepayamnt} ,
+        	#{repayedprinsum} ,
+        	#{dptno} ,
+        	#{opno} ,
+        	#{cyclesdt} ,
+        	#{cycleedt} ,
+        	#{dueno} ,
+        	#{intrstmd} ,
+        	#{repayinstamnt} ,
+        	#{repaystt} ,
+        	#{repaytermno} ,
+        	#{createdate} ,
+			#{updatedate}
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.cntrtmng.entity.BsnsRepayplan">
+		INSERT INTO bsns_repayplan 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(srlno)">
+				SRLNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				CLNTNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				CNTRCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(tbrepaypttl)">
+				TBREPAYPTTL,
+			</if>
+			<if test="@Ognl@isNotEmpty(tbrepaybal)">
+				TBREPAYBAL,
+			</if>
+			<if test="@Ognl@isNotEmpty(actualrepaydt)">
+				ACTUALREPAYDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(currepayamnt)">
+				CURREPAYAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(repayedprinsum)">
+				REPAYEDPRINSUM,
+			</if>
+			<if test="@Ognl@isNotEmpty(dptno)">
+				DPTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(opno)">
+				OPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(cyclesdt)">
+				CYCLESDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(cycleedt)">
+				CYCLEEDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(dueno)">
+				DUENO,
+			</if>
+			<if test="@Ognl@isNotEmpty(intrstmd)">
+				INTRSTMD,
+			</if>
+			<if test="@Ognl@isNotEmpty(repayinstamnt)">
+				REPAYINSTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(repaystt)">
+				REPAYSTT,
+			</if>
+			<if test="@Ognl@isNotEmpty(repaytermno)">
+				REPAYTERMNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(createdate)">
+				CREATEDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(updatedate)">
+				UPDATEDATE,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(srlno)">
+				#{srlno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				#{clntnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				#{cntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(tbrepaypttl)">
+				#{tbrepaypttl},
+			</if>
+			<if test="@Ognl@isNotEmpty(tbrepaybal)">
+				#{tbrepaybal},
+			</if>
+			<if test="@Ognl@isNotEmpty(actualrepaydt)">
+				#{actualrepaydt},
+			</if>
+			<if test="@Ognl@isNotEmpty(currepayamnt)">
+				#{currepayamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(repayedprinsum)">
+				#{repayedprinsum},
+			</if>
+			<if test="@Ognl@isNotEmpty(dptno)">
+				#{dptno},
+			</if>
+			<if test="@Ognl@isNotEmpty(opno)">
+				#{opno},
+			</if>
+			<if test="@Ognl@isNotEmpty(cyclesdt)">
+				#{cyclesdt},
+			</if>
+			<if test="@Ognl@isNotEmpty(cycleedt)">
+				#{cycleedt},
+			</if>
+			<if test="@Ognl@isNotEmpty(dueno)">
+				#{dueno},
+			</if>
+			<if test="@Ognl@isNotEmpty(intrstmd)">
+				#{intrstmd},
+			</if>
+			<if test="@Ognl@isNotEmpty(repayinstamnt)">
+				#{repayinstamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(repaystt)">
+				#{repaystt},
+			</if>
+			<if test="@Ognl@isNotEmpty(repaytermno)">
+				#{repaytermno},
+			</if>
+			<if test="@Ognl@isNotEmpty(createdate)">
+				#{createdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(updatedate)">
+				#{updatedate},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM bsns_repayplan WHERE
+        SRLNO = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsRepayplan">
+		SELECT <include refid="selectId" />
+		    FROM bsns_repayplan 
+	        WHERE 
+        SRLNO = #{id} 
+	</select>
+	
+	
+	<select id="getBySrlNo" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsRepayplan">
+		SELECT 
+				SRLNO,
+				CLNTNO,
+				CLNTNM,
+				CNTRCTNO,
+				TBREPAYPTTL,
+				TBREPAYBAL,
+				ACTUALREPAYDT,
+				CURREPAYAMNT,
+				REPAYEDPRINSUM,
+				DPTNO,
+				OPNO,
+				CYCLESDT,
+				CYCLEEDT,
+				DUENO,
+				INTRSTMD,
+				(REPAYINSTAMNT - (Select IFNULL( sum(RCVINSTAMNT) ,0) from bsns_repaylog where SRLNO=#{srlNo})) as REPAYINSTAMNT ,
+				REPAYSTT,
+				REPAYTERMNO,
+				CREATEDATE,
+				UPDATEDATE
+		    FROM bsns_repayplan 
+	        WHERE 
+        SRLNO = #{srlNo} 
+	</select>
+	
+	
+	
+	<!--判断是否已存在还款计划 -->
+	<select id="getCountPlan" parameterType="String" resultType="int">
+		select count(0) from bsns_repayplan  where  dueno = #{dueno} 
+	</select>
+	<select id="getByDueno" resultType="com.mf.cntrtmng.entity.BsnsRepayplan">
+		select
+		<include refid="selectId" />
+		from bsns_repayplan where dueno = #{dueno} 
+	</select>
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.cntrtmng.entity.BsnsRepayplan">
+	    UPDATE bsns_repayplan SET
+	        CLNTNO = #{clntno} ,
+	        CLNTNM = #{clntnm} ,
+	        CNTRCTNO = #{cntrctno} ,
+	        TBREPAYPTTL = #{tbrepaypttl} ,
+	        TBREPAYBAL = #{tbrepaybal} ,
+	        ACTUALREPAYDT = #{actualrepaydt} ,
+	        CURREPAYAMNT = #{currepayamnt} ,
+	        REPAYEDPRINSUM = #{repayedprinsum} ,
+	        DPTNO = #{dptno} ,
+	        OPNO = #{opno} ,
+	        CYCLESDT = #{cyclesdt} ,
+	        CYCLEEDT = #{cycleedt} ,
+	        DUENO = #{dueno} ,
+	        INTRSTMD = #{intrstmd} ,
+	        REPAYINSTAMNT = #{repayinstamnt} ,
+	        REPAYSTT = #{repaystt} ,
+	        REPAYTERMNO = #{repaytermno} ,
+	        CREATEDATE = #{createdate} ,
+			UPDATEDATE = #{updatedate}
+        WHERE 
+	        SRLNO = #{srlno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntnm)">
+			CLNTNM = #{clntnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctno)">
+			CNTRCTNO = #{cntrctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(tbrepaypttl)">
+			TBREPAYPTTL = #{tbrepaypttl},
+		</if>
+		<if test="@Ognl@isNotEmpty(tbrepaybal)">
+			TBREPAYBAL = #{tbrepaybal},
+		</if>
+		<if test="@Ognl@isNotEmpty(actualrepaydt)">
+			ACTUALREPAYDT = #{actualrepaydt},
+		</if>
+		<if test="@Ognl@isNotEmpty(currepayamnt)">
+			CURREPAYAMNT = #{currepayamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(repayedprinsum)">
+			REPAYEDPRINSUM = #{repayedprinsum},
+		</if>
+		<if test="@Ognl@isNotEmpty(dptno)">
+			DPTNO = #{dptno},
+		</if>
+		<if test="@Ognl@isNotEmpty(opno)">
+			OPNO = #{opno},
+		</if>
+		<if test="@Ognl@isNotEmpty(cyclesdt)">
+			CYCLESDT = #{cyclesdt},
+		</if>
+		<if test="@Ognl@isNotEmpty(cycleedt)">
+			CYCLEEDT = #{cycleedt},
+		</if>
+		<if test="@Ognl@isNotEmpty(dueno)">
+			DUENO = #{dueno},
+		</if>
+		<if test="@Ognl@isNotEmpty(intrstmd)">
+			INTRSTMD = #{intrstmd},
+		</if>
+		<if test="@Ognl@isNotEmpty(repayinstamnt)">
+			REPAYINSTAMNT = #{repayinstamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(repaystt)">
+			REPAYSTT = #{repaystt},
+		</if>
+		<if test="@Ognl@isNotEmpty(repaytermno)">
+			REPAYTERMNO = #{repaytermno},
+		</if>
+		<if test="@Ognl@isNotEmpty(createdate)">
+			CREATEDATE = #{createdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(updatedate)">
+			UPDATEDATE = #{updatedate},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.cntrtmng.entity.BsnsRepayplan">
+	    UPDATE bsns_repayplan 
+		<include refid="updateset"/>
+        WHERE 
+	        SRLNO = #{srlno} 
+	</update>
+	
+	<select id="queryDueno" resultType="com.mf.cntrtmng.entity.BsnsRepayplan">
+		SELECT <include refid="selectId" />
+		    FROM bsns_repayplan 
+	        WHERE 
+        DUENO = '${t.dueno}' 
+	</select>
+	
+	<!-- 找到所有还过款的,合同结束日期小于等于当前日期  add by hw-->
+	<select id="getByDuenoPayed" resultType="com.mf.cntrtmng.entity.BsnsRepayplan" parameterType="String">
+		select
+		<include refid="selectId" />
+		from bsns_repayplan 
+		WHERE
+			DUENO = #{dueno}
+			and cyclesdt  &lt;= date_format(now(),'%Y%m%d')
+	</select>
+	
+	<!-- 找到未还款的 , 并且要大于当前时间，及之后的期数 add  by hw -->
+	<select id="getByDuenoUnpay" resultType="com.mf.cntrtmng.entity.BsnsRepayplan" parameterType="com.mf.cntrtmng.entity.BsnsRepayplan">
+		select
+		<include refid="selectId" />
+		from bsns_repayplan 
+		where dueno = #{dueno} 
+		and REPAYSTT = 0
+		and cyclesdt &gt;= #{cyclesdt} 
+		order by CYCLEEDT
+	</select>
+	
+	<!-- 查找提前还款日期之前的提前还款状态 -->
+	<select id="getIsUnpayPlan" resultType="com.mf.cntrtmng.entity.BsnsRepayplan" parameterType="com.mf.cntrtmng.entity.BsnsRepayplan">
+		select	
+			<include refid="selectId" />
+		from bsns_repayplan
+		where dueno = #{dueno}
+		and cycleedt &lt;= #{cycleedt} 
+		and REPAYSTT &lt;&gt; 1
+	</select>
+	
+	<!-- 删  add by zc-->
+	<delete id="delete" parameterType="String">
+		DELETE FROM bsns_repayplan WHERE
+        REPAYSTT != '1' and DUENO = #{dueno} 
+    </delete>
+        
+    <!--  add by zc-->
+    <select id="getMaxByDueno" resultType="com.mf.cntrtmng.entity.BsnsRepayplan">
+			select
+			SRLNO,
+			CLNTNO,
+			CLNTNM,
+			CNTRCTNO,
+			TBREPAYPTTL,
+			TBREPAYBAL,
+			ACTUALREPAYDT,
+			CURREPAYAMNT,
+			REPAYEDPRINSUM,
+			DPTNO,
+			OPNO,
+			CYCLESDT,
+			CYCLEEDT,
+			DUENO,
+			INTRSTMD,
+			REPAYINSTAMNT,
+			REPAYSTT,
+			CREATEDATE,
+			UPDATEDATE,
+			max(REPAYTERMNO) as REPAYTERMNO
+			from bsns_repayplan where dueno = #{dueno} and REPAYSTT = '1'
+			group by dueno
+	</select>	
+	
+</mapper>
+

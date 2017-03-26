@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-config.dtd">
+	
+	
+<configuration>
+	<!-- 定义全限定类名的别名，在映射文件中可以通过别名代替具体的类名，简化配置  begin-->
+	<typeAliases>
+		<typeAlias type="com.mf.sys.entity.SysDicType" alias="SysDicType"/>
+		<typeAlias type="com.mf.sys.entity.SysDictionary" alias="SysDictionary"/>
+		<typeAlias type="com.mf.org.entity.Dept" alias="Dept"/>
+		<typeAlias type="com.mf.org.entity.Employee" alias="Employee"/>
+		<typeAlias type="com.mf.org.entity.CustManager" alias="CustManager"/>
+		<typeAlias type="com.mf.businessParam.entity.LoanUse" alias="LoanUse"/>
+		<typeAlias type="com.mf.businessParam.entity.BusinessKind" alias="BusinessKind"/>
+		<typeAlias type="com.mf.businessParam.entity.BaseRate" alias="BaseRate"/>
+		<typeAlias type="com.mf.org.entity.Operator" alias="Operator"/>
+		<typeAlias type="com.mf.sys.entity.SysRight" alias="SysRight"/>
+		<typeAlias type="com.mf.sys.entity.SysMenu" alias="SysMenu"/>
+		<typeAlias type="com.mf.cntrtmng.entity.BsnsCntrct" alias="BsnsCntrct"/>
+		
+		
+		
+	</typeAliases>
+	<!-- 定义全限定类名的别名，在映射文件中可以通过别名代替具体的类名，简化配置  end-->
+</configuration>

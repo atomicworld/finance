@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.comStructure.dao.FinanceinfoDao">
+
+	<resultMap id="Financeinfo" type="com.mf.comStructure.entity.Financeinfo">
+        <result property="id" column="ID"/>
+        <result property="wealthamt" column="WEALTHAMT"/>
+        <result property="loanreamt" column="LOANREAMT"/>
+        <result property="debtamt" column="DEBTAMT"/>
+        <result property="bankfinamt" column="BANKFINAMT"/>
+        <result property="owneramt" column="OWNERAMT"/>
+        <result property="ownerincome" column="OWNERINCOME"/>
+        <result property="allincome" column="ALLINCOME"/>
+        <result property="profitincome" column="PROFITINCOME"/>
+        <result property="taxamt" column="TAXAMT"/>
+        <result property="incometax" column="INCOMETAX"/>
+        <result property="busitax" column="BUSITAX"/>
+        <result property="status" column="STATUS"/>
+        <result property="profitamt" column="PROFITAMT"/>
+        <result property="submitDate" column="SUBMIT_DATE"/>
+        <result property="createDate" column="CREATE_DATE"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ID,
+WEALTHAMT,
+LOANREAMT,
+DEBTAMT,
+BANKFINAMT,
+OWNERAMT,
+OWNERINCOME,
+ALLINCOME,
+PROFITINCOME,
+TAXAMT,
+INCOMETAX,
+BUSITAX,
+STATUS,
+PROFITAMT,
+SUBMIT_DATE,
+CREATE_DATE
+    </sql>
+    
+	<select id="query" resultMap="Financeinfo" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from financeinfo
+		<include refid="querywhere"/>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			  
+		</where>
+	</sql>
+	
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.comStructure.entity.Financeinfo" resultType="int">
+		select count(0) from financeinfo
+		<include refid="querywhere"/>
+	</select>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.comStructure.entity.Financeinfo">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO financeinfo 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(wealthamt)">
+				WEALTHAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(loanreamt)">
+				LOANREAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(debtamt)">
+				DEBTAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(bankfinamt)">
+				BANKFINAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(owneramt)">
+				OWNERAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(ownerincome)">
+				OWNERINCOME,
+			</if>
+			<if test="@Ognl@isNotEmpty(allincome)">
+				ALLINCOME,
+			</if>
+			<if test="@Ognl@isNotEmpty(profitincome)">
+				PROFITINCOME,
+			</if>
+			<if test="@Ognl@isNotEmpty(taxamt)">
+				TAXAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(incometax)">
+				INCOMETAX,
+			</if>
+			<if test="@Ognl@isNotEmpty(busitax)">
+				BUSITAX,
+			</if>
+			<if test="@Ognl@isNotEmpty(status)">
+				STATUS,
+			</if>
+			<if test="@Ognl@isNotEmpty(profitamt)">
+				PROFITAMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(submitDate)">
+				SUBMIT_DATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(createDate)">
+				CREATE_DATE,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(wealthamt)">
+				#{wealthamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(loanreamt)">
+				#{loanreamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(debtamt)">
+				#{debtamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(bankfinamt)">
+				#{bankfinamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(owneramt)">
+				#{owneramt},
+			</if>
+			<if test="@Ognl@isNotEmpty(ownerincome)">
+				#{ownerincome},
+			</if>
+			<if test="@Ognl@isNotEmpty(allincome)">
+				#{allincome},
+			</if>
+			<if test="@Ognl@isNotEmpty(profitincome)">
+				#{profitincome},
+			</if>
+			<if test="@Ognl@isNotEmpty(taxamt)">
+				#{taxamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(incometax)">
+				#{incometax},
+			</if>
+			<if test="@Ognl@isNotEmpty(busitax)">
+				#{busitax},
+			</if>
+			<if test="@Ognl@isNotEmpty(status)">
+				#{status},
+			</if>
+			<if test="@Ognl@isNotEmpty(profitamt)">
+				#{profitamt},
+			</if>
+			<if test="@Ognl@isNotEmpty(submitDate)">
+				#{submitDate},
+			</if>
+			<if test="@Ognl@isNotEmpty(createDate)">
+				#{createDate},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM financeinfo WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" resultMap="Financeinfo" resultType="com.mf.comStructure.entity.Financeinfo">
+		SELECT <include refid="selectId" />
+		    FROM financeinfo 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="modify" parameterType="com.mf.comStructure.entity.Financeinfo">
+	    UPDATE financeinfo SET
+	        WEALTHAMT = #{wealthamt} ,
+	        LOANREAMT = #{loanreamt} ,
+	        DEBTAMT = #{debtamt} ,
+	        BANKFINAMT = #{bankfinamt} ,
+	        OWNERAMT = #{owneramt} ,
+	        OWNERINCOME = #{ownerincome} ,
+	        ALLINCOME = #{allincome} ,
+	        PROFITINCOME = #{profitincome} ,
+	        TAXAMT = #{taxamt} ,
+	        INCOMETAX = #{incometax} ,
+	        BUSITAX = #{busitax} ,
+	        PROFITAMT = #{profitamt}
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 提交 -->
+	<update id="submit" parameterType="String">
+		UPDATE financeinfo SET
+	        STATUS = '1',
+	        SUBMIT_DATE = date_format(sysdate(),'%Y-%m-%d')
+        WHERE 
+	        ID = #{id} AND STATUS = '0'
+	</update>
+</mapper>
+

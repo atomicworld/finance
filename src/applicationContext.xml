@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+       http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/context 
+       http://www.springframework.org/schema/context/spring-context-3.0.xsd
+       http://www.springframework.org/schema/tx 
+       http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+       http://www.springframework.org/schema/util 
+       http://www.springframework.org/schema/util/spring-util-3.1.xsd ">
+
+	
+	<!-- 配置dao begin -->
+	<context:component-scan base-package="com.mf.*.dao" />
+	<context:property-placeholder location="classpath*:*.properties" />
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close" p:url="${url}" p:username="${username}"
+		p:password="${password}" p:driverClassName="${driver}" />
+	<!-- 配置dao end -->
+
+	<!-- 配置发送短信类 -->
+	<context:component-scan base-package="com.mf.sms.client" />
+	
+	<bean id="env"
+		class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath:sms.properties</value>
+			</list>
+		</property>
+	</bean>
+
+
+	<!-- 声明事务管理器，基于数据库的事务管理 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		p:dataSource-ref="dataSource" />
+	<!-- <aop:config> 
+		<aop:pointcut id="serviceMethod" expression="(execution (public * com.mf.*.service.impl.*Impl.*(..)))"/> 
+		<aop:advisor pointcut-ref="serviceMethod" advice-ref="txAdvice"/> 
+	</aop:config>  -->
+	
+	<tx:advice id="txAdvice" transaction-manager="transactionManager"> 
+		<tx:attributes> 
+			<tx:method name="query*" propagation="REQUIRED" read-only="false"/> 
+			<tx:method name="find*" propagation="REQUIRED" read-only="false"/> 
+			<tx:method name="save*" propagation="REQUIRED" isolation="DEFAULT"/> 
+			<tx:method name="delete*" propagation="REQUIRED" isolation="DEFAULT"/>
+			<tx:method name="add*" propagation="REQUIRED" isolation="DEFAULT"/> 
+			<tx:method name="modify*" propagation="REQUIRED" isolation="DEFAULT"/> 
+			<tx:method name="*" propagation="REQUIRED" isolation="DEFAULT"/>
+		</tx:attributes> 
+	</tx:advice>
+
+	<!-- <tx:annotation-driven transaction-manager="transactionManager" /> -->
+
+	<!-- mybatis分页 -->
+	<bean id="pagePlugin" class="com.mf.plugin.mybatis.plugin.PagePlugin">
+		<property name="properties">
+			<props>
+				<prop key="dialect">com.mf.plugin.jdbc.dialect.H2Dialect</prop>
+				<prop key="pageSqlId">.*query.*</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 创建sqlSessionFactoryBean -->
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
+		p:dataSource-ref="dataSource" p:configLocation="classpath:mybatis-config.xml"
+		p:mapperLocations="classpath:com/mf/*/entity/mapper/*.xml"
+		p:plugins-ref="pagePlugin" />
+
+	<!-- 配置sqlSessionTemplate -->
+	<bean class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+
+	<!-- 映射接口直接转换为spring容器的bean -->
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+		p:basePackage="com.mf.*.dao" />
+		
+		
+	<!-- 短信自动发送的quartz -->
+	<!-- 启动触发器的配置开始 -->
+	<bean name="startQuertz" lazy-init="false" autowire="no"
+		class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+		<property name="triggers">
+			<list>
+				<ref bean="myJobTrigger" />
+			</list>
+		</property>
+	</bean>
+	<!-- 启动触发器的配置结束  -->
+
+	<!-- quartz-2.x的配置 -->
+	<bean id="myJobTrigger"
+		class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+		<property name="jobDetail">
+			<ref bean="myJobDetail" />
+		</property>
+		<property name="cronExpression">
+			<value>${cron}</value>
+		</property>
+	</bean>
+	<!-- 调度的配置结束 -->
+
+	<!-- job的配置开始 -->
+	<bean id="myJobDetail"
+		class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+		<property name="targetObject">
+			<ref bean="AutoSendMsgController" />
+		</property>
+		<property name="targetMethod">
+			<value>work</value>
+		</property>
+	</bean>
+	<!-- job的配置结束 -->
+	
+	<!-- 工作的bean -->
+	<bean id="AutoSendMsgController" class="com.mf.sms.controller.AutoSendMsgController" />
+	<!-- end -->
+	<!-- 激活自动代理功能 -->
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	<!-- 配置service begin -->
+	<context:component-scan base-package="com.mf.*.service" />
+	<!-- tx:annotation-driven transaction-manager="transactionManager"/ -->
+	<!-- 配置service end -->
+	<!-- 系统服务组件的切面Bean -->
+	<bean id="serviceAspect" class="com.mf.aop.aspect.ServiceAspect"/>
+	<!-- AOP配置 -->
+	<aop:config>
+		<!-- 声明一个切面,并注入切面Bean,相当于@Aspect -->
+		<aop:aspect id="simpleAspect" ref="serviceAspect">
+			<!-- 配置一个切入点,相当于@Pointcut -->
+			<aop:pointcut id="simplePointcut" expression="(execution (public * com.mf.*.service.impl.*Impl.*(..)))"/> 
+			<!-- 配置通知,相当于@Before、@After、@AfterReturn、@Around、@AfterThrowing -->
+			<!-- <aop:before pointcut-ref="simplePointcut" method="before"/> -->
+			<aop:after pointcut-ref="simplePointcut" method="after"/>
+			<!-- <aop:after-returning pointcut-ref="simplePointcut" method="afterReturn"/> -->
+			<aop:after-throwing pointcut-ref="simplePointcut" method="afterThrow" throwing="ex"/>
+		</aop:aspect>
+	</aop:config>
+</beans>

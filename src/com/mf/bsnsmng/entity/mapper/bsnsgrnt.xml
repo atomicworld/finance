@@ -1,0 +1,534 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.bsnsmng.dao.BsnsGrntDao">
+
+	<resultMap id="BsnsGrnt" type="com.mf.bsnsmng.entity.BsnsGrnt">
+        <result property="clntno" column="CLNTNO"/>
+        <result property="clntnm" column="CLNTNM"/>
+        <result property="applyno" column="APPLYNO"/>
+        <result property="rcrdid" column="RCRDID"/>
+        <result property="cntrctno" column="CNTRCTNO"/>
+        <result property="grntyr" column="GRNTYR"/>
+        <result property="grntno" column="GRNTNO"/>
+        <result property="grnterno" column="GRNTERNO"/>
+        <result property="grnternm" column="GRNTERNM"/>
+        <result property="grntamnt" column="GRNTAMNT"/>
+        <result property="grntrt" column="GRNTRT"/>
+        <result property="rltn" column="RLTN"/>
+        <result property="depno" column="DEPNO"/>
+        <result property="regopno" column="REGOPNO"/>
+        <result property="regdate" column="REGDATE"/>
+        <result property="updtdate" column="UPDTDATE"/>
+        <result property="remark" column="REMARK"/>
+        <result property="grnterclntno" column="GRNTERCLNTNO"/>
+        <result property="polno" column="POLNO"/>
+        <result property="ispol" column="ISPOL"/>
+        <result property="grnteridtyp" column="GRNTERIDTYP"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		CLNTNO,
+CLNTNM,
+APPLYNO,
+RCRDID,
+CNTRCTNO,
+GRNTYR,
+GRNTNO,
+GRNTERNO,
+GRNTERNM,
+GRNTAMNT,
+GRNTRT,
+RLTN,
+DEPNO,
+REGOPNO,
+REGDATE,
+UPDTDATE,
+REMARK,
+GRNTERCLNTNO,
+POLNO,
+ISPOL,
+GRNTERIDTYP
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.bsnsmng.entity.BsnsGrnt">
+		select
+		<include refid="selectId" />
+		from bsns_grnt
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.bsnsmng.entity.BsnsGrnt" parameterType="com.mf.bsnsmng.entity.BsnsGrnt">
+		select
+		<include refid="selectId" />
+		from bsns_grnt
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+	
+		<select id="getByApplyno" resultType="com.mf.bsnsmng.entity.BsnsGrnt" parameterType="com.mf.bsnsmng.entity.BsnsGrnt">
+		select
+		<include refid="selectId" />
+		from bsns_grnt
+		where  applyno='${_parameter}'
+		
+	</select>
+
+	<select id="query" resultType="com.mf.bsnsmng.entity.BsnsGrnt" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_grnt
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntnm)">
+					AND CLNTNM like '%${t.clntnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.applyno)">
+					AND APPLYNO like '%${t.applyno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cntrctno)">
+					AND CNTRCTNO like '%${t.cntrctno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.grntyr)">
+					AND GRNTYR like '%${t.grntyr}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.grntno)">
+					AND GRNTNO like '%${t.grntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.grnterno)">
+					AND GRNTERNO like '%${t.grnterno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.grnternm)">
+					AND GRNTERNM like '%${t.grnternm}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.grntamnt)">
+					AND GRNTAMNT = '${t.grntamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.grntrt)">
+					AND GRNTRT = '${t.grntrt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.rltn)">
+					AND RLTN like '%${t.rltn}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.depno)">
+					AND DEPNO like '%${t.depno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regopno)">
+					AND REGOPNO like '%${t.regopno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regdate)">
+					AND REGDATE like '%${t.regdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.updtdate)">
+					AND UPDTDATE like '%${t.updtdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.grnterclntno)">
+					AND GRNTERCLNTNO like '%${t.grnterclntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.polno)">
+					AND POLNO like '%${t.polno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.ispol)">
+					AND ISPOL like '%${t.ispol}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.grnteridtyp)">
+					AND GRNTERIDTYP like '%${t.grnteridtyp}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntnm)">
+					AND CLNTNM like '%${clntnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(applyno)">
+					AND APPLYNO like '%${applyno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cntrctno)">
+					AND CNTRCTNO like '%${cntrctno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(grntyr)">
+					AND GRNTYR like '%${grntyr}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(grntno)">
+					AND GRNTNO like '%${grntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(grnterno)">
+					AND GRNTERNO like '%${grnterno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(grnternm)">
+					AND GRNTERNM like '%${grnternm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(grntamnt)">
+					AND GRNTAMNT = '${grntamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(grntrt)">
+					AND GRNTRT = '${grntrt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rltn)">
+					AND RLTN like '%${rltn}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(depno)">
+					AND DEPNO like '%${depno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regopno)">
+					AND REGOPNO like '%${regopno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regdate)">
+					AND REGDATE like '%${regdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(updtdate)">
+					AND UPDTDATE like '%${updtdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(grnterclntno)">
+					AND GRNTERCLNTNO like '%${grnterclntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(polno)">
+					AND POLNO like '%${polno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(ispol)">
+					AND ISPOL like '%${ispol}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(grnteridtyp)">
+					AND GRNTERIDTYP like '%${grnteridtyp}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.bsnsmng.entity.BsnsGrnt" resultType="int">
+		select count(0) from bsns_grnt
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.bsnsmng.entity.BsnsGrnt">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO bsns_grnt (
+        	CLNTNO ,
+        	CLNTNM ,
+        	APPLYNO ,
+        	CNTRCTNO ,
+        	GRNTYR ,
+        	GRNTNO ,
+        	GRNTERNO ,
+        	GRNTERNM ,
+        	GRNTAMNT ,
+        	GRNTRT ,
+        	RLTN ,
+        	DEPNO ,
+        	REGOPNO ,
+        	REGDATE ,
+        	UPDTDATE ,
+        	REMARK ,
+        	GRNTERCLNTNO ,
+        	POLNO ,
+        	ISPOL ,
+        	GRNTERIDTYP 
+        ) VALUES (
+        	#{clntno} ,
+        	#{clntnm} ,
+        	#{applyno} ,
+        	#{cntrctno} ,
+        	#{grntyr} ,
+        	#{grntno} ,
+        	#{grnterno} ,
+        	#{grnternm} ,
+        	#{grntamnt} ,
+        	#{grntrt} ,
+        	#{rltn} ,
+        	#{depno} ,
+        	#{regopno} ,
+        	#{regdate} ,
+        	#{updtdate} ,
+        	#{remark} ,
+        	#{grnterclntno} ,
+        	#{polno} ,
+        	#{ispol} ,
+        	#{grnteridtyp} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.bsnsmng.entity.BsnsGrnt">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO bsns_grnt 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				CLNTNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				APPLYNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				CNTRCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(grntyr)">
+				GRNTYR,
+			</if>
+			<if test="@Ognl@isNotEmpty(grntno)">
+				GRNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(grnterno)">
+				GRNTERNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(grnternm)">
+				GRNTERNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(grntamnt)">
+				GRNTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(grntrt)">
+				GRNTRT,
+			</if>
+			<if test="@Ognl@isNotEmpty(rltn)">
+				RLTN,
+			</if>
+			<if test="@Ognl@isNotEmpty(depno)">
+				DEPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				REGOPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(regdate)">
+				REGDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				UPDTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+			<if test="@Ognl@isNotEmpty(grnterclntno)">
+				GRNTERCLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(polno)">
+				POLNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(ispol)">
+				ISPOL,
+			</if>
+			<if test="@Ognl@isNotEmpty(grnteridtyp)">
+				GRNTERIDTYP,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				#{clntnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				#{applyno},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				#{cntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(grntyr)">
+				#{grntyr},
+			</if>
+			<if test="@Ognl@isNotEmpty(grntno)">
+				#{grntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(grnterno)">
+				#{grnterno},
+			</if>
+			<if test="@Ognl@isNotEmpty(grnternm)">
+				#{grnternm},
+			</if>
+			<if test="@Ognl@isNotEmpty(grntamnt)">
+				#{grntamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(grntrt)">
+				#{grntrt},
+			</if>
+			<if test="@Ognl@isNotEmpty(rltn)">
+				#{rltn},
+			</if>
+			<if test="@Ognl@isNotEmpty(depno)">
+				#{depno},
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				#{regopno},
+			</if>
+			<if test="@Ognl@isNotEmpty(regdate)">
+				#{regdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				#{updtdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@Ognl@isNotEmpty(grnterclntno)">
+				#{grnterclntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(polno)">
+				#{polno},
+			</if>
+			<if test="@Ognl@isNotEmpty(ispol)">
+				#{ispol},
+			</if>
+			<if test="@Ognl@isNotEmpty(grnteridtyp)">
+				#{grnteridtyp},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM bsns_grnt WHERE
+        RCRDID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.bsnsmng.entity.BsnsGrnt">
+		SELECT <include refid="selectId" />
+		    FROM bsns_grnt 
+	        WHERE 
+             RCRDID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.bsnsmng.entity.BsnsGrnt">
+	    UPDATE bsns_grnt SET
+	        CLNTNO = #{clntno} ,
+	        CLNTNM = #{clntnm} ,
+	        APPLYNO = #{applyno} ,
+	        CNTRCTNO = #{cntrctno} ,
+	        GRNTYR = #{grntyr} ,
+	        GRNTNO = #{grntno} ,
+	        GRNTERNO = #{grnterno} ,
+	        GRNTERNM = #{grnternm} ,
+	        GRNTAMNT = #{grntamnt} ,
+	        GRNTRT = #{grntrt} ,
+	        RLTN = #{rltn} ,
+	        DEPNO = #{depno} ,
+	        REGOPNO = #{regopno} ,
+	        REGDATE = #{regdate} ,
+	        UPDTDATE = #{updtdate} ,
+	        REMARK = #{remark} ,
+	        GRNTERCLNTNO = #{grnterclntno} ,
+	        POLNO = #{polno} ,
+	        ISPOL = #{ispol} ,
+	        GRNTERIDTYP = #{grnteridtyp} 
+        WHERE 
+	        RCRDID = #{rcrdid} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntnm)">
+			CLNTNM = #{clntnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(applyno)">
+			APPLYNO = #{applyno},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctno)">
+			CNTRCTNO = #{cntrctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(grntyr)">
+			GRNTYR = #{grntyr},
+		</if>
+		<if test="@Ognl@isNotEmpty(grntno)">
+			GRNTNO = #{grntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(grnterno)">
+			GRNTERNO = #{grnterno},
+		</if>
+		<if test="@Ognl@isNotEmpty(grnternm)">
+			GRNTERNM = #{grnternm},
+		</if>
+		<if test="@Ognl@isNotEmpty(grntamnt)">
+			GRNTAMNT = #{grntamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(grntrt)">
+			GRNTRT = #{grntrt},
+		</if>
+		<if test="@Ognl@isNotEmpty(rltn)">
+			RLTN = #{rltn},
+		</if>
+		<if test="@Ognl@isNotEmpty(depno)">
+			DEPNO = #{depno},
+		</if>
+		<if test="@Ognl@isNotEmpty(regopno)">
+			REGOPNO = #{regopno},
+		</if>
+		<if test="@Ognl@isNotEmpty(regdate)">
+			REGDATE = #{regdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(updtdate)">
+			UPDTDATE = #{updtdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(grnterclntno)">
+			GRNTERCLNTNO = #{grnterclntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(polno)">
+			POLNO = #{polno},
+		</if>
+		<if test="@Ognl@isNotEmpty(ispol)">
+			ISPOL = #{ispol},
+		</if>
+		<if test="@Ognl@isNotEmpty(grnteridtyp)">
+			GRNTERIDTYP = #{grnteridtyp},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.bsnsmng.entity.BsnsGrnt">
+	    UPDATE bsns_grnt 
+		<include refid="updateset"/>
+        WHERE 
+	        RCRDID = #{rcrdid} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

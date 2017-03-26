@@ -1,0 +1,557 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.shareholder.dao.CorpSharedetailDao">
+
+	<resultMap id="CorpSharedetail" type="com.mf.shareholder.entity.CorpSharedetail">
+        <result property="shareno" column="shareno"/>
+        <result property="corpType" column="corpType"/>
+        <result property="ownerShip" column="ownerShip"/>
+        <result property="establishDate" column="establishDate"/>
+        <result property="trade" column="trade"/>
+        <result property="remark" column="remark"/>
+        <result property="busiAddress" column="BusiAddress"/>
+        <result property="postal" column="Postal"/>
+        <result property="regCode" column="RegCode"/>
+        <result property="regInstitute" column="RegInstitute"/>
+        <result property="regAddress" column="RegAddress"/>
+        <result property="regAmount" column="RegAmount"/>
+        <result property="representerName" column="RepresenterName"/>
+        <result property="representerDoc" column="RepresenterDoc"/>
+        <result property="runStartTime" column="RunStartTime"/>
+        <result property="runEndTime" column="RunEndTime"/>
+        <result property="runScope" column="RunScope"/>
+        <result property="linkMan" column="LinkMan"/>
+        <result property="tel" column="Tel"/>
+        <result property="fax" column="Fax"/>
+        <result property="email" column="Email"/>
+        <result property="webSite" column="WebSite"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		shareno,
+corpType,
+ownerShip,
+establishDate,
+trade,
+remark,
+BusiAddress,
+Postal,
+RegCode,
+RegInstitute,
+RegAddress,
+RegAmount,
+RepresenterName,
+RepresenterDoc,
+RunStartTime,
+RunEndTime,
+RunScope,
+LinkMan,
+Tel,
+Fax,
+Email,
+WebSite
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.shareholder.entity.CorpSharedetail">
+		select
+		<include refid="selectId" />
+		from corp_sharedetail
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.shareholder.entity.CorpSharedetail" parameterType="com.mf.shareholder.entity.CorpSharedetail">
+		select
+		<include refid="selectId" />
+		from corp_sharedetail
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.shareholder.entity.CorpSharedetail" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from corp_sharedetail
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.shareno)">
+					AND shareno like '%${t.shareno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.corpType)">
+					AND corpType like '%${t.corpType}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.ownerShip)">
+					AND ownerShip like '%${t.ownerShip}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.establishDate)">
+					AND establishDate like '%${t.establishDate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.trade)">
+					AND trade like '%${t.trade}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND remark like '%${t.remark}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.busiAddress)">
+					AND BusiAddress like '%${t.busiAddress}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.postal)">
+					AND Postal like '%${t.postal}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regCode)">
+					AND RegCode like '%${t.regCode}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regInstitute)">
+					AND RegInstitute like '%${t.regInstitute}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regAddress)">
+					AND RegAddress like '%${t.regAddress}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.regAmount)">
+					AND RegAmount = '${t.regAmount}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.representerName)">
+					AND RepresenterName like '%${t.representerName}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.representerDoc)">
+					AND RepresenterDoc like '%${t.representerDoc}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.runStartTime)">
+					AND RunStartTime like '%${t.runStartTime}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.runEndTime)">
+					AND RunEndTime like '%${t.runEndTime}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.runScope)">
+					AND RunScope like '%${t.runScope}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.linkMan)">
+					AND LinkMan like '%${t.linkMan}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.tel)">
+					AND Tel like '%${t.tel}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.fax)">
+					AND Fax like '%${t.fax}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.email)">
+					AND Email like '%${t.email}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.webSite)">
+					AND WebSite like '%${t.webSite}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(shareno)">
+					AND shareno like '%${shareno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(corpType)">
+					AND corpType like '%${corpType}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(ownerShip)">
+					AND ownerShip like '%${ownerShip}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(establishDate)">
+					AND establishDate like '%${establishDate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(trade)">
+					AND trade like '%${trade}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND remark like '%${remark}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(busiAddress)">
+					AND BusiAddress like '%${busiAddress}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(postal)">
+					AND Postal like '%${postal}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regCode)">
+					AND RegCode like '%${regCode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regInstitute)">
+					AND RegInstitute like '%${regInstitute}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regAddress)">
+					AND RegAddress like '%${regAddress}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regAmount)">
+					AND RegAmount = '${regAmount}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(representerName)">
+					AND RepresenterName like '%${representerName}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(representerDoc)">
+					AND RepresenterDoc like '%${representerDoc}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(runStartTime)">
+					AND RunStartTime like '%${runStartTime}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(runEndTime)">
+					AND RunEndTime like '%${runEndTime}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(runScope)">
+					AND RunScope like '%${runScope}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(linkMan)">
+					AND LinkMan like '%${linkMan}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(tel)">
+					AND Tel like '%${tel}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(fax)">
+					AND Fax like '%${fax}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(email)">
+					AND Email like '%${email}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(webSite)">
+					AND WebSite like '%${webSite}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.shareholder.entity.CorpSharedetail" resultType="int">
+		select count(0) from corp_sharedetail
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.shareholder.entity.CorpSharedetail">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO corp_sharedetail (
+        	shareno ,
+        	corpType ,
+        	ownerShip ,
+        	establishDate ,
+        	trade ,
+        	remark ,
+        	BusiAddress ,
+        	Postal ,
+        	RegCode ,
+        	RegInstitute ,
+        	RegAddress ,
+        	RegAmount ,
+        	RepresenterName ,
+        	RepresenterDoc ,
+        	RunStartTime ,
+        	RunEndTime ,
+        	RunScope ,
+        	LinkMan ,
+        	Tel ,
+        	Fax ,
+        	Email ,
+        	WebSite 
+        ) VALUES (
+        	#{shareno} ,
+        	#{corpType} ,
+        	#{ownerShip} ,
+        	#{establishDate} ,
+        	#{trade} ,
+        	#{remark} ,
+        	#{busiAddress} ,
+        	#{postal} ,
+        	#{regCode} ,
+        	#{regInstitute} ,
+        	#{regAddress} ,
+        	#{regAmount} ,
+        	#{representerName} ,
+        	#{representerDoc} ,
+        	#{runStartTime} ,
+        	#{runEndTime} ,
+        	#{runScope} ,
+        	#{linkMan} ,
+        	#{tel} ,
+        	#{fax} ,
+        	#{email} ,
+        	#{webSite} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.shareholder.entity.CorpSharedetail">
+		INSERT INTO corp_sharedetail 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(shareno)">
+				shareno,
+			</if>
+			<if test="@Ognl@isNotEmpty(corpType)">
+				corpType,
+			</if>
+			<if test="@Ognl@isNotEmpty(ownerShip)">
+				ownerShip,
+			</if>
+			<if test="@Ognl@isNotEmpty(establishDate)">
+				establishDate,
+			</if>
+			<if test="@Ognl@isNotEmpty(trade)">
+				trade,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				remark,
+			</if>
+			<if test="@Ognl@isNotEmpty(busiAddress)">
+				BusiAddress,
+			</if>
+			<if test="@Ognl@isNotEmpty(postal)">
+				Postal,
+			</if>
+			<if test="@Ognl@isNotEmpty(regCode)">
+				RegCode,
+			</if>
+			<if test="@Ognl@isNotEmpty(regInstitute)">
+				RegInstitute,
+			</if>
+			<if test="@Ognl@isNotEmpty(regAddress)">
+				RegAddress,
+			</if>
+			<if test="@Ognl@isNotEmpty(regAmount)">
+				RegAmount,
+			</if>
+			<if test="@Ognl@isNotEmpty(representerName)">
+				RepresenterName,
+			</if>
+			<if test="@Ognl@isNotEmpty(representerDoc)">
+				RepresenterDoc,
+			</if>
+			<if test="@Ognl@isNotEmpty(runStartTime)">
+				RunStartTime,
+			</if>
+			<if test="@Ognl@isNotEmpty(runEndTime)">
+				RunEndTime,
+			</if>
+			<if test="@Ognl@isNotEmpty(runScope)">
+				RunScope,
+			</if>
+			<if test="@Ognl@isNotEmpty(linkMan)">
+				LinkMan,
+			</if>
+			<if test="@Ognl@isNotEmpty(tel)">
+				Tel,
+			</if>
+			<if test="@Ognl@isNotEmpty(fax)">
+				Fax,
+			</if>
+			<if test="@Ognl@isNotEmpty(email)">
+				Email,
+			</if>
+			<if test="@Ognl@isNotEmpty(webSite)">
+				WebSite,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(shareno)">
+				#{shareno},
+			</if>
+			<if test="@Ognl@isNotEmpty(corpType)">
+				#{corpType},
+			</if>
+			<if test="@Ognl@isNotEmpty(ownerShip)">
+				#{ownerShip},
+			</if>
+			<if test="@Ognl@isNotEmpty(establishDate)">
+				#{establishDate},
+			</if>
+			<if test="@Ognl@isNotEmpty(trade)">
+				#{trade},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@Ognl@isNotEmpty(busiAddress)">
+				#{busiAddress},
+			</if>
+			<if test="@Ognl@isNotEmpty(postal)">
+				#{postal},
+			</if>
+			<if test="@Ognl@isNotEmpty(regCode)">
+				#{regCode},
+			</if>
+			<if test="@Ognl@isNotEmpty(regInstitute)">
+				#{regInstitute},
+			</if>
+			<if test="@Ognl@isNotEmpty(regAddress)">
+				#{regAddress},
+			</if>
+			<if test="@Ognl@isNotEmpty(regAmount)">
+				#{regAmount},
+			</if>
+			<if test="@Ognl@isNotEmpty(representerName)">
+				#{representerName},
+			</if>
+			<if test="@Ognl@isNotEmpty(representerDoc)">
+				#{representerDoc},
+			</if>
+			<if test="@Ognl@isNotEmpty(runStartTime)">
+				#{runStartTime},
+			</if>
+			<if test="@Ognl@isNotEmpty(runEndTime)">
+				#{runEndTime},
+			</if>
+			<if test="@Ognl@isNotEmpty(runScope)">
+				#{runScope},
+			</if>
+			<if test="@Ognl@isNotEmpty(linkMan)">
+				#{linkMan},
+			</if>
+			<if test="@Ognl@isNotEmpty(tel)">
+				#{tel},
+			</if>
+			<if test="@Ognl@isNotEmpty(fax)">
+				#{fax},
+			</if>
+			<if test="@Ognl@isNotEmpty(email)">
+				#{email},
+			</if>
+			<if test="@Ognl@isNotEmpty(webSite)">
+				#{webSite},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM corp_sharedetail WHERE shareno = #{shareno}
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.shareholder.entity.CorpSharedetail">
+		SELECT <include refid="selectId" />
+		    FROM corp_sharedetail 
+	        WHERE shareno = #{shareno}
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.shareholder.entity.CorpSharedetail">
+	    UPDATE corp_sharedetail SET
+	        shareno = #{shareno} ,
+	        corpType = #{corpType} ,
+	        ownerShip = #{ownerShip} ,
+	        establishDate = #{establishDate} ,
+	        trade = #{trade} ,
+	        remark = #{remark} ,
+	        BusiAddress = #{busiAddress} ,
+	        Postal = #{postal} ,
+	        RegCode = #{regCode} ,
+	        RegInstitute = #{regInstitute} ,
+	        RegAddress = #{regAddress} ,
+	        RegAmount = #{regAmount} ,
+	        RepresenterName = #{representerName} ,
+	        RepresenterDoc = #{representerDoc} ,
+	        RunStartTime = #{runStartTime} ,
+	        RunEndTime = #{runEndTime} ,
+	        RunScope = #{runScope} ,
+	        LinkMan = #{linkMan} ,
+	        Tel = #{tel} ,
+	        Fax = #{fax} ,
+	        Email = #{email} ,
+	        WebSite = #{webSite} 
+        WHERE 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(shareno)">
+			shareno = #{shareno},
+		</if>
+		<if test="@Ognl@isNotEmpty(corpType)">
+			corpType = #{corpType},
+		</if>
+		<if test="@Ognl@isNotEmpty(ownerShip)">
+			ownerShip = #{ownerShip},
+		</if>
+		<if test="@Ognl@isNotEmpty(establishDate)">
+			establishDate = #{establishDate},
+		</if>
+		<if test="@Ognl@isNotEmpty(trade)">
+			trade = #{trade},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			remark = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(busiAddress)">
+			BusiAddress = #{busiAddress},
+		</if>
+		<if test="@Ognl@isNotEmpty(postal)">
+			Postal = #{postal},
+		</if>
+		<if test="@Ognl@isNotEmpty(regCode)">
+			RegCode = #{regCode},
+		</if>
+		<if test="@Ognl@isNotEmpty(regInstitute)">
+			RegInstitute = #{regInstitute},
+		</if>
+		<if test="@Ognl@isNotEmpty(regAddress)">
+			RegAddress = #{regAddress},
+		</if>
+		<if test="@Ognl@isNotEmpty(regAmount)">
+			RegAmount = #{regAmount},
+		</if>
+		<if test="@Ognl@isNotEmpty(representerName)">
+			RepresenterName = #{representerName},
+		</if>
+		<if test="@Ognl@isNotEmpty(representerDoc)">
+			RepresenterDoc = #{representerDoc},
+		</if>
+		<if test="@Ognl@isNotEmpty(runStartTime)">
+			RunStartTime = #{runStartTime},
+		</if>
+		<if test="@Ognl@isNotEmpty(runEndTime)">
+			RunEndTime = #{runEndTime},
+		</if>
+		<if test="@Ognl@isNotEmpty(runScope)">
+			RunScope = #{runScope},
+		</if>
+		<if test="@Ognl@isNotEmpty(linkMan)">
+			LinkMan = #{linkMan},
+		</if>
+		<if test="@Ognl@isNotEmpty(tel)">
+			Tel = #{tel},
+		</if>
+		<if test="@Ognl@isNotEmpty(fax)">
+			Fax = #{fax},
+		</if>
+		<if test="@Ognl@isNotEmpty(email)">
+			Email = #{email},
+		</if>
+		<if test="@Ognl@isNotEmpty(webSite)">
+			WebSite = #{webSite},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.shareholder.entity.CorpSharedetail">
+	    UPDATE corp_sharedetail 
+		<include refid="updateset"/>
+        WHERE shareno = #{shareno}
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

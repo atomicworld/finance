@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.businessInfo.dao.FileupdownDao">
+
+	<resultMap id="Fileupdown" type="com.mf.businessInfo.entity.Fileupdown">
+        <result property="filename" column="filename"/>
+        <result property="filesize" column="filesize"/>
+        <result property="id" column="id"/>
+        <result property="upday" column="upday"/>
+        <result property="filepath" column="filepath"/>
+        <result property="filetype" column="filetype"/>
+        <result property="month" column="month"/>
+        <result property="reportid" column="reportid"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		filename,
+filesize,
+id,
+upday,
+filepath,
+filetype,
+month,
+reportid
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.businessInfo.entity.Fileupdown">
+		select
+		<include refid="selectId" />
+		from fileupdown
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.businessInfo.entity.Fileupdown" parameterType="com.mf.businessInfo.entity.Fileupdown">
+		select
+		<include refid="selectId" />
+		from fileupdown
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.businessInfo.entity.Fileupdown" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fileupdown
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.filename)">
+					AND filename like '%${t.filename}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.filesize)">
+					AND filesize like '%${t.filesize}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.upday)">
+					AND upday like '%${t.upday}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.filepath)">
+					AND filepath like '%${t.filepath}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.filetype)">
+					AND filetype like '%${t.filetype}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.month)">
+					AND month like '%${t.month}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.reportid)">
+					AND reportid = '${t.reportid}'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(filename)">
+					AND filename like '%${filename}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(filesize)">
+					AND filesize like '%${filesize}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(upday)">
+					AND upday like '%${upday}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(filepath)">
+					AND filepath like '%${filepath}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(filetype)">
+					AND filetype like '%${filetype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(month)">
+					AND month like '%${month}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(reportid)">
+					AND reportid = '${reportid}'
+			   </if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.businessInfo.entity.Fileupdown" resultType="int">
+		select count(0) from fileupdown
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.businessInfo.entity.Fileupdown">
+		INSERT INTO fileupdown 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(filename)">
+				filename,
+			</if>
+			<if test="@Ognl@isNotEmpty(filesize)">
+				filesize,
+			</if>
+			<if test="@Ognl@isNotEmpty(upday)">
+				upday,
+			</if>
+			<if test="@Ognl@isNotEmpty(filepath)">
+				filepath,
+			</if>
+			<if test="@Ognl@isNotEmpty(filetype)">
+				filetype,
+			</if>
+			<if test="@Ognl@isNotEmpty(month)">
+				month,
+			</if>
+			<if test="@Ognl@isNotEmpty(reportid)">
+				reportid,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(filename)">
+				#{filename},
+			</if>
+			<if test="@Ognl@isNotEmpty(filesize)">
+				#{filesize},
+			</if>
+			<if test="@Ognl@isNotEmpty(upday)">
+				#{upday},
+			</if>
+			<if test="@Ognl@isNotEmpty(filepath)">
+				#{filepath},
+			</if>
+			<if test="@Ognl@isNotEmpty(filetype)">
+				#{filetype},
+			</if>
+			<if test="@Ognl@isNotEmpty(month)">
+				#{month},
+			</if>
+			<if test="@Ognl@isNotEmpty(reportid)">
+				#{reportid},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM fileupdown WHERE
+        id = #{id} 
+	</delete>
+	
+	<!-- 删除审计id -->
+	<delete id="deleteByReportid" parameterType="String">
+		DELETE FROM fileupdown WHERE
+        reportid = #{reportid} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.businessInfo.entity.Fileupdown">
+		SELECT <include refid="selectId" />
+		    FROM fileupdown 
+	        WHERE 
+        month = #{month} 
+	</select>
+	
+	<!-- 根据reportid查实体 -->
+	<select id="getByReportid" parameterType="String" resultType="com.mf.businessInfo.entity.Fileupdown">
+		SELECT <include refid="selectId" />
+		    FROM fileupdown 
+	        WHERE 
+        reportid = #{reportid} 
+	</select>
+	
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(filename)">
+			filename = #{filename},
+		</if>
+		<if test="@Ognl@isNotEmpty(filesize)">
+			filesize = #{filesize},
+		</if>
+		<if test="@Ognl@isNotEmpty(upday)">
+			upday = #{upday},
+		</if>
+		<if test="@Ognl@isNotEmpty(filepath)">
+			filepath = #{filepath},
+		</if>
+		<if test="@Ognl@isNotEmpty(filetype)">
+			filetype = #{filetype},
+		</if>
+		<if test="@Ognl@isNotEmpty(month)">
+			month = #{month},
+		</if>
+		<if test="@Ognl@isNotEmpty(reportid)">
+			reportid = #{reportid},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.businessInfo.entity.Fileupdown">
+	    UPDATE fileupdown 
+		<include refid="updateset"/>
+        WHERE 
+	        id = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

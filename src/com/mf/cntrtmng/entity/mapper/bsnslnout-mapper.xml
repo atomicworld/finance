@@ -1,0 +1,654 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.cntrtmng.dao.BsnsLnoutDao">
+
+	<resultMap id="BsnsLnout" type="com.mf.cntrtmng.entity.BsnsLnout">
+        <result property="outno" column="OUTNO"/>
+        <result property="cntrctno" column="CNTRCTNO"/>
+        <result property="applyno" column="APPLYNO"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="clntnm" column="CLNTNM"/>
+        <result property="dptno" column="DPTNO"/>
+        <result property="kndno" column="KNDNO"/>
+        <result property="outdate" column="OUTDATE"/>
+        <result property="cntrctedate" column="CNTRCTEDATE"/>
+        <result property="outamnt" column="OUTAMNT"/>
+        <result property="currncy" column="CURRNCY"/>
+        <result property="lnrt" column="LNRT"/>
+        <result property="bsnsrt" column="BSNSRT"/>
+        <result property="cntrctamnt" column="CNTRCTAMNT"/>
+        <result property="srlno" column="SRLNO"/>
+        <result property="ovrfltprcnt" column="OVRFLTPRCNT"/>
+        <result property="fnfltprcnt" column="FNFLTPRCNT"/>
+        <result property="outstt" column="OUTSTT"/>
+        <result property="regdptno" column="REGDPTNO"/>
+        <result property="regopno" column="REGOPNO"/>
+        <result property="regdate" column="REGDATE"/>
+        <result property="updtdate" column="UPDTDATE"/>
+        <result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		OUTNO,
+CNTRCTNO,
+APPLYNO,
+CLNTNO,
+CLNTNM,
+DPTNO,
+KNDNO,
+OUTDATE,
+CNTRCTEDATE,
+OUTAMNT,
+CURRNCY,
+LNRT,
+BSNSRT,
+CNTRCTAMNT,
+SRLNO,
+OVRFLTPRCNT,
+FNFLTPRCNT,
+OUTSTT,
+REGDPTNO,
+REGOPNO,
+REGDATE,
+UPDTDATE,
+REMARK
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.cntrtmng.entity.BsnsLnout">
+		select
+		<include refid="selectId" />
+		from bsns_lnout
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.cntrtmng.entity.BsnsLnout" parameterType="com.mf.cntrtmng.entity.BsnsLnout">
+		select
+		<include refid="selectId" />
+		from bsns_lnout
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.cntrtmng.entity.BsnsLnout" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_lnout
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<select id="queryoutable" resultType="com.mf.cntrtmng.entity.BsnsLnout" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_lnout
+		where CNTRCTNO=#{t.cntrctno} and (outstt='2' or outstt='1')
+	</select>
+	<select id="queryList" resultType="com.mf.cntrtmng.entity.BsnsLnout" parameterType="com.mf.cntrtmng.entity.BsnsLnout">
+		select
+		<include refid="selectId" />
+		from bsns_lnout
+		where CNTRCTNO=#{cntrctno} and (outstt='2' or outstt='1')
+	</select>
+	<!-- wyy 20150319 -->
+	<select id="showoutInfo" resultType="com.mf.cntrtmng.entity.BsnsLnout" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_lnout
+		<include refid="querywhere"/>
+		order by outno desc
+	</select>
+	
+	
+	<select id="findOneByOutno" resultType="com.mf.cntrtmng.entity.BsnsLnout" parameterType="String"> 
+		select 
+		<include refid="selectId" />
+		from bsns_lnout
+		where outno=#{outno}
+	</select>
+	
+	<select id="findBySrlno" resultType="com.mf.cntrtmng.entity.BsnsLnout" parameterType="String"> 
+		select 
+		<include refid="selectId" />
+		from bsns_lnout
+		where srlno=#{srlno}
+	</select>
+	
+	<update id="exeout" parameterType="String">
+		update bsns_lnout
+		set outstt='1'
+		where outno=#{outno}
+	</update>
+	
+	<update id="billoutEnd" parameterType="com.mf.cntrtmng.entity.BsnsLnout">
+		UPDATE bsns_lnout 
+		SET OUTSTT = #{outstt}
+		WHERE OUTNO = #{outno}
+	</update>
+	
+	
+	<select id="queryOuted" resultType="com.mf.cntrtmng.entity.BsnsLnout" parameterType="java.util.HashMap"> 
+		select 
+		<include refid="selectId" />
+		from bsns_lnout
+		where OUTSTT=#{t.outstt} 
+		group by CNTRCTNO 
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.outno)">
+					AND OUTNO like '%${t.outno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cntrctno)">
+					AND CNTRCTNO like '%${t.cntrctno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.applyno)">
+					AND APPLYNO like '%${t.applyno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.clntnm)">
+					AND CLNTNM like '%${t.clntnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.dptno)">
+					AND DPTNO like '%${t.dptno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.kndno)">
+					AND KNDNO like '%${t.kndno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.outdate)">
+					AND OUTDATE like '%${t.outdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cntrctedate)">
+					AND CNTRCTEDATE like '%${t.cntrctedate}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.outamnt)">
+					AND OUTAMNT = '${t.outamnt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.currncy)">
+					AND CURRNCY like '%${t.currncy}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.lnrt)">
+					AND LNRT = '${t.lnrt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.bsnsrt)">
+					AND BSNSRT = '${t.bsnsrt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.cntrctamnt)">
+					AND CNTRCTAMNT = '${t.cntrctamnt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.srlno)">
+					AND SRLNO like '%${t.srlno}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.ovrfltprcnt)">
+					AND OVRFLTPRCNT = '${t.ovrfltprcnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.fnfltprcnt)">
+					AND FNFLTPRCNT = '${t.fnfltprcnt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.outstt)">
+					AND OUTSTT like '%${t.outstt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regdptno)">
+					AND REGDPTNO like '%${t.regdptno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regopno)">
+					AND REGOPNO like '%${t.regopno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regdate)">
+					AND REGDATE like '%${t.regdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.updtdate)">
+					AND UPDTDATE like '%${t.updtdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(outno)">
+					AND OUTNO like '%${outno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cntrctno)">
+					AND CNTRCTNO like '%${cntrctno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(applyno)">
+					AND APPLYNO like '%${applyno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(clntnm)">
+					AND CLNTNM like '%${clntnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(dptno)">
+					AND DPTNO like '%${dptno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(kndno)">
+					AND KNDNO like '%${kndno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(outdate)">
+					AND OUTDATE like '%${outdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cntrctedate)">
+					AND CNTRCTEDATE like '%${cntrctedate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(outamnt)">
+					AND OUTAMNT = '${outamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(currncy)">
+					AND CURRNCY like '%${currncy}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(lnrt)">
+					AND LNRT = '${lnrt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(bsnsrt)">
+					AND BSNSRT = '${bsnsrt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(cntrctamnt)">
+					AND CNTRCTAMNT = '${cntrctamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(srlno)">
+					AND SRLNO like '%${srlno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(ovrfltprcnt)">
+					AND OVRFLTPRCNT = '${ovrfltprcnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(fnfltprcnt)">
+					AND FNFLTPRCNT = '${fnfltprcnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(outstt)">
+					AND OUTSTT like '%${outstt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regdptno)">
+					AND REGDPTNO like '%${regdptno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regopno)">
+					AND REGOPNO like '%${regopno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regdate)">
+					AND REGDATE like '%${regdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(updtdate)">
+					AND UPDTDATE like '%${updtdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.cntrtmng.entity.BsnsLnout" resultType="int">
+		select count(0) from bsns_lnout
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.cntrtmng.entity.BsnsLnout">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO bsns_lnout (
+        	OUTNO ,
+        	CNTRCTNO ,
+        	APPLYNO ,
+        	CLNTNO ,
+        	CLNTNM ,
+        	DPTNO ,
+        	KNDNO ,
+        	OUTDATE ,
+        	CNTRCTEDATE ,
+        	OUTAMNT ,
+        	CURRNCY ,
+        	LNRT ,
+        	BSNSRT ,
+        	CNTRCTAMNT ,
+        	SRLNO ,
+        	OVRFLTPRCNT ,
+        	FNFLTPRCNT ,
+        	OUTSTT ,
+        	REGDPTNO ,
+        	REGOPNO ,
+        	REGDATE ,
+        	UPDTDATE ,
+        	REMARK 
+        ) VALUES (
+        	#{outno} ,
+        	#{cntrctno} ,
+        	#{applyno} ,
+        	#{clntno} ,
+        	#{clntnm} ,
+        	#{dptno} ,
+        	#{kndno} ,
+        	#{outdate} ,
+        	#{cntrctedate} ,
+        	#{outamnt} ,
+        	#{currncy} ,
+        	#{lnrt} ,
+        	#{bsnsrt} ,
+        	#{cntrctamnt} ,
+        	#{srlno} ,
+        	#{ovrfltprcnt} ,
+        	#{fnfltprcnt} ,
+        	#{outstt} ,
+        	#{regdptno} ,
+        	#{regopno} ,
+        	#{regdate} ,
+        	#{updtdate} ,
+        	#{remark} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.cntrtmng.entity.BsnsLnout">
+		INSERT INTO bsns_lnout 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(outno)">
+				OUTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				CNTRCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				APPLYNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				CLNTNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(dptno)">
+				DPTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(kndno)">
+				KNDNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(outdate)">
+				OUTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctedate)">
+				CNTRCTEDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(outamnt)">
+				OUTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(currncy)">
+				CURRNCY,
+			</if>
+			<if test="@Ognl@isNotEmpty(lnrt)">
+				LNRT,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsrt)">
+				BSNSRT,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctamnt)">
+				CNTRCTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(srlno)">
+				SRLNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(ovrfltprcnt)">
+				OVRFLTPRCNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(fnfltprcnt)">
+				FNFLTPRCNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(outstt)">
+				OUTSTT,
+			</if>
+			<if test="@Ognl@isNotEmpty(regdptno)">
+				REGDPTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				REGOPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(regdate)">
+				REGDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				UPDTDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(outno)">
+				#{outno},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				#{cntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				#{applyno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(clntnm)">
+				#{clntnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(dptno)">
+				#{dptno},
+			</if>
+			<if test="@Ognl@isNotEmpty(kndno)">
+				#{kndno},
+			</if>
+			<if test="@Ognl@isNotEmpty(outdate)">
+				#{outdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctedate)">
+				#{cntrctedate},
+			</if>
+			<if test="@Ognl@isNotEmpty(outamnt)">
+				#{outamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(currncy)">
+				#{currncy},
+			</if>
+			<if test="@Ognl@isNotEmpty(lnrt)">
+				#{lnrt},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsrt)">
+				#{bsnsrt},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctamnt)">
+				#{cntrctamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(srlno)">
+				#{srlno},
+			</if>
+			<if test="@Ognl@isNotEmpty(ovrfltprcnt)">
+				#{ovrfltprcnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(fnfltprcnt)">
+				#{fnfltprcnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(outstt)">
+				#{outstt},
+			</if>
+			<if test="@Ognl@isNotEmpty(regdptno)">
+				#{regdptno},
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				#{regopno},
+			</if>
+			<if test="@Ognl@isNotEmpty(regdate)">
+				#{regdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(updtdate)">
+				#{updtdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM bsns_lnout WHERE
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsLnout">
+		SELECT <include refid="selectId" />
+		    FROM bsns_lnout 
+	        WHERE outno = #{outno} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.cntrtmng.entity.BsnsLnout">
+	    UPDATE bsns_lnout SET
+	        OUTNO = #{outno} ,
+	        CNTRCTNO = #{cntrctno} ,
+	        APPLYNO = #{applyno} ,
+	        CLNTNO = #{clntno} ,
+	        CLNTNM = #{clntnm} ,
+	        DPTNO = #{dptno} ,
+	        KNDNO = #{kndno} ,
+	        OUTDATE = #{outdate} ,
+	        CNTRCTEDATE = #{cntrctedate} ,
+	        OUTAMNT = #{outamnt} ,
+	        CURRNCY = #{currncy} ,
+	        LNRT = #{lnrt} ,
+	        BSNSRT = #{bsnsrt} ,
+	        CNTRCTAMNT = #{cntrctamnt} ,
+	        SRLNO = #{srlno} ,
+	        OVRFLTPRCNT = #{ovrfltprcnt} ,
+	        FNFLTPRCNT = #{fnfltprcnt} ,
+	        OUTSTT = #{outstt} ,
+	        REGDPTNO = #{regdptno} ,
+	        REGOPNO = #{regopno} ,
+	        REGDATE = #{regdate} ,
+	        UPDTDATE = #{updtdate} ,
+	        REMARK = #{remark} 
+        WHERE 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(outno)">
+			OUTNO = #{outno},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctno)">
+			CNTRCTNO = #{cntrctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(applyno)">
+			APPLYNO = #{applyno},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(clntnm)">
+			CLNTNM = #{clntnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(dptno)">
+			DPTNO = #{dptno},
+		</if>
+		<if test="@Ognl@isNotEmpty(kndno)">
+			KNDNO = #{kndno},
+		</if>
+		<if test="@Ognl@isNotEmpty(outdate)">
+			OUTDATE = #{outdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctedate)">
+			CNTRCTEDATE = #{cntrctedate},
+		</if>
+		<if test="@Ognl@isNotEmpty(outamnt)">
+			OUTAMNT = #{outamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(currncy)">
+			CURRNCY = #{currncy},
+		</if>
+		<if test="@Ognl@isNotEmpty(lnrt)">
+			LNRT = #{lnrt},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnsrt)">
+			BSNSRT = #{bsnsrt},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctamnt)">
+			CNTRCTAMNT = #{cntrctamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(srlno)">
+			SRLNO = #{srlno},
+		</if>
+		<if test="@Ognl@isNotEmpty(ovrfltprcnt)">
+			OVRFLTPRCNT = #{ovrfltprcnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(fnfltprcnt)">
+			FNFLTPRCNT = #{fnfltprcnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(outstt)">
+			OUTSTT = #{outstt},
+		</if>
+		<if test="@Ognl@isNotEmpty(regdptno)">
+			REGDPTNO = #{regdptno},
+		</if>
+		<if test="@Ognl@isNotEmpty(regopno)">
+			REGOPNO = #{regopno},
+		</if>
+		<if test="@Ognl@isNotEmpty(regdate)">
+			REGDATE = #{regdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(updtdate)">
+			UPDTDATE = #{updtdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.cntrtmng.entity.BsnsLnout">
+	    UPDATE bsns_lnout 
+		<include refid="updateset"/>
+	</update>
+	<select id="queryExcel" parameterType="com.mf.cntrtmng.entity.BsnsCntrct" resultType="com.mf.cntrtmng.entity.BsnsCntrct">
+		select cntrctno,
+		 concat(clntnm,'(',clntno,')')as clntnm,
+		 b.kndnm as kndno,
+		 cntrctamnt,cntrctsdate,cntrctedate
+		 from bsns_cntrct  a 
+		 left join bsnskind b on a.kndno=b.kndno 
+		 where 1=1 
+        <if test="clntnm!=null and clntnm!='' ">
+		    and clntnm like '%${clntnm}%'
+	    </if>
+	    <if test="outflg!=null and outflg!='' ">
+		    and outflg = '${outflg}'
+	    </if>
+	    <if test="cntrctstt=='5' ">
+		    and cntrctstt &lt;&gt; '9' and cntrctstt &lt;&gt; '91'
+	    </if>
+	    <if test="cntrctstt=='9' ">
+		    and (cntrctstt = '9' or cntrctstt='91')
+	    </if>
+	    
+	</select>
+	
+	
+</mapper>
+

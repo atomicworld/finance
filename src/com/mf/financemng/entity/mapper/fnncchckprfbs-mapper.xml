@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FnncChckprfbsDao">
+
+	<resultMap id="FnncChckprfbs" type="com.mf.financemng.entity.FnncChckprfbs">
+        <result property="prftrcno" column="PRFTRCNO"/>
+        <result property="chckprftyp" column="CHCKPRFTYP"/>
+        <result property="prfcrtdt" column="PRFCRTDT"/>
+        <result property="opno" column="OPNO"/>
+        <result property="remark" column="REMARK"/>
+        <result property="chcktrcno" column="CHCKTRCNO"/>
+        <result property="accntflg" column="ACCNTFLG"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		PRFTRCNO,
+CHCKPRFTYP,
+PRFCRTDT,
+OPNO,
+REMARK,
+CHCKTRCNO,
+ACCNTFLG
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.FnncChckprfbs">
+		select
+		<include refid="selectId" />
+		from fnnc_chckprfbs
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.FnncChckprfbs" parameterType="com.mf.financemng.entity.FnncChckprfbs">
+		select
+		<include refid="selectId" />
+		from fnnc_chckprfbs
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.financemng.entity.FnncChckprfbs" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fnnc_chckprfbs
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.prftrcno)">
+					AND PRFTRCNO like '%${t.prftrcno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.chckprftyp)">
+					AND CHCKPRFTYP like '%${t.chckprftyp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.prfcrtdt)">
+					AND PRFCRTDT like '%${t.prfcrtdt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.opno)">
+					AND OPNO like '%${t.opno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.accntflg)">
+					AND ACCNTFLG like '%${t.accntflg}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(prftrcno)">
+					AND PRFTRCNO like '%${prftrcno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(chckprftyp)">
+					AND CHCKPRFTYP like '%${chckprftyp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(prfcrtdt)">
+					AND PRFCRTDT like '%${prfcrtdt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(opno)">
+					AND OPNO like '%${opno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(accntflg)">
+					AND ACCNTFLG like '%${accntflg}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.FnncChckprfbs" resultType="int">
+		select count(0) from fnnc_chckprfbs
+		<include refid="querywhere1"/>
+	</select>
+	
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.FnncChckprfbs">
+		INSERT INTO fnnc_chckprfbs 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(prftrcno)">
+				PRFTRCNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(chckprftyp)">
+				CHCKPRFTYP,
+			</if>
+			<if test="@Ognl@isNotEmpty(prfcrtdt)">
+				PRFCRTDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(opno)">
+				OPNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+			<if test="@Ognl@isNotEmpty(chcktrcno)">
+				CHCKTRCNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(accntflg)">
+				ACCNTFLG,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(prftrcno)">
+				#{prftrcno},
+			</if>
+			<if test="@Ognl@isNotEmpty(chckprftyp)">
+				#{chckprftyp},
+			</if>
+			<if test="@Ognl@isNotEmpty(prfcrtdt)">
+				#{prfcrtdt},
+			</if>
+			<if test="@Ognl@isNotEmpty(opno)">
+				#{opno},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+			<if test="@Ognl@isNotEmpty(chcktrcno)">
+				#{chcktrcno},
+			</if>
+			<if test="@Ognl@isNotEmpty(accntflg)">
+				#{accntflg},
+			</if>
+    </trim>
+	</sql>
+	
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.FnncChckprfbs">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_chckprfbs 
+	        WHERE 
+        CHCKTRCNO = #{id} 
+	</select>
+	
+	<select id="queryList" resultType="com.mf.financemng.entity.FnncPrfbsList" parameterType="java.util.HashMap">
+		select 
+			a.prftrcno,
+			d.prfno,
+			d.checkdt,
+			a.chckprftyp,a.remark,
+			sum(truncate(amnt/2,2)) jamnt,
+			sum(case when b.jdflg='2' then 1 else 0 end) jtotal,
+			sum(truncate(amnt/2,2)) damnt,
+			sum(case when b.jdflg='1' then 1 else 0 end) dtotal,
+			c.opnm,
+			a.opno,
+			a.prfcrtdt txdt,
+			a.accntflg,
+			a.chcktrcno
+		from fnnc_chckprfbs a
+		left join fnnc_chckprfdtl b on a.chcktrcno = b.chcktrcno
+		left join operator c on a.opno=emplyno 
+		left join fnnc_prfbs d on a.prftrcno=d.prftrcno
+		where a.accntflg = #{t.accntflg}
+		<if test="@Ognl@isNotEmpty(t.prfno)">
+			and d.prfno like '%${t.prfno}%'
+		</if>
+		group by a.prftrcno
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.financemng.entity.FnncChckprfbs">
+	    UPDATE fnnc_chckprfbs SET
+	        PRFTRCNO = #{prftrcno} ,
+	        CHCKPRFTYP = #{chckprftyp} ,
+	        PRFCRTDT = #{prfcrtdt} ,
+	        OPNO = #{opno} ,
+	        REMARK = #{remark} ,
+	        ACCNTFLG = #{accntflg} 
+        WHERE 
+	        CHCKTRCNO = #{chcktrcno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(prftrcno)">
+			PRFTRCNO = #{prftrcno},
+		</if>
+		<if test="@Ognl@isNotEmpty(chckprftyp)">
+			CHCKPRFTYP = #{chckprftyp},
+		</if>
+		<if test="@Ognl@isNotEmpty(prfcrtdt)">
+			PRFCRTDT = #{prfcrtdt},
+		</if>
+		<if test="@Ognl@isNotEmpty(opno)">
+			OPNO = #{opno},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+		<if test="@Ognl@isNotEmpty(accntflg)">
+			ACCNTFLG = #{accntflg},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.financemng.entity.FnncChckprfbs">
+	    UPDATE fnnc_chckprfbs 
+		<include refid="updateset"/>
+        WHERE 
+	        CHCKTRCNO = #{chcktrcno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

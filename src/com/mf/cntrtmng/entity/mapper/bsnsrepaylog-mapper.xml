@@ -1,0 +1,511 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.cntrtmng.dao.BsnsRepaylogDao">
+
+	<resultMap id="BsnsRepaylog" type="com.mf.cntrtmng.entity.BsnsRepaylog">
+		<result property="logid" column="LOGID"/>
+        <result property="paymode" column="PAYMODE"/>
+        <result property="financeflg" column="FINANCEFLG"/>
+        <result property="bsnsno" column="BSNSNO"/>
+        <result property="srlno" column="SRLNO"/>
+        <result property="paydt" column="PAYDT"/>
+        <result property="payonflg" column="PAYONFLG"/>
+        <result property="rcvamnt" column="RCVAMNT"/>
+        <result property="rcvprinamnt" column="RCVPRINAMNT"/>
+        <result property="rcvinstamnt" column="RCVINSTAMNT"/>
+        <result property="overinstamnt" column="OVERINSTAMNT"/>
+        <result property="cmpdinstamnt" column="CMPDINSTAMNT"/>
+        <result property="repayprinamnt" column="REPAYPRINAMNT"/>
+        <result property="accno" column="ACCNO"/>
+        <result property="paytm" column="PAYTM"/>
+        <result property="fninstamnt" column="FNINSTAMNT"/>
+        <result property="discountamnt" column="DISCOUNTAMNT"/>
+        <result property="fnamnt" column="FNAMNT"/>
+	</resultMap>
+	
+	<sql id="selectId">
+LOGID,
+PAYMODE,
+FINANCEFLG,
+BSNSNO,
+SRLNO,
+PAYDT,
+PAYONFLG,
+RCVAMNT,
+RCVPRINAMNT,
+RCVINSTAMNT,
+OVERINSTAMNT,
+CMPDINSTAMNT,
+REPAYPRINAMNT,
+ACCNO,
+PAYTM,
+FNINSTAMNT,
+DISCOUNTAMNT,
+FNAMNT
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.cntrtmng.entity.BsnsRepaylog">
+		select
+		<include refid="selectId" />
+		from bsns_repaylog
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.cntrtmng.entity.BsnsRepaylog" parameterType="com.mf.cntrtmng.entity.BsnsRepaylog">
+		select
+		<include refid="selectId" />
+		from bsns_repaylog
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by logid desc
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.cntrtmng.entity.BsnsRepaylog" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_repaylog
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	<!--判断是否已存在还款计划 -->
+	<select id="getCountPlan" parameterType="String" resultType="int">
+		select count(0) from bsns_repaylog  where  bsnsno = #{dueno} 
+	</select>
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.paymode)">
+					AND PAYMODE like '%${t.paymode}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.financeflg)">
+					AND FINANCEFLG like '%${t.financeflg}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.bsnsno)">
+					AND BSNSNO like '%${t.bsnsno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.paydt)">
+					AND PAYDT like '%${t.paydt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.payonflg)">
+					AND PAYONFLG like '%${t.payonflg}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rcvamnt)">
+					AND RCVAMNT = '${t.rcvamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rcvprinamnt)">
+					AND RCVPRINAMNT = '${t.rcvprinamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.rcvinstamnt)">
+					AND RCVINSTAMNT = '${t.rcvinstamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.overinstamnt)">
+					AND OVERINSTAMNT = '${t.overinstamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.cmpdinstamnt)">
+					AND CMPDINSTAMNT = '${t.cmpdinstamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.repayprinamnt)">
+					AND REPAYPRINAMNT = '${t.repayprinamnt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.accno)">
+					AND ACCNO like '%${t.accno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.paytm)">
+					AND PAYTM like '%${t.paytm}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.fninstamnt)">
+					AND FNINSTAMNT = '${t.fninstamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.discountamnt)">
+					AND DISCOUNTAMNT = '${t.discountamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.fnamnt)">
+					AND FNAMNT = '${t.fnamnt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.srlno)">
+					AND SRLNO = '${t.srlno}'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(paymode)">
+					AND PAYMODE like '%${paymode}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(financeflg)">
+					AND FINANCEFLG like '%${financeflg}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(bsnsno)">
+					AND BSNSNO like '%${bsnsno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(paydt)">
+					AND PAYDT like '%${paydt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(payonflg)">
+					AND PAYONFLG like '%${payonflg}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(rcvamnt)">
+					AND RCVAMNT = '${rcvamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rcvprinamnt)">
+					AND RCVPRINAMNT = '${rcvprinamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(rcvinstamnt)">
+					AND RCVINSTAMNT = '${rcvinstamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(overinstamnt)">
+					AND OVERINSTAMNT = '${overinstamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(cmpdinstamnt)">
+					AND CMPDINSTAMNT = '${cmpdinstamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(repayprinamnt)">
+					AND REPAYPRINAMNT = '${repayprinamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(accno)">
+					AND ACCNO like '%${accno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(paytm)">
+					AND PAYTM like '%${paytm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(fninstamnt)">
+					AND FNINSTAMNT = '${fninstamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(discountamnt)">
+					AND DISCOUNTAMNT = '${discountamnt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(fnamnt)">
+					AND FNAMNT = '${fnamnt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(srlno)">
+					AND SRLNO = '${srlno}'
+			   </if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.cntrtmng.entity.BsnsRepaylog" resultType="int">
+		select count(0) from bsns_repaylog
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.cntrtmng.entity.BsnsRepaylog">
+		INSERT INTO bsns_repaylog (
+			LOGID,
+			SRLNO,
+        	PAYMODE ,
+        	FINANCEFLG ,
+        	BSNSNO ,
+        	PAYDT ,
+        	PAYONFLG ,
+        	RCVAMNT ,
+        	RCVPRINAMNT ,
+        	RCVINSTAMNT ,
+        	OVERINSTAMNT ,
+        	CMPDINSTAMNT ,
+        	REPAYPRINAMNT ,
+        	ACCNO ,
+        	PAYTM ,
+        	FNINSTAMNT ,
+        	DISCOUNTAMNT ,
+        	FNAMNT 
+        ) VALUES (
+        	#{logid},
+        	#{srlno},
+        	#{paymode} ,
+        	#{financeflg} ,
+        	#{bsnsno} ,
+        	#{paydt} ,
+        	#{payonflg} ,
+        	#{rcvamnt} ,
+        	#{rcvprinamnt} ,
+        	#{rcvinstamnt} ,
+        	#{overinstamnt} ,
+        	#{cmpdinstamnt} ,
+        	#{repayprinamnt} ,
+        	#{accno} ,
+        	#{paytm} ,
+        	#{fninstamnt} ,
+        	#{discountamnt} ,
+        	#{fnamnt} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.cntrtmng.entity.BsnsRepaylog">
+		INSERT INTO bsns_repaylog 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(logid)">
+				LOGID,
+			</if>
+			<if test="@Ognl@isNotEmpty(srlno)">
+				SRLNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(paymode)">
+				PAYMODE,
+			</if>
+			<if test="@Ognl@isNotEmpty(financeflg)">
+				FINANCEFLG,
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsno)">
+				BSNSNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(paydt)">
+				PAYDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(payonflg)">
+				PAYONFLG,
+			</if>
+			<if test="@Ognl@isNotEmpty(rcvamnt)">
+				RCVAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(rcvprinamnt)">
+				RCVPRINAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(rcvinstamnt)">
+				RCVINSTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(overinstamnt)">
+				OVERINSTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(cmpdinstamnt)">
+				CMPDINSTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(repayprinamnt)">
+				REPAYPRINAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(accno)">
+				ACCNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(paytm)">
+				PAYTM,
+			</if>
+			<if test="@Ognl@isNotEmpty(fninstamnt)">
+				FNINSTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(discountamnt)">
+				DISCOUNTAMNT,
+			</if>
+			<if test="@Ognl@isNotEmpty(fnamnt)">
+				FNAMNT,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+    		<if test="@Ognl@isNotEmpty(logid)">
+				#{logid},
+			</if>
+    		<if test="@Ognl@isNotEmpty(srlno)">
+				#{srlno},
+			</if>
+			<if test="@Ognl@isNotEmpty(paymode)">
+				#{paymode},
+			</if>
+			<if test="@Ognl@isNotEmpty(financeflg)">
+				#{financeflg},
+			</if>
+			<if test="@Ognl@isNotEmpty(bsnsno)">
+				#{bsnsno},
+			</if>
+			<if test="@Ognl@isNotEmpty(paydt)">
+				#{paydt},
+			</if>
+			<if test="@Ognl@isNotEmpty(payonflg)">
+				#{payonflg},
+			</if>
+			<if test="@Ognl@isNotEmpty(rcvamnt)">
+				#{rcvamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(rcvprinamnt)">
+				#{rcvprinamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(rcvinstamnt)">
+				#{rcvinstamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(overinstamnt)">
+				#{overinstamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(cmpdinstamnt)">
+				#{cmpdinstamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(repayprinamnt)">
+				#{repayprinamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(accno)">
+				#{accno},
+			</if>
+			<if test="@Ognl@isNotEmpty(paytm)">
+				#{paytm},
+			</if>
+			<if test="@Ognl@isNotEmpty(fninstamnt)">
+				#{fninstamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(discountamnt)">
+				#{discountamnt},
+			</if>
+			<if test="@Ognl@isNotEmpty(fnamnt)">
+				#{fnamnt},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM bsns_repaylog WHERE
+        LOGID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsRepaylog">
+		SELECT <include refid="selectId" />
+		    FROM bsns_repaylog 
+	        WHERE 
+        LOGID = #{logid} 
+	</select>
+	<select id="getBySrlno" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsRepaylog">
+		SELECT <include refid="selectId" />
+		    FROM bsns_repaylog 
+	        WHERE 
+        srlno = #{srlno} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.cntrtmng.entity.BsnsRepaylog">
+	    UPDATE bsns_repaylog SET
+	        PAYMODE = #{paymode} ,
+	        FINANCEFLG = #{financeflg} ,
+	        BSNSNO = #{bsnsno} ,
+	        PAYDT = #{paydt} ,
+	        PAYONFLG = #{payonflg} ,
+	        RCVAMNT = #{rcvamnt} ,
+	        RCVPRINAMNT = #{rcvprinamnt} ,
+	        RCVINSTAMNT = #{rcvinstamnt} ,
+	        OVERINSTAMNT = #{overinstamnt} ,
+	        CMPDINSTAMNT = #{cmpdinstamnt} ,
+	        REPAYPRINAMNT = #{repayprinamnt} ,
+	        ACCNO = #{accno} ,
+	        PAYTM = #{paytm} ,
+	        FNINSTAMNT = #{fninstamnt} ,
+	        DISCOUNTAMNT = #{discountamnt} ,
+	        FNAMNT = #{fnamnt} ,
+	        LOGID = #{logid} 
+        WHERE 
+	        LOGID = #{LOGID} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(paymode)">
+			PAYMODE = #{paymode},
+		</if>
+		<if test="@Ognl@isNotEmpty(financeflg)">
+			FINANCEFLG = #{financeflg},
+		</if>
+		<if test="@Ognl@isNotEmpty(bsnsno)">
+			BSNSNO = #{bsnsno},
+		</if>
+		<if test="@Ognl@isNotEmpty(paydt)">
+			PAYDT = #{paydt},
+		</if>
+		<if test="@Ognl@isNotEmpty(payonflg)">
+			PAYONFLG = #{payonflg},
+		</if>
+		<if test="@Ognl@isNotEmpty(rcvamnt)">
+			RCVAMNT = #{rcvamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(rcvprinamnt)">
+			RCVPRINAMNT = #{rcvprinamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(rcvinstamnt)">
+			RCVINSTAMNT = #{rcvinstamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(overinstamnt)">
+			OVERINSTAMNT = #{overinstamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(cmpdinstamnt)">
+			CMPDINSTAMNT = #{cmpdinstamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(repayprinamnt)">
+			REPAYPRINAMNT = #{repayprinamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(accno)">
+			ACCNO = #{accno},
+		</if>
+		<if test="@Ognl@isNotEmpty(paytm)">
+			PAYTM = #{paytm},
+		</if>
+		<if test="@Ognl@isNotEmpty(fninstamnt)">
+			FNINSTAMNT = #{fninstamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(discountamnt)">
+			DISCOUNTAMNT = #{discountamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(fnamnt)">
+			FNAMNT = #{fnamnt},
+		</if>
+		<if test="@Ognl@isNotEmpty(logid)">
+			LOGID = #{logid},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective  wyy 0411-->
+	<update id="update" parameterType="com.mf.cntrtmng.entity.BsnsRepaylog">
+	    UPDATE bsns_repaylog 
+		<include refid="updateset"/>
+        WHERE 
+	        srlno = #{srlno} 
+	</update>
+	
+	
+	<!-- 根据借据编号查询还款记录补录 -->
+	
+	<select id="getByDueno" resultType="com.mf.cntrtmng.entity.BsnsRepaylogList" parameterType="String">
+		select a.logid,
+		a.srlno,
+		b.repaytermno,b.cyclesdt,b.cycleedt,
+		b.currepayamnt,b.repayinstamnt,a.rcvprinamnt,
+		a.rcvinstamnt,a.rcvamnt,financeflg ,b.repaystt
+		from bsns_repayplan b  
+		left join bsns_repaylog a on a.srlno=b.srlno 
+		where b.dueno=#{dueno} and logid is not null
+		
+	</select>
+	<select id="getByDuenoCount" resultType="com.mf.cntrtmng.entity.BsnsRepaylogList" parameterType="String">
+		select sum(currepayamnt)as currepayamnt,
+		(select sum(rcvprinamnt) 
+			from bsns_repaylog a 
+				left join bsns_repayplan b on a.srlno=b.srlno 
+				 	where a.bsnsno=#{dueno} 
+				 	and b.cycleedt &lt; date_format(now(),'%Y%m%d')
+		)as rcvprinamnt  
+		from bsns_repayplan where dueno=#{dueno}  and cycleedt &lt; date_format(now(),'%Y%m%d')
+		
+	</select>
+	
+	<!-- add by hw -->
+	<select id="getForMaxDt" parameterType="String" resultType="com.mf.cntrtmng.entity.BsnsRepaylog">
+       	 SELECT logid,paymode,financeflg,bsnsno,srlno,
+			max(paydt) as paydt,
+			payonflg,rcvamnt,rcvprinamnt,rcvinstamnt,overinstamnt,cmpdinstamnt,repayprinamnt,accno,paytm,fninstamnt,discountamnt,fnamnt
+	    FROM bsns_repaylog 
+        WHERE 
+       	 	BSNSNO = #{dueno} and srlno = 'Prepayment'
+	</select>
+	<!-- add by hw -->	
+</mapper>
+

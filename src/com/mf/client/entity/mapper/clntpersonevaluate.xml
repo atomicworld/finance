@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntPersonEvaluateDao">
+
+	<resultMap id="ClntPersonEvaluate" type="com.mf.client.entity.ClntPersonEvaluate">
+        <result property="clntno" column="CLNTNO"/>
+        <result property="agescr" column="AGESCR"/>
+        <result property="sexscr" column="SEXSCR"/>
+        <result property="marriagescr" column="MARRIAGESCR"/>
+        <result property="healthscr" column="HEALTHSCR"/>
+        <result property="edulevelscr" column="EDULEVELSCR"/>
+        <result property="householdscr" column="HOUSEHOLDSCR"/>
+        <result property="dutyscr" column="DUTYSCR"/>
+        <result property="familynumscr" column="FAMILYNUMSCR"/>
+        <result property="occtypescr" column="OCCTYPESCR"/>
+        <result property="castescr" column="CASTESCR"/>
+        <result property="worktimesscr" column="WORKTIMESSCR"/>
+        <result property="belongempscr" column="BELONGEMPSCR"/>
+        <result property="montylyincomescr" column="MONTYLYINCOMESCR"/>
+        <result property="businesscontact" column="BUSINESSCONTACT"/>
+        <result property="totalscr" column="TOTALSCR"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		CLNTNO,
+AGESCR,
+SEXSCR,
+MARRIAGESCR,
+HEALTHSCR,
+EDULEVELSCR,
+HOUSEHOLDSCR,
+DUTYSCR,
+FAMILYNUMSCR,
+OCCTYPESCR,
+CASTESCR,
+WORKTIMESSCR,
+BELONGEMPSCR,
+MONTYLYINCOMESCR,
+BUSINESSCONTACT,
+TOTALSCR
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntPersonEvaluate">
+		select
+		<include refid="selectId" />
+		from clnt_person_evaluate
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntPersonEvaluate" parameterType="com.mf.client.entity.ClntPersonEvaluate">
+		select
+		<include refid="selectId" />
+		from clnt_person_evaluate
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntPersonEvaluate" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_person_evaluate
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(t.agescr)">
+					AND AGESCR = '${t.agescr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.sexscr)">
+					AND SEXSCR = '${t.sexscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.marriagescr)">
+					AND MARRIAGESCR = '${t.marriagescr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.healthscr)">
+					AND HEALTHSCR = '${t.healthscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.edulevelscr)">
+					AND EDULEVELSCR = '${t.edulevelscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.householdscr)">
+					AND HOUSEHOLDSCR = '${t.householdscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.dutyscr)">
+					AND DUTYSCR = '${t.dutyscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.familynumscr)">
+					AND FAMILYNUMSCR = '${t.familynumscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.occtypescr)">
+					AND OCCTYPESCR = '${t.occtypescr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.castescr)">
+					AND CASTESCR = '${t.castescr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.worktimesscr)">
+					AND WORKTIMESSCR = '${t.worktimesscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.belongempscr)">
+					AND BELONGEMPSCR = '${t.belongempscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.montylyincomescr)">
+					AND MONTYLYINCOMESCR = '${t.montylyincomescr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.businesscontact)">
+					AND BUSINESSCONTACT = '${t.businesscontact}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.totalscr)">
+					AND TOTALSCR = '${t.totalscr}'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(agescr)">
+					AND AGESCR = '${agescr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(sexscr)">
+					AND SEXSCR = '${sexscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(marriagescr)">
+					AND MARRIAGESCR = '${marriagescr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(healthscr)">
+					AND HEALTHSCR = '${healthscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(edulevelscr)">
+					AND EDULEVELSCR = '${edulevelscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(householdscr)">
+					AND HOUSEHOLDSCR = '${householdscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(dutyscr)">
+					AND DUTYSCR = '${dutyscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(familynumscr)">
+					AND FAMILYNUMSCR = '${familynumscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(occtypescr)">
+					AND OCCTYPESCR = '${occtypescr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(castescr)">
+					AND CASTESCR = '${castescr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(worktimesscr)">
+					AND WORKTIMESSCR = '${worktimesscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(belongempscr)">
+					AND BELONGEMPSCR = '${belongempscr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(montylyincomescr)">
+					AND MONTYLYINCOMESCR = '${montylyincomescr}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(businesscontact)">
+					AND BUSINESSCONTACT = '${businesscontact}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(totalscr)">
+					AND TOTALSCR = '${totalscr}'
+			   </if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntPersonEvaluate" resultType="int">
+		select count(0) from clnt_person_evaluate
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntPersonEvaluate">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_person_evaluate (
+        	AGESCR ,
+        	SEXSCR ,
+        	MARRIAGESCR ,
+        	HEALTHSCR ,
+        	EDULEVELSCR ,
+        	HOUSEHOLDSCR ,
+        	DUTYSCR ,
+        	FAMILYNUMSCR ,
+        	OCCTYPESCR ,
+        	CASTESCR ,
+        	WORKTIMESSCR ,
+        	BELONGEMPSCR ,
+        	MONTYLYINCOMESCR ,
+        	BUSINESSCONTACT ,
+        	TOTALSCR 
+        ) VALUES (
+        	#{agescr} ,
+        	#{sexscr} ,
+        	#{marriagescr} ,
+        	#{healthscr} ,
+        	#{edulevelscr} ,
+        	#{householdscr} ,
+        	#{dutyscr} ,
+        	#{familynumscr} ,
+        	#{occtypescr} ,
+        	#{castescr} ,
+        	#{worktimesscr} ,
+        	#{belongempscr} ,
+        	#{montylyincomescr} ,
+        	#{businesscontact} ,
+        	#{totalscr} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntPersonEvaluate">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO clnt_person_evaluate 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(agescr)">
+				AGESCR,
+			</if>
+			<if test="@Ognl@isNotEmpty(sexscr)">
+				SEXSCR,
+			</if>
+			<if test="@Ognl@isNotEmpty(marriagescr)">
+				MARRIAGESCR,
+			</if>
+			<if test="@Ognl@isNotEmpty(healthscr)">
+				HEALTHSCR,
+			</if>
+			<if test="@Ognl@isNotEmpty(edulevelscr)">
+				EDULEVELSCR,
+			</if>
+			<if test="@Ognl@isNotEmpty(householdscr)">
+				HOUSEHOLDSCR,
+			</if>
+			<if test="@Ognl@isNotEmpty(dutyscr)">
+				DUTYSCR,
+			</if>
+			<if test="@Ognl@isNotEmpty(familynumscr)">
+				FAMILYNUMSCR,
+			</if>
+			<if test="@Ognl@isNotEmpty(occtypescr)">
+				OCCTYPESCR,
+			</if>
+			<if test="@Ognl@isNotEmpty(castescr)">
+				CASTESCR,
+			</if>
+			<if test="@Ognl@isNotEmpty(worktimesscr)">
+				WORKTIMESSCR,
+			</if>
+			<if test="@Ognl@isNotEmpty(belongempscr)">
+				BELONGEMPSCR,
+			</if>
+			<if test="@Ognl@isNotEmpty(montylyincomescr)">
+				MONTYLYINCOMESCR,
+			</if>
+			<if test="@Ognl@isNotEmpty(businesscontact)">
+				BUSINESSCONTACT,
+			</if>
+			<if test="@Ognl@isNotEmpty(totalscr)">
+				TOTALSCR,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(agescr)">
+				#{agescr},
+			</if>
+			<if test="@Ognl@isNotEmpty(sexscr)">
+				#{sexscr},
+			</if>
+			<if test="@Ognl@isNotEmpty(marriagescr)">
+				#{marriagescr},
+			</if>
+			<if test="@Ognl@isNotEmpty(healthscr)">
+				#{healthscr},
+			</if>
+			<if test="@Ognl@isNotEmpty(edulevelscr)">
+				#{edulevelscr},
+			</if>
+			<if test="@Ognl@isNotEmpty(householdscr)">
+				#{householdscr},
+			</if>
+			<if test="@Ognl@isNotEmpty(dutyscr)">
+				#{dutyscr},
+			</if>
+			<if test="@Ognl@isNotEmpty(familynumscr)">
+				#{familynumscr},
+			</if>
+			<if test="@Ognl@isNotEmpty(occtypescr)">
+				#{occtypescr},
+			</if>
+			<if test="@Ognl@isNotEmpty(castescr)">
+				#{castescr},
+			</if>
+			<if test="@Ognl@isNotEmpty(worktimesscr)">
+				#{worktimesscr},
+			</if>
+			<if test="@Ognl@isNotEmpty(belongempscr)">
+				#{belongempscr},
+			</if>
+			<if test="@Ognl@isNotEmpty(montylyincomescr)">
+				#{montylyincomescr},
+			</if>
+			<if test="@Ognl@isNotEmpty(businesscontact)">
+				#{businesscontact},
+			</if>
+			<if test="@Ognl@isNotEmpty(totalscr)">
+				#{totalscr},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM clnt_person_evaluate WHERE
+        CLNTNO = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntPersonEvaluate">
+		SELECT <include refid="selectId" />
+		    FROM clnt_person_evaluate 
+	        WHERE 
+        CLNTNO = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntPersonEvaluate">
+	    UPDATE clnt_person_evaluate SET
+	        AGESCR = #{agescr} ,
+	        SEXSCR = #{sexscr} ,
+	        MARRIAGESCR = #{marriagescr} ,
+	        HEALTHSCR = #{healthscr} ,
+	        EDULEVELSCR = #{edulevelscr} ,
+	        HOUSEHOLDSCR = #{householdscr} ,
+	        DUTYSCR = #{dutyscr} ,
+	        FAMILYNUMSCR = #{familynumscr} ,
+	        OCCTYPESCR = #{occtypescr} ,
+	        CASTESCR = #{castescr} ,
+	        WORKTIMESSCR = #{worktimesscr} ,
+	        BELONGEMPSCR = #{belongempscr} ,
+	        MONTYLYINCOMESCR = #{montylyincomescr} ,
+	        BUSINESSCONTACT = #{businesscontact} ,
+	        TOTALSCR = #{totalscr} 
+        WHERE 
+	        CLNTNO = #{clntno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(agescr)">
+			AGESCR = #{agescr},
+		</if>
+		<if test="@Ognl@isNotEmpty(sexscr)">
+			SEXSCR = #{sexscr},
+		</if>
+		<if test="@Ognl@isNotEmpty(marriagescr)">
+			MARRIAGESCR = #{marriagescr},
+		</if>
+		<if test="@Ognl@isNotEmpty(healthscr)">
+			HEALTHSCR = #{healthscr},
+		</if>
+		<if test="@Ognl@isNotEmpty(edulevelscr)">
+			EDULEVELSCR = #{edulevelscr},
+		</if>
+		<if test="@Ognl@isNotEmpty(householdscr)">
+			HOUSEHOLDSCR = #{householdscr},
+		</if>
+		<if test="@Ognl@isNotEmpty(dutyscr)">
+			DUTYSCR = #{dutyscr},
+		</if>
+		<if test="@Ognl@isNotEmpty(familynumscr)">
+			FAMILYNUMSCR = #{familynumscr},
+		</if>
+		<if test="@Ognl@isNotEmpty(occtypescr)">
+			OCCTYPESCR = #{occtypescr},
+		</if>
+		<if test="@Ognl@isNotEmpty(castescr)">
+			CASTESCR = #{castescr},
+		</if>
+		<if test="@Ognl@isNotEmpty(worktimesscr)">
+			WORKTIMESSCR = #{worktimesscr},
+		</if>
+		<if test="@Ognl@isNotEmpty(belongempscr)">
+			BELONGEMPSCR = #{belongempscr},
+		</if>
+		<if test="@Ognl@isNotEmpty(montylyincomescr)">
+			MONTYLYINCOMESCR = #{montylyincomescr},
+		</if>
+		<if test="@Ognl@isNotEmpty(businesscontact)">
+			BUSINESSCONTACT = #{businesscontact},
+		</if>
+		<if test="@Ognl@isNotEmpty(totalscr)">
+			TOTALSCR = #{totalscr},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntPersonEvaluate">
+	    UPDATE clnt_person_evaluate 
+		<include refid="updateset"/>
+        WHERE 
+	        CLNTNO = #{clntno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

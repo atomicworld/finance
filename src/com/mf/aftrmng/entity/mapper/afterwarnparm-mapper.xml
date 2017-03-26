@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.aftrmng.dao.AfterWarnparmDao">
+
+	<resultMap id="AfterWarnparm" type="com.mf.aftrmng.entity.AfterWarnparm">
+        <result property="rcrdid" column="RCRDID"/>
+        <result property="warnday" column="WARNDAY"/>
+        <result property="warnnm" column="WARNNM"/>
+        <result property="cntrctno" column="CNTRCTNO"/>
+        <result property="dueno" column="DUENO"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		RCRDID,
+WARNDAY,
+WARNNM,
+CNTRCTNO,
+DUENO
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.aftrmng.entity.AfterWarnparm">
+		select
+		<include refid="selectId" />
+		from after_warnparm
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.aftrmng.entity.AfterWarnparm" parameterType="com.mf.aftrmng.entity.AfterWarnparm">
+		select
+		<include refid="selectId" />
+		from after_warnparm
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.aftrmng.entity.AfterWarnparm" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from after_warnparm
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.warnday)">
+					AND WARNDAY like '%${t.warnday}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.warnnm)">
+					AND WARNNM like '%${t.warnnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.cntrctno)">
+					AND CNTRCTNO like '%${t.cntrctno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.dueno)">
+					AND DUENO like '%${t.dueno}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(warnday)">
+					AND WARNDAY like '%${warnday}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(warnnm)">
+					AND WARNNM like '%${warnnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(cntrctno)">
+					AND CNTRCTNO like '%${cntrctno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(dueno)">
+					AND DUENO like '%${dueno}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.aftrmng.entity.AfterWarnparm" resultType="int">
+		select count(0) from after_warnparm
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.aftrmng.entity.AfterWarnparm">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO after_warnparm (
+        	WARNDAY ,
+        	WARNNM ,
+        	CNTRCTNO ,
+        	DUENO 
+        ) VALUES (
+        	#{warnday} ,
+        	#{warnnm} ,
+        	#{cntrctno} ,
+        	#{dueno} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.aftrmng.entity.AfterWarnparm">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO after_warnparm 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(warnday)">
+				WARNDAY,
+			</if>
+			<if test="@Ognl@isNotEmpty(warnnm)">
+				WARNNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				CNTRCTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(dueno)">
+				DUENO,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(warnday)">
+				#{warnday},
+			</if>
+			<if test="@Ognl@isNotEmpty(warnnm)">
+				#{warnnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(cntrctno)">
+				#{cntrctno},
+			</if>
+			<if test="@Ognl@isNotEmpty(dueno)">
+				#{dueno},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM after_warnparm WHERE
+        RCRDID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.aftrmng.entity.AfterWarnparm">
+		SELECT <include refid="selectId" />
+		    FROM after_warnparm 
+	        WHERE 
+        RCRDID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.aftrmng.entity.AfterWarnparm">
+	    UPDATE after_warnparm SET
+	        WARNDAY = #{warnday} ,
+	        WARNNM = #{warnnm} ,
+	        CNTRCTNO = #{cntrctno} ,
+	        DUENO = #{dueno} 
+        WHERE 
+	        RCRDID = #{rcrdid} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(warnday)">
+			WARNDAY = #{warnday},
+		</if>
+		<if test="@Ognl@isNotEmpty(warnnm)">
+			WARNNM = #{warnnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(cntrctno)">
+			CNTRCTNO = #{cntrctno},
+		</if>
+		<if test="@Ognl@isNotEmpty(dueno)">
+			DUENO = #{dueno},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.aftrmng.entity.AfterWarnparm">
+	    UPDATE after_warnparm 
+		<include refid="updateset"/>
+        WHERE 
+	        RCRDID = #{rcrdid} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	<select id="findByWarnnm" resultType="com.mf.aftrmng.entity.AfterWarnparm" parameterType="com.mf.aftrmng.entity.AfterWarnparm">
+		select
+		<include refid="selectId" />
+		from after_warnparm
+		<include refid="querywhere1"/>
+	</select>
+	
+</mapper>
+

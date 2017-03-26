@@ -1,0 +1,659 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FnncCapitalreportDao">
+
+	<resultMap id="FnncCapitalreport" type="com.mf.financemng.entity.FnncCapitalreport">
+        <result property="sharholdno" column="sharholdno"/>
+        <result property="sharholdnm" column="sharholdnm"/>
+        <result property="docno" column="docno"/>
+        <result property="docnm" column="docnm"/>
+        <result property="doctp" column="doctp"/>
+        <result property="docdt" column="docdt"/>
+        <result property="registcapit" column="registcapit"/>
+        <result property="registcapitota" column="registcapitota"/>
+        <result property="reprate" column="reprate"/>
+        <result property="repratetota" column="repratetota"/>
+        <result property="earpaidcapit" column="earpaidcapit"/>
+        <result property="earpaidcapitota" column="earpaidcapitota"/>
+        <result property="earprate" column="earprate"/>
+        <result property="earpratetota" column="earpratetota"/>
+        <result property="growpaidcapit" column="growpaidcapit"/>
+        <result property="growpaidcapitota" column="growpaidcapitota"/>
+        <result property="growprate" column="growprate"/>
+        <result property="growpratetota" column="growpratetota"/>
+        <result property="currpaidcapit" column="currpaidcapit"/>
+        <result property="currpaidcapitota" column="currpaidcapitota"/>
+        <result property="currprate" column="currprate"/>
+        <result property="currpratetota" column="currpratetota"/>
+        <result property="scdate" column="scdate"/>
+        <result property="lastmoddate" column="lastmoddate"/>
+        <result property="regopno" column="regopno"/>
+        <result property="depno" column="depno"/>
+        <result property="remark" column="remark"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		sharholdno,
+sharholdnm,
+docno,
+docnm,
+doctp,
+docdt,
+registcapit,
+registcapitota,
+reprate,
+repratetota,
+earpaidcapit,
+earpaidcapitota,
+earprate,
+earpratetota,
+growpaidcapit,
+growpaidcapitota,
+growprate,
+growpratetota,
+currpaidcapit,
+currpaidcapitota,
+currprate,
+currpratetota,
+scdate,
+lastmoddate,
+regopno,
+depno,
+remark
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.FnncCapitalreport">
+		select
+		<include refid="selectId" />
+		from fnnc_capitalreport
+		where
+		 docno = #{id} 
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.FnncCapitalreport" parameterType="com.mf.financemng.entity.FnncCapitalreport">
+		select
+		<include refid="selectId" />
+		from fnnc_capitalreport
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.financemng.entity.FnncCapitalreport" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fnnc_capitalreport
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(t.sharholdno)">
+					AND sharholdno = '${t.sharholdno}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.sharholdnm)">
+					AND sharholdnm like '%${t.sharholdnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.docno)">
+					AND docno like '%${t.docno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.docnm)">
+					AND docnm like '%${t.docnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.doctp)">
+					AND doctp like '%${t.doctp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.docdt)">
+					AND docdt like '%${t.docdt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.registcapit)">
+					AND registcapit like '%${t.registcapit}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.registcapitota)">
+					AND registcapitota like '%${t.registcapitota}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.reprate)">
+					AND reprate like '%${t.reprate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.repratetota)">
+					AND repratetota like '%${t.repratetota}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.earpaidcapit)">
+					AND earpaidcapit like '%${t.earpaidcapit}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.earpaidcapitota)">
+					AND earpaidcapitota like '%${t.earpaidcapitota}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.earprate)">
+					AND earprate like '%${t.earprate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.earpratetota)">
+					AND earpratetota like '%${t.earpratetota}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.growpaidcapit)">
+					AND growpaidcapit like '%${t.growpaidcapit}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.growpaidcapitota)">
+					AND growpaidcapitota like '%${t.growpaidcapitota}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.growprate)">
+					AND growprate like '%${t.growprate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.growpratetota)">
+					AND growpratetota like '%${t.growpratetota}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.currpaidcapit)">
+					AND currpaidcapit like '%${t.currpaidcapit}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.currpaidcapitota)">
+					AND currpaidcapitota like '%${t.currpaidcapitota}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.currprate)">
+					AND currprate like '%${t.currprate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.currpratetota)">
+					AND currpratetota like '%${t.currpratetota}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.scdate)">
+					AND scdate like '%${t.scdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.lastmoddate)">
+					AND lastmoddate like '%${t.lastmoddate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.regopno)">
+					AND regopno like '%${t.regopno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.depno)">
+					AND depno like '%${t.depno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND remark like '%${t.remark}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(sharholdno)">
+					AND sharholdno = '${sharholdno}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(sharholdnm)">
+					AND sharholdnm like '%${sharholdnm}%'
+				</if>
+				<if test="@Ognl@isNotEmpty(docno)">
+					AND docno like '%${docno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(docnm)">
+					AND docnm like '%${docnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(doctp)">
+					AND doctp like '%${doctp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(docdt)">
+					AND docdt like '%${docdt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(registcapit)">
+					AND registcapit like '%${registcapit}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(registcapitota)">
+					AND registcapitota like '%${registcapitota}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(reprate)">
+					AND reprate like '%${reprate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(repratetota)">
+					AND repratetota like '%${repratetota}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(earpaidcapit)">
+					AND earpaidcapit like '%${earpaidcapit}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(earpaidcapitota)">
+					AND earpaidcapitota like '%${earpaidcapitota}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(earprate)">
+					AND earprate like '%${earprate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(earpratetota)">
+					AND earpratetota like '%${earpratetota}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(growpaidcapit)">
+					AND growpaidcapit like '%${growpaidcapit}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(growpaidcapitota)">
+					AND growpaidcapitota like '%${growpaidcapitota}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(growprate)">
+					AND growprate like '%${growprate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(growpratetota)">
+					AND growpratetota like '%${growpratetota}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(currpaidcapit)">
+					AND currpaidcapit like '%${currpaidcapit}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(currpaidcapitota)">
+					AND currpaidcapitota like '%${currpaidcapitota}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(currprate)">
+					AND currprate like '%${currprate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(currpratetota)">
+					AND currpratetota like '%${currpratetota}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(scdate)">
+					AND scdate like '%${scdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(lastmoddate)">
+					AND lastmoddate like '%${lastmoddate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(regopno)">
+					AND regopno like '%${regopno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(depno)">
+					AND depno like '%${depno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND remark like '%${remark}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.FnncCapitalreport" resultType="int">
+		select count(0) from fnnc_capitalreport
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.financemng.entity.FnncCapitalreport">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO fnnc_capitalreport (
+        	sharholdno ,
+        	sharholdnm ,
+        	docno ,
+        	docnm ,
+        	doctp ,
+        	docdt ,
+        	registcapit ,
+        	registcapitota ,
+        	reprate ,
+        	repratetota ,
+        	earpaidcapit ,
+        	earpaidcapitota ,
+        	earprate ,
+        	earpratetota ,
+        	growpaidcapit ,
+        	growpaidcapitota ,
+        	growprate ,
+        	growpratetota ,
+        	currpaidcapit ,
+        	currpaidcapitota ,
+        	currprate ,
+        	currpratetota ,
+        	scdate ,
+        	lastmoddate ,
+        	regopno ,
+        	depno ,
+        	remark 
+        ) VALUES (
+        	#{sharholdno} ,
+        	#{sharholdnm} ,
+        	#{docno} ,
+        	#{docnm} ,
+        	#{doctp} ,
+        	#{docdt} ,
+        	#{registcapit} ,
+        	#{registcapitota} ,
+        	#{reprate} ,
+        	#{repratetota} ,
+        	#{earpaidcapit} ,
+        	#{earpaidcapitota} ,
+        	#{earprate} ,
+        	#{earpratetota} ,
+        	#{growpaidcapit} ,
+        	#{growpaidcapitota} ,
+        	#{growprate} ,
+        	#{growpratetota} ,
+        	#{currpaidcapit} ,
+        	#{currpaidcapitota} ,
+        	#{currprate} ,
+        	#{currpratetota} ,
+        	#{scdate} ,
+        	#{lastmoddate} ,
+        	#{regopno} ,
+        	#{depno} ,
+        	#{remark} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.FnncCapitalreport">	
+		INSERT INTO fnnc_capitalreport 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(sharholdno)">
+				sharholdno,
+			</if>
+			<if test="@Ognl@isNotEmpty(sharholdnm)">
+				sharholdnm,
+			</if>
+			<if test="@Ognl@isNotEmpty(docno)">
+				docno,
+			</if>
+			<if test="@Ognl@isNotEmpty(docnm)">
+				docnm,
+			</if>
+			<if test="@Ognl@isNotEmpty(doctp)">
+				doctp,
+			</if>
+			<if test="@Ognl@isNotEmpty(docdt)">
+				docdt,
+			</if>
+			<if test="@Ognl@isNotEmpty(registcapit)">
+				registcapit,
+			</if>
+			<if test="@Ognl@isNotEmpty(registcapitota)">
+				registcapitota,
+			</if>
+			<if test="@Ognl@isNotEmpty(reprate)">
+				reprate,
+			</if>
+			<if test="@Ognl@isNotEmpty(repratetota)">
+				repratetota,
+			</if>
+			<if test="@Ognl@isNotEmpty(earpaidcapit)">
+				earpaidcapit,
+			</if>
+			<if test="@Ognl@isNotEmpty(earpaidcapitota)">
+				earpaidcapitota,
+			</if>
+			<if test="@Ognl@isNotEmpty(earprate)">
+				earprate,
+			</if>
+			<if test="@Ognl@isNotEmpty(earpratetota)">
+				earpratetota,
+			</if>
+			<if test="@Ognl@isNotEmpty(growpaidcapit)">
+				growpaidcapit,
+			</if>
+			<if test="@Ognl@isNotEmpty(growpaidcapitota)">
+				growpaidcapitota,
+			</if>
+			<if test="@Ognl@isNotEmpty(growprate)">
+				growprate,
+			</if>
+			<if test="@Ognl@isNotEmpty(growpratetota)">
+				growpratetota,
+			</if>
+			<if test="@Ognl@isNotEmpty(currpaidcapit)">
+				currpaidcapit,
+			</if>
+			<if test="@Ognl@isNotEmpty(currpaidcapitota)">
+				currpaidcapitota,
+			</if>
+			<if test="@Ognl@isNotEmpty(currprate)">
+				currprate,
+			</if>
+			<if test="@Ognl@isNotEmpty(currpratetota)">
+				currpratetota,
+			</if>
+			<if test="@Ognl@isNotEmpty(scdate)">
+				scdate,
+			</if>
+			<if test="@Ognl@isNotEmpty(lastmoddate)">
+				lastmoddate,
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				regopno,
+			</if>
+			<if test="@Ognl@isNotEmpty(depno)">
+				depno,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				remark,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(sharholdno)">
+				#{sharholdno},
+			</if>
+			<if test="@Ognl@isNotEmpty(sharholdnm)">
+				#{sharholdnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(docno)">
+				#{docno},
+			</if>
+			<if test="@Ognl@isNotEmpty(docnm)">
+				#{docnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(doctp)">
+				#{doctp},
+			</if>
+			<if test="@Ognl@isNotEmpty(docdt)">
+				#{docdt},
+			</if>
+			<if test="@Ognl@isNotEmpty(registcapit)">
+				#{registcapit},
+			</if>
+			<if test="@Ognl@isNotEmpty(registcapitota)">
+				#{registcapitota},
+			</if>
+			<if test="@Ognl@isNotEmpty(reprate)">
+				#{reprate},
+			</if>
+			<if test="@Ognl@isNotEmpty(repratetota)">
+				#{repratetota},
+			</if>
+			<if test="@Ognl@isNotEmpty(earpaidcapit)">
+				#{earpaidcapit},
+			</if>
+			<if test="@Ognl@isNotEmpty(earpaidcapitota)">
+				#{earpaidcapitota},
+			</if>
+			<if test="@Ognl@isNotEmpty(earprate)">
+				#{earprate},
+			</if>
+			<if test="@Ognl@isNotEmpty(earpratetota)">
+				#{earpratetota},
+			</if>
+			<if test="@Ognl@isNotEmpty(growpaidcapit)">
+				#{growpaidcapit},
+			</if>
+			<if test="@Ognl@isNotEmpty(growpaidcapitota)">
+				#{growpaidcapitota},
+			</if>
+			<if test="@Ognl@isNotEmpty(growprate)">
+				#{growprate},
+			</if>
+			<if test="@Ognl@isNotEmpty(growpratetota)">
+				#{growpratetota},
+			</if>
+			<if test="@Ognl@isNotEmpty(currpaidcapit)">
+				#{currpaidcapit},
+			</if>
+			<if test="@Ognl@isNotEmpty(currpaidcapitota)">
+				#{currpaidcapitota},
+			</if>
+			<if test="@Ognl@isNotEmpty(currprate)">
+				#{currprate},
+			</if>
+			<if test="@Ognl@isNotEmpty(currpratetota)">
+				#{currpratetota},
+			</if>
+			<if test="@Ognl@isNotEmpty(scdate)">
+				#{scdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(lastmoddate)">
+				#{lastmoddate},
+			</if>
+			<if test="@Ognl@isNotEmpty(regopno)">
+				#{regopno},
+			</if>
+			<if test="@Ognl@isNotEmpty(depno)">
+				#{depno},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM fnnc_capitalreport WHERE
+        sharholdno = #{sharholdno} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.FnncCapitalreport">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_capitalreport 
+	        WHERE 
+        docno = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.financemng.entity.FnncCapitalreport">
+	    UPDATE fnnc_capitalreport SET
+	        sharholdno = #{sharholdno} ,
+	        sharholdnm = #{sharholdnm} ,
+	        docnm = #{docnm} ,
+	        doctp = #{doctp} ,
+	        docdt = #{docdt} ,
+	        registcapit = #{registcapit} ,
+	        registcapitota = #{registcapitota} ,
+	        reprate = #{reprate} ,
+	        repratetota = #{repratetota} ,
+	        earpaidcapit = #{earpaidcapit} ,
+	        earpaidcapitota = #{earpaidcapitota} ,
+	        earprate = #{earprate} ,
+	        earpratetota = #{earpratetota} ,
+	        growpaidcapit = #{growpaidcapit} ,
+	        growpaidcapitota = #{growpaidcapitota} ,
+	        growprate = #{growprate} ,
+	        growpratetota = #{growpratetota} ,
+	        currpaidcapit = #{currpaidcapit} ,
+	        currpaidcapitota = #{currpaidcapitota} ,
+	        currprate = #{currprate} ,
+	        currpratetota = #{currpratetota} ,
+	        scdate = #{scdate} ,
+	        lastmoddate = #{lastmoddate} ,
+	        regopno = #{regopno} ,
+	        depno = #{depno} ,
+	        remark = #{remark} 
+        WHERE 
+	        docno = #{docno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(sharholdno)">
+			sharholdno = #{sharholdno},
+		</if>
+		<if test="@Ognl@isNotEmpty(sharholdnm)">
+			sharholdnm = #{sharholdnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(docnm)">
+			docnm = #{docnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(doctp)">
+			doctp = #{doctp},
+		</if>
+		<if test="@Ognl@isNotEmpty(docdt)">
+			docdt = #{docdt},
+		</if>
+		<if test="@Ognl@isNotEmpty(registcapit)">
+			registcapit = #{registcapit},
+		</if>
+		<if test="@Ognl@isNotEmpty(registcapitota)">
+			registcapitota = #{registcapitota},
+		</if>
+		<if test="@Ognl@isNotEmpty(reprate)">
+			reprate = #{reprate},
+		</if>
+		<if test="@Ognl@isNotEmpty(repratetota)">
+			repratetota = #{repratetota},
+		</if>
+		<if test="@Ognl@isNotEmpty(earpaidcapit)">
+			earpaidcapit = #{earpaidcapit},
+		</if>
+		<if test="@Ognl@isNotEmpty(earpaidcapitota)">
+			earpaidcapitota = #{earpaidcapitota},
+		</if>
+		<if test="@Ognl@isNotEmpty(earprate)">
+			earprate = #{earprate},
+		</if>
+		<if test="@Ognl@isNotEmpty(earpratetota)">
+			earpratetota = #{earpratetota},
+		</if>
+		<if test="@Ognl@isNotEmpty(growpaidcapit)">
+			growpaidcapit = #{growpaidcapit},
+		</if>
+		<if test="@Ognl@isNotEmpty(growpaidcapitota)">
+			growpaidcapitota = #{growpaidcapitota},
+		</if>
+		<if test="@Ognl@isNotEmpty(growprate)">
+			growprate = #{growprate},
+		</if>
+		<if test="@Ognl@isNotEmpty(growpratetota)">
+			growpratetota = #{growpratetota},
+		</if>
+		<if test="@Ognl@isNotEmpty(currpaidcapit)">
+			currpaidcapit = #{currpaidcapit},
+		</if>
+		<if test="@Ognl@isNotEmpty(currpaidcapitota)">
+			currpaidcapitota = #{currpaidcapitota},
+		</if>
+		<if test="@Ognl@isNotEmpty(currprate)">
+			currprate = #{currprate},
+		</if>
+		<if test="@Ognl@isNotEmpty(currpratetota)">
+			currpratetota = #{currpratetota},
+		</if>
+		<if test="@Ognl@isNotEmpty(scdate)">
+			scdate = #{scdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(lastmoddate)">
+			lastmoddate = #{lastmoddate},
+		</if>
+		<if test="@Ognl@isNotEmpty(regopno)">
+			regopno = #{regopno},
+		</if>
+		<if test="@Ognl@isNotEmpty(depno)">
+			depno = #{depno},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			remark = #{remark},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.financemng.entity.FnncCapitalreport">
+	    UPDATE fnnc_capitalreport 
+		<include refid="updateset"/>
+        WHERE 
+	        sharholdno = #{sharholdno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

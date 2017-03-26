@@ -1,0 +1,550 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FnncLedgerDao">
+
+	<resultMap id="FnncLedger" type="com.mf.financemng.entity.FnncLedger">
+        <result property="ledgerno" column="LEDGERNO"/>
+        <result property="curtp" column="CURTP"/>
+        <result property="accntno" column="ACCNTNO"/>
+        <result property="ledgerdate" column="LEDGERDATE"/>
+        <result property="accntdrct" column="ACCNTDRCT"/>
+        <result property="upaccntno" column="UPACCNTNO"/>
+        <result property="jqmBal" column="JQM_BAL"/>
+        <result property="dqmBal" column="DQM_BAL"/>
+        <result property="jqcBal" column="JQC_BAL"/>
+        <result property="dqcBal" column="DQC_BAL"/>
+        <result property="jbqAmt" column="JBQ_AMT"/>
+        <result property="dbqAmt" column="DBQ_AMT"/>
+        <result property="jysumAmt" column="JYSUM_AMT"/>
+        <result property="dysumAmt" column="DYSUM_AMT"/>
+        <result property="flag" column="FLAG"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		LEDGERNO,
+CURTP,
+ACCNTNO,
+LEDGERDATE,
+ACCNTDRCT,
+UPACCNTNO,
+JQM_BAL AS JQMBAL,
+DQM_BAL AS DQMBAL,
+JQC_BAL AS JQCBAL,
+DQC_BAL AS DQCBAL,
+JBQ_AMT AS JBQAMT,
+DBQ_AMT AS DBQAMT,
+JYSUM_AMT JYSUMAMT,
+DYSUM_AMT DYSUMAMT,
+FLAG
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.FnncLedger">
+		select
+		<include refid="selectId" />
+		from fnnc_ledger
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.FnncLedger" parameterType="com.mf.financemng.entity.FnncLedger">
+		select
+		<include refid="selectId" />
+		from fnnc_ledger
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.financemng.entity.FnncLedger" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fnnc_ledger
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.curtp)">
+					AND CURTP like '%${t.curtp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.ledgerdate)">
+					AND LEDGERDATE like '%${t.ledgerdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.accntno)">
+					AND ACCNTNO like '%${t.accntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.accntdrct)">
+					AND ACCNTDRCT like '%${t.accntdrct}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.upaccntno)">
+					AND UPACCNTNO like '%${t.upaccntno}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.jqmBal)">
+					AND JQM_BAL = '${t.jqmBal}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.dqmBal)">
+					AND DQM_BAL = '${t.dqmBal}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.jqcBal)">
+					AND JQC_BAL = '${t.jqcBal}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.dqcBal)">
+					AND DQC_BAL = '${t.dqcBal}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.jbqAmt)">
+					AND JBQ_AMT = '${t.jbqAmt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.dbqAmt)">
+					AND DBQ_AMT = '${t.dbqAmt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.jysumAmt)">
+					AND JYSUM_AMT = '${t.jysumAmt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.dysumAmt)">
+					AND DYSUM_AMT = '${t.dysumAmt}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.flag)">
+					AND FLAG like '%${t.flag}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(curtp)">
+					AND CURTP like '%${curtp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(accntno)">
+					AND ACCNTNO like '%${accntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(ledgerdate)">
+					AND LEDGERDATE like '%${ledgerdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(accntdrct)">
+					AND ACCNTDRCT like '%${accntdrct}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(upaccntno)">
+					AND UPACCNTNO like '%${upaccntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(jqmBal)">
+					AND JQM_BAL = '${jqmBal}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(dqmBal)">
+					AND DQM_BAL = '${dqmBal}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(jqcBal)">
+					AND JQC_BAL = '${jqcBal}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(dqcBal)">
+					AND DQC_BAL = '${dqcBal}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(jbqAmt)">
+					AND JBQ_AMT = '${jbqAmt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(dbqAmt)">
+					AND DBQ_AMT = '${dbqAmt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(jysumAmt)">
+					AND JYSUM_AMT = '${jysumAmt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(dysumAmt)">
+					AND DYSUM_AMT = '${dysumAmt}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(flag)">
+					AND FLAG like '%${flag}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.FnncLedger" resultType="int">
+		select count(0) from fnnc_ledger
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.financemng.entity.FnncLedger">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO fnnc_ledger (
+        	CURTP ,
+        	ACCNTNO ,
+        	LEDGERDATE ,
+        	ACCNTDRCT ,
+        	UPACCNTNO ,
+        	JQM_BAL ,
+        	DQM_BAL ,
+        	JQC_BAL ,
+        	DQC_BAL ,
+        	JBQ_AMT ,
+        	DBQ_AMT ,
+        	JYSUM_AMT ,
+        	DYSUM_AMT ,
+        	FLAG 
+        ) VALUES (
+        	#{curtp} ,
+        	#{accntno} ,
+        	#{ledgerdate} ,
+        	#{accntdrct} ,
+        	#{upaccntno} ,
+        	#{jqmBal} ,
+        	#{dqmBal} ,
+        	#{jqcBal} ,
+        	#{dqcBal} ,
+        	#{jbqAmt} ,
+        	#{dbqAmt} ,
+        	#{jysumAmt} ,
+        	#{dysumAmt} ,
+        	#{flag} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.FnncLedger">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO fnnc_ledger 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(curtp)">
+				CURTP,
+			</if>
+			<if test="@Ognl@isNotEmpty(accntno)">
+				ACCNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(ledgerdate)">
+				LEDGERDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(accntdrct)">
+				ACCNTDRCT,
+			</if>
+			<if test="@Ognl@isNotEmpty(upaccntno)">
+				UPACCNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(jqmBal)">
+				JQM_BAL,
+			</if>
+			<if test="@Ognl@isNotEmpty(dqmBal)">
+				DQM_BAL,
+			</if>
+			<if test="@Ognl@isNotEmpty(jqcBal)">
+				JQC_BAL,
+			</if>
+			<if test="@Ognl@isNotEmpty(dqcBal)">
+				DQC_BAL,
+			</if>
+			<if test="@Ognl@isNotEmpty(jbqAmt)">
+				JBQ_AMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(dbqAmt)">
+				DBQ_AMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(jysumAmt)">
+				JYSUM_AMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(dysumAmt)">
+				DYSUM_AMT,
+			</if>
+			<if test="@Ognl@isNotEmpty(flag)">
+				FLAG,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(curtp)">
+				#{curtp},
+			</if>
+			<if test="@Ognl@isNotEmpty(accntno)">
+				#{accntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(ledgerdate)">
+				#{ledgerdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(accntdrct)">
+				#{accntdrct},
+			</if>
+			<if test="@Ognl@isNotEmpty(upaccntno)">
+				#{upaccntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(jqmBal)">
+				#{jqmBal},
+			</if>
+			<if test="@Ognl@isNotEmpty(dqmBal)">
+				#{dqmBal},
+			</if>
+			<if test="@Ognl@isNotEmpty(jqcBal)">
+				#{jqcBal},
+			</if>
+			<if test="@Ognl@isNotEmpty(dqcBal)">
+				#{dqcBal},
+			</if>
+			<if test="@Ognl@isNotEmpty(jbqAmt)">
+				#{jbqAmt},
+			</if>
+			<if test="@Ognl@isNotEmpty(dbqAmt)">
+				#{dbqAmt},
+			</if>
+			<if test="@Ognl@isNotEmpty(jysumAmt)">
+				#{jysumAmt},
+			</if>
+			<if test="@Ognl@isNotEmpty(dysumAmt)">
+				#{dysumAmt},
+			</if>
+			<if test="@Ognl@isNotEmpty(flag)">
+				#{flag},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM fnnc_ledger WHERE
+        LEDGERNO = #{id} 
+	</delete>
+	<delete id="del" >
+		DELETE FROM fnnc_ledger 
+	</delete>
+	<delete id="delefnncledgerlog" >
+		delete from fnnc_ledger_log where substring(ledgerdate,1,6)=(select substring(max(prfcrtdt),1,6) from fnnc_chckprfbs where accntflg=#{accntflg});
+	</delete>
+	<delete id="deleteLedgerInfo" parameterType="String">
+		delete from fnnc_chckprfdtl where substring(prfcrtdt,1,6)=(select substring(max(prfcrtdt),1,6) from fnnc_chckprfbs where accntflg='Y') and stt=#{stt}	
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.FnncLedger">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_ledger 
+	        WHERE 
+        LEDGERNO = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.financemng.entity.FnncLedger">
+	    UPDATE fnnc_ledger SET
+	        CURTP = #{curtp} ,
+	        ACCNTNO = #{accntno} ,
+	        LEDGERDATE = #{ledgerdate} ,
+	        ACCNTDRCT = #{accntdrct} ,
+	        UPACCNTNO = #{upaccntno} ,
+	        JQM_BAL = #{jqmBal} ,
+	        DQM_BAL = #{dqmBal} ,
+	        JQC_BAL = #{jqcBal} ,
+	        DQC_BAL = #{dqcBal} ,
+	        JBQ_AMT = #{jbqAmt} ,
+	        DBQ_AMT = #{dbqAmt} ,
+	        JYSUM_AMT = #{jysumAmt} ,
+	        DYSUM_AMT = #{dysumAmt} ,
+	        FLAG = #{flag} 
+        WHERE 
+	        LEDGERNO = #{ledgerno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(curtp)">
+			CURTP = #{curtp},
+		</if>
+		<if test="@Ognl@isNotEmpty(accntno)">
+			ACCNTNO = #{accntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(ledgerdate)">
+			LEDGERDATE = #{ledgerdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(accntdrct)">
+			ACCNTDRCT = #{accntdrct},
+		</if>
+		<if test="@Ognl@isNotEmpty(upaccntno)">
+			UPACCNTNO = #{upaccntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(jqmBal)">
+			JQM_BAL = #{jqmBal},
+		</if>
+		<if test="@Ognl@isNotEmpty(dqmBal)">
+			DQM_BAL = #{dqmBal},
+		</if>
+		<if test="@Ognl@isNotEmpty(jqcBal)">
+			JQC_BAL = #{jqcBal},
+		</if>
+		<if test="@Ognl@isNotEmpty(dqcBal)">
+			DQC_BAL = #{dqcBal},
+		</if>
+		<if test="@Ognl@isNotEmpty(jbqAmt)">
+			JBQ_AMT = #{jbqAmt},
+		</if>
+		<if test="@Ognl@isNotEmpty(dbqAmt)">
+			DBQ_AMT = #{dbqAmt},
+		</if>
+		<if test="@Ognl@isNotEmpty(jysumAmt)">
+			JYSUM_AMT = #{jysumAmt},
+		</if>
+		<if test="@Ognl@isNotEmpty(dysumAmt)">
+			DYSUM_AMT = #{dysumAmt},
+		</if>
+		<if test="@Ognl@isNotEmpty(flag)">
+			FLAG = #{flag},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="update" parameterType="com.mf.financemng.entity.FnncLedger">
+	    UPDATE fnnc_ledger 
+		<include refid="updateset"/>
+        WHERE 
+	        LEDGERNO = #{ledgerno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	<select id="getAccntList" resultType="com.mf.financemng.entity.FnncPrfdtlList" parameterType="String" >
+		
+	select a.prfcrtdt,
+	substring(b.accntno,1,4)as accntno,
+	sum(b.amnt)as amnt,
+	d.accntnm,
+	b.jdflg ,
+	count(b.sqnno)as remark from fnnc_chckprfbs a 
+	left join fnnc_chckprfdtl b on a.chcktrcno=b.chcktrcno 
+	left join fnnc_accntitem d on b.accntno=d.accntno 
+	where a.accntflg='N' and substring(b.prfcrtdt,1,6)=(select substring(min(prfcrtdt),1,6) from fnnc_chckprfdtl )
+	group by substring(b.accntno,1,4),b.jdflg 
+	union all 
+	select a.prfcrtdt,
+	substring(b.accntno,1,6)as accntno,
+	sum(b.amnt)as amnt,
+	d.accntnm,
+	b.jdflg,
+	count(b.sqnno)as remark from fnnc_chckprfbs a 
+	left join fnnc_chckprfdtl b on a.chcktrcno=b.chcktrcno 
+	left join fnnc_accntitem d on b.accntno=d.accntno 
+	where a.accntflg='N' and substring(b.prfcrtdt,1,6)=(select substring(min(prfcrtdt),1,6) from fnnc_chckprfdtl ) and length(trim(b.accntno))=6
+	group by substring(b.accntno,1,6),b.jdflg
+	union all
+	select a.prfcrtdt,
+	d.accntno,
+	sum(b.amnt)as amnt,
+	d.accntnm,
+	b.jdflg,
+	count(b.sqnno)as remark from fnnc_chckprfbs a 
+	left join fnnc_chckprfdtl b on a.chcktrcno=b.chcktrcno 
+	left join fnnc_accntitem d on b.accntno=d.accntno 
+	where a.accntflg='N' and substring(b.prfcrtdt,1,6)=(select substring(min(prfcrtdt),1,6) from fnnc_chckprfdtl ) and length(trim(b.accntno))=8
+	group by substring(b.accntno,1,8),b.jdflg
+
+	</select>
+	<!-- 根据主键查实体 -->
+	<select id="getByAccntno" parameterType="String" resultType="com.mf.financemng.entity.FnncLedger">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_ledger 
+	        WHERE 
+        ACCNTNO = #{accntno} 
+	</select>
+	<select id="crryOvr" parameterType="String" resultType="com.mf.financemng.entity.FnncLedger">
+		select 
+		sum(b.dbq_amt)as dbqAmt,
+		sum(b.jbq_amt)as jbqAmt 
+		from fnnc_crryovraccnt a 
+		left join fnnc_ledger b on a.crryovraccntno=b.accntno group by crryovrtyp order by crryovrtyp
+	</select>
+	<!-- 更新Selective -->
+	<update id="updateByAccntno" parameterType="com.mf.financemng.entity.FnncLedger">
+	    UPDATE fnnc_ledger 
+		<include refid="updateset"/>
+        WHERE 
+	        ACCNTNO = #{accntno} 
+	</update>
+	<update id="updateAccntflg" parameterType="String">
+	    update fnnc_chckprfbs set accntflg='J' where accntflg='N' and substring(prfcrtdt,1,6)=(select substring(min(prfcrtdt),1,6))
+	</update>
+	<update id="changeAccntflg" parameterType="String">
+	    update fnnc_chckprfbs set accntflg='Y' where accntflg='J' and substring(prfcrtdt,1,6)=(select substring(min(prfcrtdt),1,6))
+	</update>
+	<select id="getCount" parameterType="String" resultType="int">
+		select count(0) from fnnc_chckprfbs where accntflg=#{accntflg}
+	</select>
+	<select id="getAllCount" parameterType="String" resultType="int">
+		select count(0) from fnnc_ledger 
+	</select>
+	<select id="getLogCount" parameterType="String" resultType="int">
+		select count(0) from fnnc_ledger_log 
+	</select>
+	
+	<insert id="copyFnncLedger" parameterType="com.mf.financemng.entity.FnncLedger">
+		insert into fnnc_ledger_log select * from fnnc_ledger
+	</insert>
+	<insert id="recoverFnncLedger" parameterType="com.mf.financemng.entity.FnncLedger">
+		insert into fnnc_ledger select * from fnnc_ledger_log where flag=2 and substring(ledgerdate,1,6)=(select substring(max(ledgerdate),1,6) from fnnc_ledger_log);
+	</insert>
+	
+	<select id="getInstr" resultType="com.mf.financemng.entity.FnncAccntitem" parameterType="String" >
+		select  accntno,
+				accntkndcode,
+				upaccntno,
+				accntnm,
+				haschildaccnt,
+				accntlvl,
+				accntdrct,
+				accnttyp,
+				frgnflg,
+				eqlflg,
+				amtdrcn,
+				jamnt,
+				damnt from fnnc_accntitem 
+				where accntno not in (select accntno from fnnc_ledger) and length(accntno)&lt;8	
+	</select>
+	<update id="updateLedger" parameterType="String">
+		update fnnc_ledger set flag=#{flag}
+	</update>
+	<update id="recoverFnncChckprfbs" parameterType="String">
+		update fnnc_chckprfbs set accntflg='N' where accntflg&lt;&gt;'R' and substring(prfcrtdt,1,6)=#{prfcrtdt}
+	</update>
+	<delete id="recoverFnncChckprfdtl" parameterType="String">
+		delete from fnnc_chckprfbs where accntflg='R' and substring(prfcrtdt,1,6)=#{prfcrtdt}
+	</delete>
+	<select id="getMaxMonth" parameterType="String" resultType="String">
+		select max(prfcrtdt) from fnnc_chckprfbs where accntflg=#{prfcrtdt}
+	</select>
+	<select id="isHave" parameterType="String" resultType="int">
+		select count(0) from fnnc_ledger_log where substring(ledgerdate,1,6)=#{ledgerdate}
+	</select>
+	
+	<select id="getJzkm" parameterType="String" resultType="String">
+		select max(crryovraccntno) from fnnc_crryovrcnf
+	</select>
+	<update id="updateBqAmt" parameterType="String">
+		update fnnc_ledger set jbq_amt=0.00,dbq_amt=0.00
+	</update>
+	<update id="updateLedgerDate" parameterType="String">
+		update fnnc_ledger set ledgerdate=#{date}
+	</update>
+	<update id="updateSixPrfix" parameterType="String">
+		update fnnc_ledger set jqm_bal=0,dqm_bal=0 where accntno like '${_parameter}%'
+	</update>
+	<update id="updatejy">
+		update fnnc_ledger set jysum_amt=jysum_amt+dbq_amt,dysum_amt=dysum_amt+jbq_amt where substring(accntno,1,4) in(select crryovraccntno from fnnc_crryovraccnt)
+	</update>
+	<update id="updatejd">
+		update fnnc_ledger set dbq_amt=dbq_amt+jbq_amt,jbq_amt=jbq_amt+dbq_amt where substring(accntno,1,4) in(select crryovraccntno from fnnc_crryovraccnt)
+	</update>
+	<select id="getInfo" parameterType="String" resultType="com.mf.financemng.entity.FnncLedger">
+		select accntno,jbq_amt as jbqAmt,dbq_amt as dbqAmt,ledgerdate from fnnc_ledger
+		where (jbq_amt &lt;&gt;0 or dbq_amt&lt;&gt;0) and
+		substring(accntno,1,4) in(select crryovraccntno from fnnc_crryovraccnt) 
+		and accntno in (select accntno from fnnc_accntitem where haschildaccnt='N')
+	</select>
+</mapper>
+

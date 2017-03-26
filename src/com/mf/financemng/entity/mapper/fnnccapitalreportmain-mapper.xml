@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.financemng.dao.FnncCapitalreportmainDao">
+
+	<resultMap id="FnncCapitalreportmain" type="com.mf.financemng.entity.FnncCapitalreportmain">
+        <result property="docno" column="DOCNO"/>
+        <result property="docnm" column="DOCNM"/>
+        <result property="doctp" column="DOCTP"/>
+        <result property="docdt" column="DOCDT"/>
+        <result property="registcapitota" column="REGISTCAPITOTA"/>
+        <result property="currpaidcapitota" column="CURRPAIDCAPITOTA"/>
+        <result property="currpratetota" column="CURRPRATETOTA"/>
+        <result property="remark" column="remark"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		DOCNO,
+DOCNM,
+DOCTP,
+DOCDT,
+REGISTCAPITOTA,
+CURRPAIDCAPITOTA,
+CURRPRATETOTA,
+remark
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.financemng.entity.FnncCapitalreportmain">
+		select
+		<include refid="selectId" />
+		from fnnc_capitalreportmain
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.financemng.entity.FnncCapitalreportmain" parameterType="com.mf.financemng.entity.FnncCapitalreportmain">
+		select
+		<include refid="selectId" />
+		from fnnc_capitalreportmain
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.financemng.entity.FnncCapitalreportmain" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from fnnc_capitalreportmain
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.docnm)">
+					AND DOCNM like '%${t.docnm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.doctp)">
+					AND DOCTP like '%${t.doctp}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.docdt)">
+					AND DOCDT like '%${t.docdt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.registcapitota)">
+					AND REGISTCAPITOTA like '%${t.registcapitota}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.currpaidcapitota)">
+					AND CURRPAIDCAPITOTA like '%${t.currpaidcapitota}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.currpratetota)">
+					AND CURRPRATETOTA like '%${t.currpratetota}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND remark like '%${t.remark}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(docnm)">
+					AND DOCNM like '%${docnm}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(doctp)">
+					AND DOCTP like '%${doctp}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(docdt)">
+					AND DOCDT like '%${docdt}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(registcapitota)">
+					AND REGISTCAPITOTA like '%${registcapitota}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(currpaidcapitota)">
+					AND CURRPAIDCAPITOTA like '%${currpaidcapitota}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(currpratetota)">
+					AND CURRPRATETOTA like '%${currpratetota}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND remark like '%${remark}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.financemng.entity.FnncCapitalreportmain" resultType="int">
+		select count(0) from fnnc_capitalreportmain
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.financemng.entity.FnncCapitalreportmain">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO fnnc_capitalreportmain (
+        	DOCNM ,
+        	DOCTP ,
+        	DOCDT ,
+        	REGISTCAPITOTA ,
+        	CURRPAIDCAPITOTA ,
+        	CURRPRATETOTA ,
+        	remark 
+        ) VALUES (
+        	#{docnm} ,
+        	#{doctp} ,
+        	#{docdt} ,
+        	#{registcapitota} ,
+        	#{currpaidcapitota} ,
+        	#{currpratetota} ,
+        	#{remark} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.financemng.entity.FnncCapitalreportmain">
+	
+		INSERT INTO fnnc_capitalreportmain 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(docno)">
+				DOCNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(docnm)">
+				DOCNM,
+			</if>
+			<if test="@Ognl@isNotEmpty(doctp)">
+				DOCTP,
+			</if>
+			<if test="@Ognl@isNotEmpty(docdt)">
+				DOCDT,
+			</if>
+			<if test="@Ognl@isNotEmpty(registcapitota)">
+				REGISTCAPITOTA,
+			</if>
+			<if test="@Ognl@isNotEmpty(currpaidcapitota)">
+				CURRPAIDCAPITOTA,
+			</if>
+			<if test="@Ognl@isNotEmpty(currpratetota)">
+				CURRPRATETOTA,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				remark,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(docno)">
+				#{docno},
+			</if>
+			<if test="@Ognl@isNotEmpty(docnm)">
+				#{docnm},
+			</if>
+			<if test="@Ognl@isNotEmpty(doctp)">
+				#{doctp},
+			</if>
+			<if test="@Ognl@isNotEmpty(docdt)">
+				#{docdt},
+			</if>
+			<if test="@Ognl@isNotEmpty(registcapitota)">
+				#{registcapitota},
+			</if>
+			<if test="@Ognl@isNotEmpty(currpaidcapitota)">
+				#{currpaidcapitota},
+			</if>
+			<if test="@Ognl@isNotEmpty(currpratetota)">
+				#{currpratetota},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM fnnc_capitalreportmain WHERE
+        DOCNO = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.financemng.entity.FnncCapitalreportmain">
+		SELECT <include refid="selectId" />
+		    FROM fnnc_capitalreportmain 
+	        WHERE 
+        DOCNO = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.financemng.entity.FnncCapitalreportmain">
+	    UPDATE fnnc_capitalreportmain SET
+	        DOCNM = #{docnm} ,
+	        DOCTP = #{doctp} ,
+	        DOCDT = #{docdt} ,
+	        REGISTCAPITOTA = #{registcapitota} ,
+	        CURRPAIDCAPITOTA = #{currpaidcapitota} ,
+	        CURRPRATETOTA = #{currpratetota} ,
+	        remark = #{remark} 
+        WHERE 
+	        DOCNO = #{docno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(docnm)">
+			DOCNM = #{docnm},
+		</if>
+		<if test="@Ognl@isNotEmpty(doctp)">
+			DOCTP = #{doctp},
+		</if>
+		<if test="@Ognl@isNotEmpty(docdt)">
+			DOCDT = #{docdt},
+		</if>
+		<if test="@Ognl@isNotEmpty(registcapitota)">
+			REGISTCAPITOTA = #{registcapitota},
+		</if>
+		<if test="@Ognl@isNotEmpty(currpaidcapitota)">
+			CURRPAIDCAPITOTA = #{currpaidcapitota},
+		</if>
+		<if test="@Ognl@isNotEmpty(currpratetota)">
+			CURRPRATETOTA = #{currpratetota},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			remark = #{remark},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.financemng.entity.FnncCapitalreportmain">
+	    UPDATE fnnc_capitalreportmain 
+		<include refid="updateset"/>
+        WHERE 
+	        DOCNO = #{docno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

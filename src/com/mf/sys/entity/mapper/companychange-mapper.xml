@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.sys.dao.CompanyChangeDao">
+
+	<resultMap id="CompanyChange" type="com.mf.sys.entity.CompanyChange">
+        <result property="changeno" column="changeno"/>
+        <result property="companyno" column="companyno"/>
+        <result property="dispatchno" column="dispatchno"/>
+        <result property="filenm" column="filenm"/>
+        <result property="changedt" column="changedt"/>
+        <result property="changepro" column="changepro"/>
+        <result property="beforechange" column="beforechange"/>
+        <result property="afterchange" column="afterchange"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		changeno,companyno,dispatchno,filenm,changedt,changepro,beforechange,afterchange
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.sys.entity.CompanyChange">
+		select
+		<include refid="selectId" />
+		from company_change
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.sys.entity.CompanyChange" parameterType="com.mf.sys.entity.CompanyChange">
+		select
+		<include refid="selectId" />
+		from company_change
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.sys.entity.CompanyChange" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from company_change
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.companyno)">
+					AND companyno like '%${t.companyno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.dispatchno)">
+					AND dispatchno like '%${t.dispatchno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.filenm)">
+					AND filenm like '%${t.filenm}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.changedt)">
+					AND changedt like '%${t.changedt}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.changepro)">
+					AND changepro like '%${t.changepro}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.beforechange)">
+					AND beforechange like '%${t.beforechange}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.afterchange)">
+					AND afterchange like '%${t.afterchange}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+	<sql id="querywhere1">
+	<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+	<where>	      				
+	       <if test="@Ognl@isNotEmpty(companyno)">
+				AND companyno like '%${companyno}%'
+			</if>
+	       <if test="@Ognl@isNotEmpty(dispatchno)">
+				AND dispatchno like '%${dispatchno}%'
+			</if>
+	       <if test="@Ognl@isNotEmpty(filenm)">
+				AND filenm like '%${filenm}%'
+			</if>
+	       <if test="@Ognl@isNotEmpty(changedt)">
+				AND changedt like '%${changedt}%'
+			</if>
+	       <if test="@Ognl@isNotEmpty(changepro)">
+				AND changepro like '%${changepro}%'
+			</if>
+	       <if test="@Ognl@isNotEmpty(beforechange)">
+				AND beforechange like '%${beforechange}%'
+			</if>
+	       <if test="@Ognl@isNotEmpty(afterchange)">
+				AND afterchange like '%${afterchange}%'
+			</if>
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.sys.entity.CompanyChange" resultType="int">
+		select count(0) from company_change
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.sys.entity.CompanyChange">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO company_change (
+        	companyno ,
+        	dispatchno ,
+        	filenm ,
+        	changedt ,
+        	changepro ,
+        	beforechange ,
+        	afterchange 
+        ) VALUES (
+        	#{companyno} ,
+        	#{dispatchno} ,
+        	#{filenm} ,
+        	#{changedt} ,
+        	#{changepro} ,
+        	#{beforechange} ,
+        	#{afterchange} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.sys.entity.CompanyChange">
+		INSERT INTO company_change 
+		(changeno,companyno,dispatchno,filenm,changedt,changepro,beforechange,afterchange) values
+		(#{changeno},#{companyno},#{dispatchno},#{filenm},#{changedt},#{changepro},#{beforechange},#{afterchange})
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(changeno)">
+				changeno,
+			</if>
+			<if test="@Ognl@isNotEmpty(companyno)">
+				companyno,
+			</if>
+			<if test="@Ognl@isNotEmpty(dispatchno)">
+				dispatchno,
+			</if>
+			<if test="@Ognl@isNotEmpty(filenm)">
+				filenm,
+			</if>
+			<if test="@Ognl@isNotEmpty(changedt)">
+				changedt,
+			</if>
+			<if test="@Ognl@isNotEmpty(changepro)">
+				changepro,
+			</if>
+			<if test="@Ognl@isNotEmpty(beforechange)">
+				beforechange,
+			</if>
+			<if test="@Ognl@isNotEmpty(afterchange)">
+				afterchange,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(companyno)">
+				#{companyno},
+			</if>
+			<if test="@Ognl@isNotEmpty(dispatchno)">
+				#{dispatchno},
+			</if>
+			<if test="@Ognl@isNotEmpty(filenm)">
+				#{filenm},
+			</if>
+			<if test="@Ognl@isNotEmpty(changedt)">
+				#{changedt},
+			</if>
+			<if test="@Ognl@isNotEmpty(changepro)">
+				#{changepro},
+			</if>
+			<if test="@Ognl@isNotEmpty(beforechange)">
+				#{beforechange},
+			</if>
+			<if test="@Ognl@isNotEmpty(afterchange)">
+				#{afterchange},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="deleteById" parameterType="String">
+		DELETE FROM company_change WHERE
+        changeno = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.sys.entity.CompanyChange">
+		SELECT <include refid="selectId" />
+		    FROM company_change 
+ 	        WHERE 
+       		changeno = #{id}
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.sys.entity.CompanyChange">
+	    UPDATE company_change SET
+	        companyno = #{companyno} ,
+	        dispatchno = #{dispatchno} ,
+	        filenm = #{filenm} ,
+	        changedt = #{changedt} ,
+	        changepro = #{changepro} ,
+	        beforechange = #{beforechange} ,
+	        afterchange = #{afterchange} 
+        WHERE 
+	        changeno = #{changeno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(companyno)">
+			companyno = #{companyno},
+		</if>
+		<if test="@Ognl@isNotEmpty(dispatchno)">
+			dispatchno = #{dispatchno},
+		</if>
+		<if test="@Ognl@isNotEmpty(filenm)">
+			filenm = #{filenm},
+		</if>
+		<if test="@Ognl@isNotEmpty(changedt)">
+			changedt = #{changedt},
+		</if>
+		<if test="@Ognl@isNotEmpty(changepro)">
+			changepro = #{changepro},
+		</if>
+		<if test="@Ognl@isNotEmpty(beforechange)">
+			beforechange = #{beforechange},
+		</if>
+		<if test="@Ognl@isNotEmpty(afterchange)">
+			afterchange = #{afterchange},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.sys.entity.CompanyChange">
+	    UPDATE company_change 
+		<include refid="updateset"/>
+        WHERE 
+	        changeno = #{changeno} 
+	</update>
+	
+</mapper>
+

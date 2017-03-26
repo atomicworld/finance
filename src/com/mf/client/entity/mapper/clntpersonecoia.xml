@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.client.dao.ClntPersonEcoIaDao">
+
+	<resultMap id="ClntPersonEcoIa" type="com.mf.client.entity.ClntPersonEcoIa">
+        <result property="id" column="ID"/>
+        <result property="clntno" column="CLNTNO"/>
+        <result property="ianame" column="IANAME"/>
+        <result property="iatype" column="IATYPE"/>
+        <result property="iades" column="IADES"/>
+        <result property="iacertno" column="IACERTNO"/>
+        <result property="evalvalue" column="EVALVALUE"/>
+        <result property="authorg" column="AUTHORG"/>
+        <result property="authdate" column="AUTHDATE"/>
+        <result property="statdate" column="STATDATE"/>
+        <result property="remark" column="REMARK"/>
+	</resultMap>
+	
+	<sql id="selectId">
+		ID,
+CLNTNO,
+IANAME,
+IATYPE,
+IADES,
+IACERTNO,
+EVALVALUE,
+AUTHORG,
+AUTHDATE,
+STATDATE,
+REMARK
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.client.entity.ClntPersonEcoIa">
+		select
+		<include refid="selectId" />
+		from clnt_person_eco_ia
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.client.entity.ClntPersonEcoIa" parameterType="com.mf.client.entity.ClntPersonEcoIa">
+		select
+		<include refid="selectId" />
+		from clnt_person_eco_ia
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.client.entity.ClntPersonEcoIa" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from clnt_person_eco_ia
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.clntno)">
+					AND CLNTNO like '%${t.clntno}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.ianame)">
+					AND IANAME like '%${t.ianame}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.iatype)">
+					AND IATYPE like '%${t.iatype}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.iades)">
+					AND IADES like '%${t.iades}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.iacertno)">
+					AND IACERTNO like '%${t.iacertno}%'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(t.evalvalue)">
+					AND EVALVALUE = '${t.evalvalue}'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.authorg)">
+					AND AUTHORG like '%${t.authorg}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.authdate)">
+					AND AUTHDATE like '%${t.authdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.statdate)">
+					AND STATDATE like '%${t.statdate}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.remark)">
+					AND REMARK like '%${t.remark}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(clntno)">
+					AND CLNTNO like '%${clntno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(ianame)">
+					AND IANAME like '%${ianame}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(iatype)">
+					AND IATYPE like '%${iatype}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(iades)">
+					AND IADES like '%${iades}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(iacertno)">
+					AND IACERTNO like '%${iacertno}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(evalvalue)">
+					AND EVALVALUE = '${evalvalue}'
+			   </if>
+		       <if test="@Ognl@isNotEmpty(authorg)">
+					AND AUTHORG like '%${authorg}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(authdate)">
+					AND AUTHDATE like '%${authdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(statdate)">
+					AND STATDATE like '%${statdate}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(remark)">
+					AND REMARK like '%${remark}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.client.entity.ClntPersonEcoIa" resultType="int">
+		select count(0) from clnt_person_eco_ia
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.client.entity.ClntPersonEcoIa">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO clnt_person_eco_ia (
+        	CLNTNO ,
+        	IANAME ,
+        	IATYPE ,
+        	IADES ,
+        	IACERTNO ,
+        	EVALVALUE ,
+        	AUTHORG ,
+        	AUTHDATE ,
+        	STATDATE ,
+        	REMARK 
+        ) VALUES (
+        	#{clntno} ,
+        	#{ianame} ,
+        	#{iatype} ,
+        	#{iades} ,
+        	#{iacertno} ,
+        	#{evalvalue} ,
+        	#{authorg} ,
+        	#{authdate} ,
+        	#{statdate} ,
+        	#{remark} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.client.entity.ClntPersonEcoIa">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO clnt_person_eco_ia 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				CLNTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(ianame)">
+				IANAME,
+			</if>
+			<if test="@Ognl@isNotEmpty(iatype)">
+				IATYPE,
+			</if>
+			<if test="@Ognl@isNotEmpty(iades)">
+				IADES,
+			</if>
+			<if test="@Ognl@isNotEmpty(iacertno)">
+				IACERTNO,
+			</if>
+			<if test="@Ognl@isNotEmpty(evalvalue)">
+				EVALVALUE,
+			</if>
+			<if test="@Ognl@isNotEmpty(authorg)">
+				AUTHORG,
+			</if>
+			<if test="@Ognl@isNotEmpty(authdate)">
+				AUTHDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(statdate)">
+				STATDATE,
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				REMARK,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(clntno)">
+				#{clntno},
+			</if>
+			<if test="@Ognl@isNotEmpty(ianame)">
+				#{ianame},
+			</if>
+			<if test="@Ognl@isNotEmpty(iatype)">
+				#{iatype},
+			</if>
+			<if test="@Ognl@isNotEmpty(iades)">
+				#{iades},
+			</if>
+			<if test="@Ognl@isNotEmpty(iacertno)">
+				#{iacertno},
+			</if>
+			<if test="@Ognl@isNotEmpty(evalvalue)">
+				#{evalvalue},
+			</if>
+			<if test="@Ognl@isNotEmpty(authorg)">
+				#{authorg},
+			</if>
+			<if test="@Ognl@isNotEmpty(authdate)">
+				#{authdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(statdate)">
+				#{statdate},
+			</if>
+			<if test="@Ognl@isNotEmpty(remark)">
+				#{remark},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM clnt_person_eco_ia WHERE
+        ID = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.client.entity.ClntPersonEcoIa">
+		SELECT <include refid="selectId" />
+		    FROM clnt_person_eco_ia 
+	        WHERE 
+        ID = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.client.entity.ClntPersonEcoIa">
+	    UPDATE clnt_person_eco_ia SET
+	        CLNTNO = #{clntno} ,
+	        IANAME = #{ianame} ,
+	        IATYPE = #{iatype} ,
+	        IADES = #{iades} ,
+	        IACERTNO = #{iacertno} ,
+	        EVALVALUE = #{evalvalue} ,
+	        AUTHORG = #{authorg} ,
+	        AUTHDATE = #{authdate} ,
+	        STATDATE = #{statdate} ,
+	        REMARK = #{remark} 
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(clntno)">
+			CLNTNO = #{clntno},
+		</if>
+		<if test="@Ognl@isNotEmpty(ianame)">
+			IANAME = #{ianame},
+		</if>
+		<if test="@Ognl@isNotEmpty(iatype)">
+			IATYPE = #{iatype},
+		</if>
+		<if test="@Ognl@isNotEmpty(iades)">
+			IADES = #{iades},
+		</if>
+		<if test="@Ognl@isNotEmpty(iacertno)">
+			IACERTNO = #{iacertno},
+		</if>
+		<if test="@Ognl@isNotEmpty(evalvalue)">
+			EVALVALUE = #{evalvalue},
+		</if>
+		<if test="@Ognl@isNotEmpty(authorg)">
+			AUTHORG = #{authorg},
+		</if>
+		<if test="@Ognl@isNotEmpty(authdate)">
+			AUTHDATE = #{authdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(statdate)">
+			STATDATE = #{statdate},
+		</if>
+		<if test="@Ognl@isNotEmpty(remark)">
+			REMARK = #{remark},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.client.entity.ClntPersonEcoIa">
+	    UPDATE clnt_person_eco_ia 
+		<include refid="updateset"/>
+        WHERE 
+	        ID = #{id} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+

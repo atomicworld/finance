@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<!-- 不使用namespace的话sql搜索定位会比较方便 -->
+<mapper namespace="com.mf.bsnsmng.dao.BsnsReportDao">
+
+	<resultMap id="BsnsReport" type="com.mf.bsnsmng.entity.BsnsReport">
+        <result property="reportno" column="reportno"/>
+        <result property="intro" column="intro"/>
+        <result property="url" column="url"/>
+        <result property="applyno" column="applyno"/>
+        <result property="fileName" column="fileName"/>
+	</resultMap>
+	
+<sql id="selectId">
+reportno,
+intro,
+url,
+applyno,
+fileName
+    </sql>
+    
+    <select id="findAll" resultType="com.mf.bsnsmng.entity.BsnsReport">
+		select
+		<include refid="selectId" />
+		from bsns_report
+	</select>
+	
+	<select id="queryAll" resultType="com.mf.bsnsmng.entity.BsnsReport" parameterType="com.mf.bsnsmng.entity.BsnsReport">
+		select
+		<include refid="selectId" />
+		from bsns_report
+		<include refid="querywhere1"/>
+		<if test="@Ognl@isNotEmpty(sort) and @Ognl@isNotEmpty(direction)">
+		 order by ${sort} ${direction}
+		</if>
+	</select>
+
+	<select id="query" resultType="com.mf.bsnsmng.entity.BsnsReport" parameterType="java.util.HashMap">
+		select
+		<include refid="selectId" />
+		from bsns_report
+		<include refid="querywhere"/>
+		<if test="@Ognl@isNotEmpty(t.sort) and @Ognl@isNotEmpty(t.direction)">
+		 order by ${t.sort} ${t.direction}
+		</if>
+	</select>
+	
+	<sql id="querywhere">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+			   <if test="@Ognl@isNotEmpty(t.intro)">
+					AND intro like '%${t.intro}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.url)">
+					AND url like '%${t.url}%'
+			   </if>
+			   <if test="@Ognl@isNotEmpty(t.applyno)">
+					AND applyno like '%${t.applyno}%'
+			   </if>
+	       
+		</where>
+	</sql>
+	
+		<sql id="querywhere1">
+		<!-- ognl访问静态方法的表达式 为@class@method(args),以下为调用Ognl.isNotEmpty()方法,还有其它方法如isNotBlank()可以使用，具体请查看Ognl类 -->
+		<where>	      				
+		       <if test="@Ognl@isNotEmpty(intro)">
+					AND intro like '%${intro}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(url)">
+					AND url like '%${url}%'
+				</if>
+		       <if test="@Ognl@isNotEmpty(applyno)">
+					AND applyno like '%${applyno}%'
+				</if>
+	       
+		</where>
+	</sql>
+
+	<!-- 总记录数 -->
+	<select id="count" parameterType="com.mf.bsnsmng.entity.BsnsReport" resultType="int">
+		select count(0) from bsns_report
+		<include refid="querywhere1"/>
+	</select>
+	
+	<!-- 新增 -->
+	<insert id="addAll" parameterType="com.mf.bsnsmng.entity.BsnsReport">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+        SELECT LAST_INSERT_ID() AS ID   
+    </selectKey>
+		INSERT INTO bsns_report (
+        	intro ,
+        	url ,
+        	applyno,
+        	fileName 
+        ) VALUES (
+        	#{intro} ,
+        	#{url} ,
+        	#{applyno},
+        	#{fileName} 
+        )
+	</insert>
+	
+	<!-- 新增Selective -->
+	<insert id="add" parameterType="com.mf.bsnsmng.entity.BsnsReport">
+	<selectKey resultType="java.lang.Integer"  order="AFTER" keyProperty="id" >
+	        SELECT LAST_INSERT_ID() AS ID
+	</selectKey>
+		INSERT INTO bsns_report 
+		<include refid="addtrim"/>
+	</insert>
+	
+	<sql id="addtrim">
+	<trim prefix="(" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(intro)">
+				intro,
+			</if>
+			<if test="@Ognl@isNotEmpty(url)">
+				url,
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				applyno,
+			</if>
+			<if test="@Ognl@isNotEmpty(fileName)">
+				fileName,
+			</if>
+    </trim>
+    <trim prefix=" values (" suffix=")" suffixOverrides="," >
+			<if test="@Ognl@isNotEmpty(intro)">
+				#{intro},
+			</if>
+			<if test="@Ognl@isNotEmpty(url)">
+				#{url},
+			</if>
+			<if test="@Ognl@isNotEmpty(applyno)">
+				#{applyno},
+			</if>
+			<if test="@Ognl@isNotEmpty(fileName)">
+				#{fileName},
+			</if>
+    </trim>
+	</sql>
+	
+	<!-- 删 -->
+	<delete id="delete" parameterType="String">
+		DELETE FROM bsns_report WHERE
+        reportno = #{id} 
+	</delete>
+	
+	<!-- 根据主键查实体 -->
+	<select id="getById" parameterType="String" resultType="com.mf.bsnsmng.entity.BsnsReport">
+		SELECT <include refid="selectId" />
+		    FROM bsns_report 
+	        WHERE 
+        reportno = #{id} 
+	</select>
+	
+	<!-- 更新all -->
+	<update id="updateAll" parameterType="com.mf.bsnsmng.entity.BsnsReport">
+	    UPDATE bsns_report SET
+	        intro = #{intro} ,
+	        url = #{url} ,
+	        applyno = #{applyno},
+	        fileName = #{fileName} 
+        WHERE 
+	        reportno = #{reportno} 
+	</update>
+	
+	<sql id="updateset">
+	<set>
+		<if test="@Ognl@isNotEmpty(intro)">
+			intro = #{intro},
+		</if>
+		<if test="@Ognl@isNotEmpty(url)">
+			url = #{url},
+		</if>
+		
+		<if test="@Ognl@isNotEmpty(applyno)">
+			applyno = #{applyno},
+		</if>
+		<if test="@Ognl@isNotEmpty(fileName)">
+			fileName = #{fileName},
+		</if>
+    </set>
+	</sql>
+	
+	<!-- 更新Selective -->
+	<update id="modify" parameterType="com.mf.bsnsmng.entity.BsnsReport">
+	    UPDATE bsns_report 
+		<include refid="updateset"/>
+        WHERE 
+	        reportno = #{reportno} 
+	</update>
+	
+	<!-- 查找唯一索引但不是主键的字段Selective -->
+	
+</mapper>
+
