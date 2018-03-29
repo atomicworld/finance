@@ -1,2 +1,1 @@
-# finance
-the springmvc project
+# springmvc 项目
